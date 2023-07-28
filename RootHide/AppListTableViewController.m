@@ -34,7 +34,10 @@
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [searchBar resignFirstResponder];
 }
-
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    isFiltered = false;
+    [self.tableView reloadData];
+}
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     if(searchText.length == 0) {
@@ -68,7 +71,7 @@
     
     UISearchController *searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     searchController.searchBar.delegate = self;
-    searchController.searchBar.placeholder = @"Enter name or identification screening";
+    searchController.searchBar.placeholder = @"name or identifier";
     searchController.searchBar.barTintColor = [UIColor whiteColor];
     searchController.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
     self.navigationItem.searchController = searchController;
@@ -134,6 +137,13 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     return @"Applist";
+}
+
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return [[UIView alloc] init];;
+}
+- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return [[UIView alloc] init];;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

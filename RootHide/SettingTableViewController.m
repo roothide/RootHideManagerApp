@@ -1,4 +1,5 @@
 #import "SettingTableViewController.h"
+#include "jbroot.h"
 
 @interface SettingTableViewController ()
 
@@ -25,7 +26,7 @@
     
     [self setTitle:@"Setting"];
     
-    NSString *rulesFilePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:@"rules.plist"];
+    NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/VarCleanRules-custom.plist");
     NSCharacterSet *CharacterSet = [NSCharacterSet URLQueryAllowedCharacterSet];
     NSString *encodedURLString = [rulesFilePath stringByAddingPercentEncodingWithAllowedCharacters:CharacterSet];
     NSURL *filzaURL = [NSURL URLWithString:[@"filza://view" stringByAppendingString:encodedURLString]];
@@ -35,10 +36,11 @@
             @"groupTitle": @"General",
             @"items": @[
                 @{
-                    @"textLabel": @"Auto Blacklist",
-                    @"detailTextLabel": @"Auto add the latest installed app into blacklist",
+                    @"textLabel": @"Whitelist Mode",
+                    @"detailTextLabel": @"auto blacklist newly installed apps",
                     @"type": @"switch",
-                    @"switchKey": @"auto_blacklist",
+                    @"switchKey": @"whitelistmode",
+                    @"disabled": @YES
                 },
             ]
         },
@@ -47,7 +49,7 @@
             @"items": @[
                 @{
                     @"textLabel": @"Edit VarClean Rules",
-                    @"detailTextLabel": @"Open the rules file in Filza",
+                    @"detailTextLabel": @"open the rules file in Filza",
                     @"type": @"url",
                     @"url": filzaURL.absoluteString
                 },
@@ -89,6 +91,7 @@
         UISwitch *theSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
         [theSwitch setOn:[defaults boolForKey:item[@"switchKey"]]];
         [theSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
+        [theSwitch setEnabled:!item[@"disabled"]];
         cell.accessoryView = theSwitch;
     }
     

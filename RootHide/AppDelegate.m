@@ -2,7 +2,7 @@
 #import "AppListTableViewController.h"
 #import "VarCleanController.h"
 #import "SettingTableViewController.h"
-
+#include "jbroot.h"
 
 @interface AppDelegate ()
 
@@ -13,6 +13,31 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    NSString* roothideDir = jbroot(@"/var/mobile/Library/RootHide");
+    if(![NSFileManager.defaultManager fileExistsAtPath:roothideDir]) {
+        assert([NSFileManager.defaultManager createDirectoryAtPath:roothideDir withIntermediateDirectories:YES attributes:nil error:nil]);
+    }
+    
+    NSString* jsonPath = [NSBundle.mainBundle pathForResource:@"VarCleanRules" ofType:@"json"];
+    NSLog(@"jsonPath=%@", jsonPath);
+    NSData* jsonData = [NSData dataWithContentsOfFile:jsonPath];
+    assert(jsonData != NULL);
+    NSDictionary *rules = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:nil];
+    assert(rules != NULL);
+    NSLog(@"default rules=%@", rules);
+    NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/VarCleanRules.plist");
+    if([NSFileManager.defaultManager fileExistsAtPath:rulesFilePath]) {
+        assert([NSFileManager.defaultManager removeItemAtPath:rulesFilePath error:nil]);
+    }
+    NSLog(@"copy default rules to %@", rulesFilePath);
+    assert([rules writeToFile:rulesFilePath atomically:YES]);
+    
+    NSString *customedRulesFilePath = jbroot(@"/var/mobile/Library/RootHide/VarCleanRules-custom.plist");
+    if(![NSFileManager.defaultManager fileExistsAtPath:customedRulesFilePath]) {
+        NSDictionary* template = [[NSDictionary alloc] init];
+        assert([template writeToFile:customedRulesFilePath atomically:YES]);
+    }
     
     self.window = UIWindow.alloc.init;
     self.window.backgroundColor = [UIColor clearColor];

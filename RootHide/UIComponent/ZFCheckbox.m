@@ -10,13 +10,13 @@
 
 CGFloat const kLine1UnselectedStart = 0.2;
 CGFloat const kLine1UnselectedEnd = 1.0;
-CGFloat const kLine1SelectedStart = 0.0;
-CGFloat const kLine1SelectedEnd = 0.08;
+CGFloat const kLine1SelectedStart = 0;
+CGFloat const kLine1SelectedEnd = 0.15;
 
 CGFloat const kLine2UnselectedStart = 0.41;
 CGFloat const kLine2UnselectedEnd = 1.0;
 CGFloat const kLine2SelectedStart = 0.0;
-CGFloat const kLine2SelectedEnd = 0.28;
+CGFloat const kLine2SelectedEnd = 0.4;
 
 @interface ZFCheckbox ()
 @property (nonatomic, strong) CAShapeLayer *line1Layer;
@@ -46,7 +46,7 @@ CGFloat const kLine2SelectedEnd = 0.28;
 - (void)setup
 {
     // default
-    self.lineWidth = 1.5;
+    self.lineWidth = 1.2;
     self.lineColor = [UIColor systemBlueColor];
     self.lineBackgroundColor = [UIColor clearColor];
     self.backgroundColor = [UIColor clearColor];
@@ -113,16 +113,23 @@ CGFloat const kLine2SelectedEnd = 0.28;
     [CATransaction setAnimationDuration:animated ? self.animateDuration : 0];
     
     if (self.selected) {
+        self.lineWidth = 2.0;
+        self.lineColor = [UIColor systemBlueColor];
         self.line1Layer.strokeStart = kLine1SelectedStart;
         self.line1Layer.strokeEnd = kLine1SelectedEnd;
         self.line2Layer.strokeStart = kLine2SelectedStart;
         self.line2Layer.strokeEnd = kLine2SelectedEnd;
     } else {
+        self.lineWidth = 1.2;
+        self.lineColor = [UIColor systemGrayColor];
         self.line1Layer.strokeStart = kLine1UnselectedStart;
         self.line1Layer.strokeEnd = kLine1UnselectedEnd;
         self.line2Layer.strokeStart = kLine2UnselectedStart;
         self.line2Layer.strokeEnd = kLine2UnselectedEnd;
     }
+    
+    self.line1Layer.lineWidth = self.line2Layer.lineWidth = self.lineWidth;
+    self.line1Layer.strokeColor = self.line2Layer.strokeColor = self.lineColor.CGColor;
     
     [CATransaction commit];
 
