@@ -231,7 +231,7 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];//取消选中效果
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];//
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     ZFCheckbox *checkbox = (ZFCheckbox*)cell.accessoryView;

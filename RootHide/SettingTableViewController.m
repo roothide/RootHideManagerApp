@@ -35,8 +35,8 @@
             @"groupTitle": @"General",
             @"items": @[
                 @{
-                    @"textLabel": @"Auto blacklist",
-                    @"detailTextLabel": @"Auto add the newly installed app to blacklist",
+                    @"textLabel": @"Auto Blacklist",
+                    @"detailTextLabel": @"Auto add the latest installed app into blacklist",
                     @"type": @"switch",
                     @"switchKey": @"auto_blacklist",
                 },
@@ -46,8 +46,8 @@
             @"groupTitle": @"Advanced",
             @"items": @[
                 @{
-                    @"textLabel": @"View clean rules",
-                    @"detailTextLabel": @"Open the rules file through Filza",
+                    @"textLabel": @"Edit VarClean Rules",
+                    @"detailTextLabel": @"Open the rules file in Filza",
                     @"type": @"url",
                     @"url": filzaURL.absoluteString
                 },
@@ -117,7 +117,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];//取消选中效果
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];//
     
     NSDictionary *groupData = self.menuData[indexPath.section];
     NSArray *items = groupData[@"items"];

@@ -37,7 +37,7 @@
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
     tabBarController.viewControllers = @[listNavigationController, cleanNavigationController, setNavigationController];
     
-    //tabbar分割线常显
+    //
     //tabBarController.tabBar.scrollEdgeAppearance = [UITabBarAppearance new];
     
     self.window.rootViewController = tabBarController;
