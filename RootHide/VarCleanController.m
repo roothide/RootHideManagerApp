@@ -1,11 +1,9 @@
 #import "VarCleanController.h"
+#include "AppDelegate.h"
 #import "ZFCheckbox.h"
-#include "jbroot.h"
 
-@interface VarCleanController () {
-    NSMutableArray *menuData;
-}
-
+@interface VarCleanController ()
+@property (nonatomic, retain) NSMutableArray* tableData;
 @end
 
 @implementation VarCleanController
@@ -35,7 +33,7 @@
     UIBarButtonItem *button2 = [[UIBarButtonItem alloc] initWithTitle:@"SeleteAll" style:UIBarButtonItemStylePlain target:self action:@selector(batchSelect)];
     self.navigationItem.leftBarButtonItem = button2;
     
-    menuData = [[NSMutableArray alloc] init];
+    self.tableData = [[NSMutableArray alloc] init];
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     refreshControl.tintColor = [UIColor grayColor];
@@ -47,7 +45,7 @@
 
 - (void)batchSelect {
     int selected = 0;
-    for(NSDictionary* group in menuData) {
+    for(NSDictionary* group in self.tableData) {
         for(NSMutableDictionary* item in group[@"items"]) {
             if(![item[@"checked"] boolValue]) {
                 item[@"checked"] = @YES;
@@ -55,7 +53,7 @@
             }
         }
     }
-    if(selected==0) for(NSDictionary* group in menuData) {
+    if(selected==0) for(NSDictionary* group in self.tableData) {
         for(NSMutableDictionary* item in group[@"items"]) {
             if([item[@"checked"] boolValue]) {
                 item[@"checked"] = @NO;
@@ -138,12 +136,12 @@
         NSArray *sortedFiles = [files sortedArrayUsingDescriptors:@[sortDescriptor]];
         
         tableGroup[@"items"] = [[sortedFolders arrayByAddingObjectsFromArray:sortedFiles] mutableCopy];
-        [menuData addObject:tableGroup];
+        [self.tableData addObject:tableGroup];
     }
 }
 
 - (void)updateData {
-    menuData = [[NSMutableArray alloc] init];
+    self.tableData = [[NSMutableArray alloc] init];
     
     NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/VarCleanRules.plist");
     NSDictionary *rules = [NSDictionary dictionaryWithContentsOfFile:rulesFilePath];
@@ -182,26 +180,37 @@
 }
 
 - (void)varClean {
-    NSLog(@"menuData=%@", menuData);
+    NSLog(@"self.tableData=%@", self.tableData);
     
     [self.tableView.refreshControl beginRefreshing];
     
-    for(NSDictionary* group in [menuData copy]) {
+    for(NSDictionary* group in [self.tableData copy]) {
         for(NSDictionary* item in [group[@"items"] copy])
         {
             if(![item[@"checked"] boolValue]) continue;
             
             NSLog(@"clean %@", item[@"path"]);
             
-//            NSError* err;
-//            if(![NSFileManager.defaultManager removeItemAtPath:item[@"path"] error:&err]) {
-//                NSLog(@"clean failed=%@", err);
-//                continue;
-//            }
             
+            NSString* backup = jbroot(@"/var/mobile/Library/RootHide/backup");
+            NSString* newpath = [backup stringByAppendingPathComponent:item[@"path"]];
+            NSString* dirpath = [newpath stringByDeletingLastPathComponent];
+            NSLog(@"newpath=%@, dirpath=%@", newpath, dirpath);
+            if(![NSFileManager.defaultManager fileExistsAtPath:dirpath])
+                [NSFileManager.defaultManager createDirectoryAtPath:dirpath
+                                        withIntermediateDirectories:YES attributes:nil error:nil];
+            [NSFileManager.defaultManager copyItemAtPath:item[@"path"] toPath:newpath error:nil];
+            
+            
+            NSError* err;
+            if(![NSFileManager.defaultManager removeItemAtPath:item[@"path"] error:&err]) {
+                NSLog(@"clean failed=%@", err);
+                continue;
+            }
+
             
             NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[group[@"items"] indexOfObject:item]
-                                                        inSection:[menuData indexOfObject:group] ];
+                                                        inSection:[self.tableData indexOfObject:group] ];
             
             [group[@"items"] removeObject:item]; //delete source data first
             
@@ -219,19 +228,19 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    NSLog(@"numberOfRowsInSection=%ld", menuData.count);
-    return menuData.count;
+    NSLog(@"numberOfRowsInSection=%ld", self.tableData.count);
+    return self.tableData.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSDictionary *groupData = menuData[section];
+    NSDictionary *groupData = self.tableData[section];
     NSArray *items = groupData[@"items"];
     NSLog(@"numberOfRowsInSection=%ld %ld", (long)section, items.count);
     return items.count;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    NSDictionary *groupData = menuData[section];
+    NSDictionary *groupData = self.tableData[section];
     return groupData[@"group"];
 }
 
@@ -239,7 +248,7 @@
     NSLog(@"cellForRowAtIndexPath=%@", indexPath);
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
     
-    NSDictionary *groupData = menuData[indexPath.section];
+    NSDictionary *groupData = self.tableData[indexPath.section];
     NSArray *items = groupData[@"items"];
     
     NSDictionary *item = items[indexPath.row];
@@ -259,7 +268,7 @@
     ZFCheckbox *checkbox = (ZFCheckbox*)cell.accessoryView;
     [checkbox setSelected:!checkbox.selected animated:YES];
     
-    NSDictionary *groupData = menuData[indexPath.section];
+    NSDictionary *groupData = self.tableData[indexPath.section];
     NSArray *items = groupData[@"items"];
     NSMutableDictionary *item = items[indexPath.row];
     NSLog(@"select=%@", item);

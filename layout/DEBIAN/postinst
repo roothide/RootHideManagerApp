@@ -1,0 +1,4 @@
+#!/bin/sh
+
+chown 0:0 /Applications/RootHide.app/RootHide
+chmod +s /Applications/RootHide.app/RootHide

@@ -101,7 +101,7 @@
 
 	"/var/root" : {
 		"whitelist":[
-			"Library",
+            "Library",
 		],
 		"blacklist":[
 			".bootstrapped",
@@ -177,6 +177,9 @@
 		],
 	},
 	"/var/mobile/Documents" : {
+        "whitelist":[
+            {"match":"regexp", "name":"^com\\.apple\\."},
+        ],
 		"blacklist":[
 			{"match":"regexp", "name":".+"},
 		]
@@ -280,7 +283,6 @@
 			"StatusKit",
 			"com.apple.nsurlsessiond-launchd",
 			"CallHistoryTransactions",
-			"Filza",
 			"OSAnalytics",
 			"Suggestions",
 			"com.apple.private.SensorKit",
@@ -331,6 +333,7 @@
 			"Intents",
 			"PowerUI",
 			"VoiceTrigger",
+            "ConfigurationProfiles"
 		],
 		"blacklist":[
 			"Sileo",
@@ -339,6 +342,45 @@
 			"SBSettings",
 		]
 	},
+    "/var/mobile/Library/Preferences" : {
+        "whitelist":[
+            {"match":"regexp", "name":"^com\\.apple\\."},
+            {"match":"regexp", "name":"^systemgroup\\.com\\.apple\\."},
+            ".GlobalPreferences.plist",
+            ".GlobalPreferences_m.plist",
+            "bluetoothaudiod.plist",
+            "NetworkInterfaces.plist",
+            "OSThermalStatus.plist",
+            "preferences.plist",
+            "osanalyticshelper.plist",
+            "UserEventAgent.plist",
+            "wifid.plist",
+            "dprivacyd.plist",
+            "silhouette.plist",
+            "nfcd.plist",
+            "kNPProgressTrackerDomain.plist",
+            "siriknowledged.plist",
+            "UITextInputContextIdentifiers.plist",
+            "mobile_storage_proxy.plist",
+            "splashboardd.plist",
+            "mobile_installation_proxy.plist",
+            "languageassetd.plist",
+            "ptpcamerad.plist",
+            "com.google.gmp.measurement.monitor.plist",
+            "com.google.gmp.measurement.plist",
+        ],
+        "blacklist":[
+            "com.roothide.manager.plist",
+            "com.opa334.Dopamine.roothide.plist",
+            "com.opa334.Dopamine.plist",
+            "com.tigisoftware.Filza.plist",
+            "com.xina.jailbreak.plist",
+            "org.coolstar.SileoStore.plist",
+            "ru.domo.cocoatop64.plist",
+            "ws.hbang.Terminal.plist",
+            "xyz.willy.Zebra.plist",
+        ]
+    },
 	"/var/mobile/Library/Application Support" : {
 		"whitelist":[
 			{"match":"regexp", "name":"^com\\.apple\\."},
@@ -367,8 +409,6 @@
 			"com.roothide.manager",
 			"com.opa334.Dopamine.roothide",
 			"com.opa334.Dopamine",
-			"com.serena.Antoine",
-			"com.amywhile.Aemulo",
 			"com.tigisoftware.Filza",
 			"com.xina.jailbreak",
 			"org.coolstar.SileoStore",

@@ -1,8 +1,61 @@
 // ref https://github.com/XsF1re/FlyJB-App
 
 #import "AppListTableViewController.h"
-
+#include "AppDelegate.h"
 #import "LMApp.h"
+
+#include <sys/sysctl.h>
+
+void killBundleForPath(const char* bundlePath)
+{
+    NSLog(@"killBundleForPath: %s", bundlePath);
+    
+    char realBundlePath[PATH_MAX];
+    if(!realpath(bundlePath, realBundlePath))
+        return;
+    
+    static int maxArgumentSize = 0;
+    if (maxArgumentSize == 0) {
+        size_t size = sizeof(maxArgumentSize);
+        if (sysctl((int[]){ CTL_KERN, KERN_ARGMAX }, 2, &maxArgumentSize, &size, NULL, 0) == -1) {
+            perror("sysctl argument size");
+            maxArgumentSize = 4096; // Default
+        }
+    }
+    int mib[3] = { CTL_KERN, KERN_PROC, KERN_PROC_ALL};
+    struct kinfo_proc *info;
+    size_t length;
+    size_t count;
+    
+    if (sysctl(mib, 3, NULL, &length, NULL, 0) < 0)
+        return;
+    if (!(info = malloc(length)))
+        return;
+    if (sysctl(mib, 3, info, &length, NULL, 0) < 0) {
+        free(info);
+        return;
+    }
+    count = length / sizeof(struct kinfo_proc);
+    for (int i = 0; i < count; i++) {
+        pid_t pid = info[i].kp_proc.p_pid;
+        if (pid == 0) {
+            continue;
+        }
+        size_t size = maxArgumentSize;
+        char* buffer = (char *)malloc(length);
+        if (sysctl((int[]){ CTL_KERN, KERN_PROCARGS2, pid }, 3, buffer, &size, NULL, 0) == 0) {
+            char *executablePath = buffer + sizeof(int);
+            NSLog(@"executablePath [%d] %s", pid, executablePath);
+            char realExecutablePath[PATH_MAX];
+            if (realpath(executablePath, realExecutablePath)
+                && strncmp(realExecutablePath, realBundlePath, strlen(realBundlePath)) == 0) {
+                kill(pid, SIGKILL);
+            }
+        }
+        free(buffer);
+    }
+    free(info);
+}
 
 @interface PrivateApi_LSApplicationWorkspace
 - (NSArray*)allInstalledApplications;
@@ -12,6 +65,7 @@
 @end
 
 @interface AppListTableViewController () {
+    UISearchController *searchController;
     NSArray *appsArray;
     
     NSMutableArray* filteredApps;
@@ -39,22 +93,26 @@
     [self.tableView reloadData];
 }
 
--(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+-(void)reloadSearch {
+    NSString* searchText = searchController.searchBar.text;
     if(searchText.length == 0) {
         isFiltered = false;
     } else {
         isFiltered = true;
         filteredApps = [[NSMutableArray alloc] init];
-        
+        searchText = searchText.lowercaseString;
         for (LMApp* app in appsArray) {
-            NSRange nameRange = [app.name rangeOfString:searchText options:NSCaseInsensitiveSearch];
-            NSRange bundleIdRange = [app.bundleIdentifier rangeOfString:searchText options:NSCaseInsensitiveSearch];
+            NSRange nameRange = [app.name.lowercaseString rangeOfString:searchText options:NSCaseInsensitiveSearch];
+            NSRange bundleIdRange = [app.bundleIdentifier.lowercaseString rangeOfString:searchText options:NSCaseInsensitiveSearch];
             if(nameRange.location != NSNotFound || bundleIdRange.location != NSNotFound) {
                 [filteredApps addObject:app];
             }
         }
     }
-    
+}
+
+-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    [self reloadSearch];
     [self.tableView reloadData];
 }
 
@@ -69,7 +127,7 @@
     
     isFiltered = false;
     
-    UISearchController *searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     searchController.searchBar.delegate = self;
     searchController.searchBar.placeholder = @"name or identifier";
     searchController.searchBar.barTintColor = [UIColor whiteColor];
@@ -90,6 +148,7 @@
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [self updateData];
         dispatch_async(dispatch_get_main_queue(), ^{
+            [self reloadSearch];
             [self.tableView reloadData];
             [self.tableView.refreshControl endRefreshing];
         });
@@ -110,7 +169,10 @@
     for(id proxy in allInstalledApplications)
     {
         LMApp* app = [LMApp appWithPrivateProxy:proxy];
-        if(!app.isHiddenApp && ([app.applicationType containsString:@"User"]))
+        //if(!app.isHiddenApp && ([app.applicationType containsString:@"User"]))
+        if(!app.isHiddenApp
+           && ![app.bundleIdentifier hasPrefix:@"com.apple."]
+           && ([app.bundleURL.path hasPrefix:@"/private/var/containers/Bundle/Application/"]))
         {
             [applications addObject:app];
         }
@@ -140,10 +202,10 @@
 }
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return [[UIView alloc] init];;
+    return [[UIView alloc] init];
 }
 - (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    return [[UIView alloc] init];;
+    return [[UIView alloc] init];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -175,8 +237,8 @@
     
     UISwitch *theSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [theSwitch setOn:[defaults boolForKey:app.bundleIdentifier]];
+    NSMutableDictionary* appconfig = [AppDelegate getDefaultsForKey:@"appconfig"];
+    [theSwitch setOn:[[appconfig objectForKey:app.bundleIdentifier] boolValue]];
     
     cell.accessoryView = theSwitch;
     [theSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
@@ -195,8 +257,13 @@
         app = filteredApps[indexPath.row];
     }
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:switchInCell.on forKey:app.bundleIdentifier];
-    [defaults synchronize];
+    NSMutableDictionary* appconfig = [AppDelegate getDefaultsForKey:@"appconfig"];
+    if(!appconfig) appconfig = [[NSMutableDictionary alloc] init];
+    [appconfig setObject:@(switchInCell.on) forKey:app.bundleIdentifier];
+    [AppDelegate setDefaults:appconfig forKey:@"appconfig"];
+    
+    
+    killBundleForPath(app.bundleURL.path.UTF8String);
+    
 }
 @end

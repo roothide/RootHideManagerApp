@@ -4,8 +4,11 @@
 #import "AppDelegate.h"
 
 int main(int argc, char * argv[]) {
-//    setuid(0);
-//    setgid(0);
+    
+    assert(setuid(0) == 0);
+    assert(setgid(0) == 0);
+    assert(getuid() == 0);
+    assert(getgid() == 0);
     
 //    NSString * bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
     

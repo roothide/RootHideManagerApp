@@ -2,14 +2,26 @@
 #import "AppListTableViewController.h"
 #import "VarCleanController.h"
 #import "SettingTableViewController.h"
-#include "jbroot.h"
+#include "NSJSONSerialization+Comments.h"
 
 @interface AppDelegate ()
-
 @end
 
 @implementation AppDelegate
 
++ (id)getDefaultsForKey:(NSString*)key {
+    NSString *configFilePath = jbroot(@"/var/mobile/Library/RootHide/RootHideConfig.plist");
+    NSDictionary* defaults = [NSDictionary dictionaryWithContentsOfFile:configFilePath];
+    return [defaults objectForKey:key];
+}
+
++ (void)setDefaults:(NSObject*)value forKey:(NSString*)key {
+    NSString *configFilePath = jbroot(@"/var/mobile/Library/RootHide/RootHideConfig.plist");
+    NSMutableDictionary* defaults = [NSMutableDictionary dictionaryWithContentsOfFile:configFilePath];
+    if(!defaults) defaults = [[NSMutableDictionary alloc] init];
+    [defaults setValue:value forKey:key];
+    [defaults writeToFile:configFilePath atomically:YES];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -23,7 +35,9 @@
     NSLog(@"jsonPath=%@", jsonPath);
     NSData* jsonData = [NSData dataWithContentsOfFile:jsonPath];
     assert(jsonData != NULL);
-    NSDictionary *rules = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:nil];
+    NSError* err;
+    NSDictionary *rules = [NSJSONSerialization JSONObjectWithCommentedData:jsonData options:NSJSONReadingMutableContainers error:&err];
+    if(err) NSLog(@"json error=%@", err);
     assert(rules != NULL);
     NSLog(@"default rules=%@", rules);
     NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/VarCleanRules.plist");

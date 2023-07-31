@@ -1,5 +1,5 @@
 #import "SettingTableViewController.h"
-#include "jbroot.h"
+#include "AppDelegate.h"
 
 @interface SettingTableViewController ()
 
@@ -39,7 +39,7 @@
                     @"textLabel": @"Whitelist Mode",
                     @"detailTextLabel": @"auto blacklist newly installed apps",
                     @"type": @"switch",
-                    @"switchKey": @"whitelistmode",
+                    @"switchKey": @"whitelistMode",
                     @"disabled": @YES
                 },
             ]
@@ -86,10 +86,10 @@
     cell.textLabel.text = item[@"textLabel"];
     cell.detailTextLabel.text = item[@"detailTextLabel"];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary* settings = [AppDelegate getDefaultsForKey:@"settings"];
     if([item[@"type"] isEqualToString:@"switch"]) {
         UISwitch *theSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
-        [theSwitch setOn:[defaults boolForKey:item[@"switchKey"]]];
+        [theSwitch setOn:[[settings objectForKey:item[@"switchKey"]] boolValue] ];
         [theSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
         [theSwitch setEnabled:!item[@"disabled"]];
         cell.accessoryView = theSwitch;
@@ -114,9 +114,10 @@
     
     NSLog(@"%@",item[@"switchKey"]);
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:switchInCell.on forKey:item[@"switchKey"]];
-    [defaults synchronize];
+    NSMutableDictionary* settings = [AppDelegate getDefaultsForKey:@"settings"];
+    if(!settings) settings = [[NSMutableDictionary alloc] init];
+    [settings setObject:@(switchInCell.on) forKey:item[@"switchKey"]];
+    [AppDelegate setDefaults:settings forKey:@"settings"];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
