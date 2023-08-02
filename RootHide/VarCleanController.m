@@ -23,6 +23,8 @@
     self.navigationController.navigationBar.hidden = NO;
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.clearsSelectionOnViewWillAppear = NO;
+    
+    //[self.tabBarItem setBadgeValue:@"?"];
 
     
     [self setTitle:@"VarClean"];

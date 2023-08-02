@@ -37,6 +37,7 @@
 		],
 		"blacklist":[
 			"jb",
+            "stash",
 			"alternatives",
 			"ap",
 			"apt",
@@ -102,14 +103,14 @@
 	"/var/root" : {
 		"whitelist":[
             "Library",
+            ".bootstrapped",
+            ".aks_migrate",
+            ".aks_whitelist",
+            ".mkb_seshat_health",
+            ".obliterated",
 		],
 		"blacklist":[
-			".bootstrapped",
 			".bash_history",
-			".aks_migrate",
-			".aks_whitelist",
-			".mkb_seshat_health",
-			".obliterated",
 		]
 	},
 	"/var/root/Library" : {
@@ -492,4 +493,25 @@
 			"xyz.willy.Zebra",
 		]
 	},
+    
+    "/var/tmp" : {
+        "whitelist":[
+            {"match":"regexp", "name":"^\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}$"},
+            {"match":"regexp", "name":"^com\\.apple\\."},
+            {"match":"regexp", "name":"^SSOBackup-"},
+            ".LINKS",
+            "MediaCache",
+            "analytics",
+            "aud",
+            "ct.shutdown",
+            "fseventsd-uuid",
+            "hdds6.dat",
+            "nfcd.firstlaunch",
+            "powerlog",
+            "recommendations",
+            "journeys",
+        ],
+        "blacklist":[
+        ]
+    }
 }
