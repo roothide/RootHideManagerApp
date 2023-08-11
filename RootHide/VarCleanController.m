@@ -44,10 +44,10 @@
     
     [self updateData];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(startRefresh)
-                                          name:UIApplicationWillEnterForegroundNotification
-                                               object:nil];
+//doClean will auto refresh list    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(startRefresh)
+//                                          name:UIApplicationWillEnterForegroundNotification
+//                                               object:nil];
 }
 
 - (void)batchSelect {
@@ -198,7 +198,7 @@
             
             NSLog(@"clean %@", item[@"path"]);
             
-            
+            /*
             NSString* backup = jbroot(@"/var/mobile/Library/RootHide/backup");
             NSString* newpath = [backup stringByAppendingPathComponent:item[@"path"]];
             NSString* dirpath = [newpath stringByDeletingLastPathComponent];
@@ -207,6 +207,7 @@
                 [NSFileManager.defaultManager createDirectoryAtPath:dirpath
                                         withIntermediateDirectories:YES attributes:nil error:nil];
             [NSFileManager.defaultManager copyItemAtPath:item[@"path"] toPath:newpath error:nil];
+            //*/
             
             
             NSError* err;
@@ -228,8 +229,8 @@
     
     [self.tableView.refreshControl endRefreshing];
     
-//    [self updateData];
-//    [self.tableView reloadData];
+    [self updateData];
+    [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source
