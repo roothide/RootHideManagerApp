@@ -63,9 +63,9 @@
     SettingTableViewController *setController = [SettingTableViewController sharedInstance];
     
     
-    listController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Blacklist" image:[UIImage systemImageNamed:@"list.bullet.circle"] tag:0];
-    cleanController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"VarClean" image:[UIImage systemImageNamed:@"clear"] tag:1];
-    setController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Setting" image:[UIImage systemImageNamed:@"gearshape"] tag:2];
+    listController.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Blacklist",@"") image:[UIImage systemImageNamed:@"list.bullet.circle"] tag:0];
+    cleanController.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"VarClean",@"") image:[UIImage systemImageNamed:@"trash"] tag:1];
+    setController.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Setting",@"") image:[UIImage systemImageNamed:@"gearshape"] tag:2];
     
 
     UINavigationController *listNavigationController = [[UINavigationController alloc] initWithRootViewController:listController];
@@ -86,9 +86,9 @@
     statfs("/usr/standalone/firmware", &s);
     NSString* path = [NSString stringWithFormat:@"%s/../../../procursus", s.f_mntfromname];
     if(access(path.UTF8String, F_OK)==0) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"xinaA15 detected" message:@"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:Localized(@"xinaA15 detected") message:Localized(@"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app.") preferredStyle:UIAlertControllerStyleAlert];
 
-        [alert addAction:[UIAlertAction actionWithTitle:@"Got It" style:UIAlertActionStyleDefault handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:Localized(@"Got It") style:UIAlertActionStyleDefault handler:nil]];
         [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
     }
     

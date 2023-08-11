@@ -41,9 +41,9 @@
             {
                 NSError* err=nil;
                 if([NSFileManager.defaultManager moveItemAtPath:[bootpath stringByAppendingPathComponent:name] toPath:[bootpath stringByAppendingFormat:@"/xinaA15-%X", arc4random()] error:&err]) {
-                    msg = @"xinaA15 files has been hidden, please reboot your device.\n\nif you want to use xinaA15 again please restore it in RootHide app.";
+                    msg = Localized(@"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again.");
                 } else {
-                    msg = [NSString stringWithFormat:@"hide failed: %@", err];
+                    msg = [NSString stringWithFormat:Localized(@"hide failed: %@"), err];
                 }
             }
         }
@@ -58,7 +58,7 @@
                     xinafilename = nil;
                     char realbootpath[PATH_MAX]={0};
                     realpath(bootpath.UTF8String, realbootpath);
-                    msg = [NSString stringWithFormat:@"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/", realbootpath];
+                    msg = [NSString stringWithFormat:Localized(@"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/"), realbootpath];
                     break;
                 } else {
                     xinafilename = name;
@@ -69,19 +69,19 @@
         if(xinafilename) {
             NSError* err=nil;
             if([NSFileManager.defaultManager moveItemAtPath:[bootpath stringByAppendingPathComponent:xinafilename] toPath:[bootpath stringByAppendingPathComponent:@"procursus"] error:&err]) {
-                msg = @"xinaA15 files has been restored, you can reboot your device to switch to xinaA15.";
+                msg = Localized(@"xinaA15 files has been restored, you can reboot your device to switch to xinaA15.");
             } else {
-                msg = [NSString stringWithFormat:@"restore failed: %@", err];
+                msg = [NSString stringWithFormat:Localized(@"restore failed: %@"), err];
             }
         } else if(!msg) {
-            msg = @"restore failed: xinaA15 file not found!";
+            msg = Localized(@"restore failed: xinaA15 file not found!");
         }
     }
     
     if(msg) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Process xinaA15 Files" message:msg preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:Localized(@"Process xinaA15 Files") message:msg preferredStyle:UIAlertControllerStyleAlert];
         
-        [alert addAction:[UIAlertAction actionWithTitle:@"Got It" style:UIAlertActionStyleDefault handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:Localized(@"Got It") style:UIAlertActionStyleDefault handler:nil]];
         [self.navigationController presentViewController:alert animated:YES completion:nil];
     }
 }
@@ -94,11 +94,11 @@
     
     self.menuData = @[
         @{
-            @"groupTitle": @"General",
+            @"groupTitle": Localized(@"General"),
             @"items": @[
                 @{
-                    @"textLabel": @"Whitelist Mode",
-                    @"detailTextLabel": @"auto blacklist newly installed apps",
+                    @"textLabel": Localized(@"Whitelist Mode"),
+                    @"detailTextLabel": Localized(@"auto blacklist newly installed apps"),
                     @"type": @"switch",
                     @"switchKey": @"whitelistMode",
                     @"disabled": @YES
@@ -106,11 +106,11 @@
             ]
         },
         @{
-            @"groupTitle": @"Advanced",
+            @"groupTitle": Localized(@"Advanced"),
             @"items": @[
                 @{
-                    @"textLabel": @"Edit VarClean Rules",
-                    @"detailTextLabel": @"open the rules file in Filza",
+                    @"textLabel": Localized(@"Edit VarClean Rules"),
+                    @"detailTextLabel": Localized(@"open the rules file in Filza"),
                     @"type": @"url",
                     @"url": filzaURL.absoluteString
                 },
@@ -138,11 +138,11 @@
     if(xinaA15installed || xinaA15fileshide) {
         [self.menuData addObjectsFromArray:@[
             @{
-                @"groupTitle": @"Misc",
+                @"groupTitle": Localized(@"Misc"),
                 @"items": @[
                     @{
-                        @"textLabel": @"Hide xinaA15 Files",
-                        @"detailTextLabel": @"hide xinaA15 files without uninstall it",
+                        @"textLabel": Localized(@"Hide xinaA15 Files"),
+                        @"detailTextLabel": Localized(@"hide xinaA15 files without uninstall it"),
                         @"type": @"switch",
                         @"status": @(xinaA15fileshide),
                         @"action": ^{
@@ -164,7 +164,7 @@
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleInsetGrouped];
     self.tableView.tableFooterView = [[UIView alloc] init];
     
-    [self setTitle:@"Setting"];
+    [self setTitle:Localized(@"Setting")];
     
     [self reloadMenu];
 }

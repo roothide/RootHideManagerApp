@@ -123,13 +123,13 @@ void killBundleForPath(const char* bundlePath)
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleInsetGrouped];
     self.tableView.tableFooterView = [[UIView alloc] init];
     
-    [self setTitle:@"Blacklist"];
+    [self setTitle:Localized(@"Blacklist")];
     
     isFiltered = false;
     
     searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     searchController.searchBar.delegate = self;
-    searchController.searchBar.placeholder = @"name or identifier";
+    searchController.searchBar.placeholder = Localized(@"name or identifier");
     searchController.searchBar.barTintColor = [UIColor whiteColor];
     searchController.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
     self.navigationItem.searchController = searchController;
@@ -141,6 +141,11 @@ void killBundleForPath(const char* bundlePath)
     self.tableView.refreshControl = refreshControl;
     
     [self updateData];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(startRefresh)
+                                          name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
 }
 
 - (void)startRefresh {

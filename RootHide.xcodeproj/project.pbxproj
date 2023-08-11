@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		8477B5E22A7526AB000632D0 /* NSJSONSerialization+Comments.m in Sources */ = {isa = PBXBuildFile; fileRef = 8477B5E02A7526AB000632D0 /* NSJSONSerialization+Comments.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8477B6052A866437000632D0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8477B6072A866437000632D0 /* Localizable.strings */; };
+		8477B60B2A866CBA000632D0 /* entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8477B60A2A866CBA000632D0 /* entitlements.plist */; };
 		84BBFAC92A7420100054A68E /* VarCleanRules.json in Resources */ = {isa = PBXBuildFile; fileRef = 84BBFAC72A741C800054A68E /* VarCleanRules.json */; };
 		84BBFACC2A74361E0054A68E /* libjbpath.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84BBFACA2A74361E0054A68E /* libjbpath.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
 		A672ABB427F748DE00878787 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A672ABB327F748DE00878787 /* AppDelegate.m */; };
@@ -24,6 +26,9 @@
 /* Begin PBXFileReference section */
 		8477B5DD2A75269B000632D0 /* NSJSONSerialization+Comments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSJSONSerialization+Comments.h"; path = "RootHide/NSJSONSerialization+Comments.h"; sourceTree = SOURCE_ROOT; };
 		8477B5E02A7526AB000632D0 /* NSJSONSerialization+Comments.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSJSONSerialization+Comments.m"; path = "RootHide/NSJSONSerialization+Comments.m"; sourceTree = SOURCE_ROOT; };
+		8477B6062A866437000632D0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8477B6092A8668AF000632D0 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8477B60A2A866CBA000632D0 /* entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = entitlements.plist; sourceTree = "<group>"; };
 		84BBFAC72A741C800054A68E /* VarCleanRules.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = VarCleanRules.json; sourceTree = "<group>"; };
 		84BBFACA2A74361E0054A68E /* libjbpath.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libjbpath.dylib; sourceTree = "<group>"; };
 		84BBFACB2A74361E0054A68E /* jbroot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jbroot.h; sourceTree = "<group>"; };
@@ -65,6 +70,7 @@
 			children = (
 				84BBFACB2A74361E0054A68E /* jbroot.h */,
 				84BBFACA2A74361E0054A68E /* libjbpath.dylib */,
+				8477B60A2A866CBA000632D0 /* entitlements.plist */,
 				A672ABB127F748DE00878787 /* RootHide */,
 				A672ABB027F748DE00878787 /* Products */,
 				BFE9353B27F753D30022D46C /* Frameworks */,
@@ -82,6 +88,8 @@
 		A672ABB127F748DE00878787 /* RootHide */ = {
 			isa = PBXGroup;
 			children = (
+				BFA303472A47EBA800DC242C /* LMApp.h */,
+				BFA3034A2A47EBA800DC242C /* LMApp.m */,
 				8477B5DD2A75269B000632D0 /* NSJSONSerialization+Comments.h */,
 				8477B5E02A7526AB000632D0 /* NSJSONSerialization+Comments.m */,
 				BF0FF1BE2A5510C100FFA27E /* UIComponent */,
@@ -94,11 +102,10 @@
 				BFD8B9712A4BD68D007CCEB8 /* SettingTableViewController.h */,
 				BFD8B9722A4BD68D007CCEB8 /* SettingTableViewController.m */,
 				84BBFAC72A741C800054A68E /* VarCleanRules.json */,
-				BFA303472A47EBA800DC242C /* LMApp.h */,
-				BFA3034A2A47EBA800DC242C /* LMApp.m */,
+				A672ABC427F748E100878787 /* main.m */,
 				A672ABBE27F748E100878787 /* Assets.xcassets */,
 				A672ABC327F748E100878787 /* Info.plist */,
-				A672ABC427F748E100878787 /* main.m */,
+				8477B6072A866437000632D0 /* Localizable.strings */,
 			);
 			path = RootHide;
 			sourceTree = "<group>";
@@ -162,6 +169,7 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
 			);
 			mainGroup = A672ABA627F748DE00878787;
 			productRefGroup = A672ABB027F748DE00878787 /* Products */;
@@ -178,7 +186,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8477B60B2A866CBA000632D0 /* entitlements.plist in Resources */,
 				A672ABBF27F748E100878787 /* Assets.xcassets in Resources */,
+				8477B6052A866437000632D0 /* Localizable.strings in Resources */,
 				84BBFAC92A7420100054A68E /* VarCleanRules.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -203,11 +213,24 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		8477B6072A866437000632D0 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8477B6062A866437000632D0 /* en */,
+				8477B6092A8668AF000632D0 /* de */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		A672ABC627F748E100878787 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -266,6 +289,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";

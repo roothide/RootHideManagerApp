@@ -27,12 +27,12 @@
     //[self.tabBarItem setBadgeValue:@"?"];
 
     
-    [self setTitle:@"VarClean"];
+    [self setTitle:Localized(@"VarClean")];
     
-    UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:@"Clean" style:UIBarButtonItemStylePlain target:self action:@selector(varClean)];
+    UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:Localized(@"Clean") style:UIBarButtonItemStylePlain target:self action:@selector(varClean)];
     self.navigationItem.rightBarButtonItem = button;
     
-    UIBarButtonItem *button2 = [[UIBarButtonItem alloc] initWithTitle:@"SeleteAll" style:UIBarButtonItemStylePlain target:self action:@selector(batchSelect)];
+    UIBarButtonItem *button2 = [[UIBarButtonItem alloc] initWithTitle:Localized(@"SeleteAll") style:UIBarButtonItemStylePlain target:self action:@selector(batchSelect)];
     self.navigationItem.leftBarButtonItem = button2;
     
     self.tableData = [[NSMutableArray alloc] init];
@@ -43,6 +43,11 @@
     self.tableView.refreshControl = refreshControl;
     
     [self updateData];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(startRefresh)
+                                          name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
 }
 
 - (void)batchSelect {

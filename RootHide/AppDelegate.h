@@ -10,3 +10,5 @@
 
 @end
 
+#define Localized(x) NSLocalizedString(x,nil)
+
