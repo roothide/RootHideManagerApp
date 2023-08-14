@@ -124,7 +124,7 @@
             BOOL exists = [fileManager fileExistsAtPath:filePath isDirectory:&isDirectory];
             BOOL isFolder = exists && isDirectory;
             
-            NSDictionary *tableItem = @{
+            NSMutableDictionary *tableItem = @{
                 @"name": file,
                 @"path": filePath,
                 @"isFolder": @(isFolder),
@@ -159,6 +159,14 @@
     [self updateForRules:rules customed:customedRules];
     [self updateForRules:customedRules customed:nil];
 
+    NSComparator sorter = ^NSComparisonResult(NSDictionary* a, NSDictionary* b)
+    {
+        if([a[@"items"] count]!=0 && [b[@"items"] count]==0) return NSOrderedAscending;
+        if([a[@"items"] count]==0 && [b[@"items"] count]!=0) return NSOrderedDescending;
+        
+        return [a[@"group"] compare:b[@"group"]];
+    };
+    [self.tableData sortUsingComparator:sorter];
 }
 
 - (BOOL)checkFileInList:(NSString *)fileName List:(NSArray*)list {
@@ -196,7 +204,7 @@
         {
             if(![item[@"checked"] boolValue]) continue;
             
-            NSLog(@"clean %@", item[@"path"]);
+            NSLog(@"clean %@", item);
             
             /*
             NSString* backup = jbroot(@"/var/mobile/Library/RootHide/backup");
@@ -268,18 +276,20 @@
     return cell;
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];//
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     ZFCheckbox *checkbox = (ZFCheckbox*)cell.accessoryView;
-    [checkbox setSelected:!checkbox.selected animated:YES];
+    
+    BOOL newstate = !checkbox.selected;
+    
+    [checkbox setSelected:newstate animated:YES];
     
     NSDictionary *groupData = self.tableData[indexPath.section];
     NSArray *items = groupData[@"items"];
     NSMutableDictionary *item = items[indexPath.row];
     NSLog(@"select=%@", item);
-    item[@"checked"] = @(checkbox.selected);
+    item[@"checked"] = @(newstate);
 }
 @end
