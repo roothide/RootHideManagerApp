@@ -24,9 +24,6 @@
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.clearsSelectionOnViewWillAppear = NO;
     
-    //[self.tabBarItem setBadgeValue:@"?"];
-
-    
     [self setTitle:Localized(@"VarClean")];
     
     UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:Localized(@"Clean") style:UIBarButtonItemStylePlain target:self action:@selector(varClean)];
@@ -148,6 +145,7 @@
 }
 
 - (void)updateData {
+    NSLog(@"updateData...");
     self.tableData = [[NSMutableArray alloc] init];
     
     NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/VarCleanRules.plist");
@@ -167,6 +165,16 @@
         return [a[@"group"] compare:b[@"group"]];
     };
     [self.tableData sortUsingComparator:sorter];
+    
+    
+    int BlacklistCount=0;
+    for(NSDictionary* group in self.tableData) {
+        for(NSDictionary* item in group[@"items"])
+        {
+            if([item[@"checked"] boolValue]) BlacklistCount++;
+        }
+    }
+    [self.tabBarItem setBadgeValue:BlacklistCount ? [NSString stringWithFormat:@"%d",BlacklistCount]:nil];
 }
 
 - (BOOL)checkFileInList:(NSString *)fileName List:(NSArray*)list {
@@ -204,7 +212,7 @@
         {
             if(![item[@"checked"] boolValue]) continue;
             
-            NSLog(@"clean %@", item);
+            NSLog(@"clean=%@", item);
             
             /*
             NSString* backup = jbroot(@"/var/mobile/Library/RootHide/backup");
@@ -270,6 +278,7 @@
     NSDictionary *item = items[indexPath.row];
     cell.textLabel.text =  [NSString stringWithFormat:@"%@ %@",[item[@"isFolder"] boolValue] ? @"📁" : @"📃", item[@"name"]];
     ZFCheckbox *checkbox = [[ZFCheckbox alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    checkbox.userInteractionEnabled = FALSE; //passthrough to didSelectRowAtIndexPath
     [checkbox setSelected:[item[@"checked"] boolValue]];
     cell.accessoryView = checkbox;
     
@@ -289,7 +298,7 @@
     NSDictionary *groupData = self.tableData[indexPath.section];
     NSArray *items = groupData[@"items"];
     NSMutableDictionary *item = items[indexPath.row];
-    NSLog(@"select=%@", item);
     item[@"checked"] = @(newstate);
+    NSLog(@"select=%@", item);
 }
 @end
