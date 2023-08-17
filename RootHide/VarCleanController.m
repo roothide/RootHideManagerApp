@@ -39,6 +39,7 @@
     [refreshControl addTarget:self action:@selector(startRefresh) forControlEvents:UIControlEventValueChanged];
     self.tableView.refreshControl = refreshControl;
     
+    
     [self updateData];
     
 //doClean will auto refresh list    [[NSNotificationCenter defaultCenter] addObserver:self
@@ -165,16 +166,6 @@
         return [a[@"group"] compare:b[@"group"]];
     };
     [self.tableData sortUsingComparator:sorter];
-    
-    
-    int BlacklistCount=0;
-    for(NSDictionary* group in self.tableData) {
-        for(NSDictionary* item in group[@"items"])
-        {
-            if([item[@"checked"] boolValue]) BlacklistCount++;
-        }
-    }
-    [self.tabBarItem setBadgeValue:BlacklistCount ? [NSString stringWithFormat:@"%d",BlacklistCount]:nil];
 }
 
 - (BOOL)checkFileInList:(NSString *)fileName List:(NSArray*)list {
