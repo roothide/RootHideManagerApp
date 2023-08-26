@@ -3,9 +3,14 @@
 #import "VarCleanController.h"
 #import "SettingTableViewController.h"
 #include "NSJSONSerialization+Comments.h"
+
 #include <sys/mount.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 @interface AppDelegate ()
+- (void)showAlert:(NSString*)title message:(NSString*)message;
 @end
 
 @implementation AppDelegate
@@ -22,6 +27,31 @@
     if(!defaults) defaults = [[NSMutableDictionary alloc] init];
     [defaults setValue:value forKey:key];
     [defaults writeToFile:configFilePath atomically:YES];
+}
+
+- (void)showAlert:(NSString*)title message:(NSString*)message {
+    
+    static dispatch_queue_t alertQueue = nil;
+    
+    static dispatch_once_t oncetoken;
+    dispatch_once(&oncetoken, ^{
+        alertQueue = dispatch_queue_create("alertQueue", DISPATCH_QUEUE_SERIAL);
+    });
+    
+    dispatch_async(alertQueue, ^{
+        __block BOOL presented = NO;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:Localized(@"Got It") style:UIAlertActionStyleDefault handler:nil]];
+            
+            UIViewController* vc = self.window.rootViewController;
+            while(vc.presentedViewController) vc = vc.presentedViewController;
+            [vc presentViewController:alert animated:YES completion:^{ presented=YES; }];
+        });
+        
+        while(!presented) usleep(100*1000);
+    });
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -86,11 +116,24 @@
     statfs("/usr/standalone/firmware", &s);
     NSString* path = [NSString stringWithFormat:@"%s/../../../procursus", s.f_mntfromname];
     if(access(path.UTF8String, F_OK)==0) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:Localized(@"xinaA15 detected") message:Localized(@"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app.") preferredStyle:UIAlertControllerStyleAlert];
-
-        [alert addAction:[UIAlertAction actionWithTitle:Localized(@"Got It") style:UIAlertActionStyleDefault handler:nil]];
-        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+        [self showAlert:Localized(@"xinaA15 detected") message:Localized(@"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app.")];
     }
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        
+        int s = socket(AF_INET, SOCK_STREAM, 0);
+        
+        struct sockaddr_in a;
+        a.sin_family = AF_INET;
+        a.sin_addr.s_addr = inet_addr("127.0.0.1");
+        a.sin_port = htons(22);
+        
+        if(connect(s, (struct sockaddr*)&a, sizeof(a)) == 0) {
+            [self showAlert:Localized(@"SSH Detected") message:Localized(@"SSH Service has been installed, you can uninstall it via Sileo/Zebra.")];
+        }
+        
+        close(s);
+    });
     
     return YES;
 }
