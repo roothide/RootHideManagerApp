@@ -2,7 +2,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AppListTableViewController : UITableViewController <UISearchBarDelegate>
+@interface BlacklistViewController : UITableViewController <UISearchBarDelegate>
 
 + (instancetype)sharedInstance;
 

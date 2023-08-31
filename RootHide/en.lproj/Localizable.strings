@@ -2,7 +2,7 @@
 "Blacklist" = "Blacklist";
 "name or identifier" = "name or identifier";
 
-"VarClean" = "VarClean";
+"varClean" = "varClean";
 "Clean" = "Clean";
 "SeleteAll" = "SeleteAll";
 
@@ -13,8 +13,8 @@
 "auto blacklist newly installed apps" = "auto blacklist newly installed apps";
 
 "Advanced" = "Advanced";
-"Edit VarClean Rules" = "Edit VarClean Rules";
-"open the rules file in Filza" = "open the rules file in Filza";
+"Edit varClean Rules" = "Edit varClean Rules";
+"view the rules file in Filza" = "view the rules file in Filza";
 
 "Misc" = "Misc";
 "Hide xinaA15 Files" = "Hide xinaA15 Files";

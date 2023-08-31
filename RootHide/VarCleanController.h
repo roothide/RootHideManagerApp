@@ -2,7 +2,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface VarCleanController : UITableViewController
+@interface varCleanController : UITableViewController
 
 + (instancetype)sharedInstance;
 

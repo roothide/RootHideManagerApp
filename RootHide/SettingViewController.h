@@ -2,7 +2,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SettingTableViewController : UITableViewController
+@interface SettingViewController : UITableViewController
 
 + (instancetype)sharedInstance;
 

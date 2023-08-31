@@ -176,6 +176,11 @@
 			"Media",
 			"MobileSoftwareUpdate"
 		],
+        "blacklist":[
+            "log.txt",
+            ".ekenablelogging",
+            ".eksafemode",
+        ]
 	},
 	"/var/mobile/Documents" : {
         "whitelist":[

@@ -1,7 +1,7 @@
 // https://github.com/wujianguo/iOSAppsInfo
 // modified by Shadow-
 
-#import "LMApp.h"
+#import "AppList.h"
 #import <dlfcn.h>
 
 @interface UIImage ()
@@ -42,7 +42,7 @@
 @end
 
 
-@implementation LMApp
+@implementation AppList
 {
     PrivateApi_LSApplicationProxy* _applicationProxy;
     UIImage* _icon;

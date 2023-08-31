@@ -1,18 +1,18 @@
-#import "SettingTableViewController.h"
+#import "SettingViewController.h"
 #include "AppDelegate.h"
 #include <sys/mount.h>
 #include <spawn.h>
 
-@interface SettingTableViewController ()
+@interface SettingViewController ()
 
 @property (nonatomic, retain) NSMutableArray *menuData;
 
 @end
 
-@implementation SettingTableViewController
+@implementation SettingViewController
 
 + (instancetype)sharedInstance {
-    static SettingTableViewController* sharedInstance = nil;
+    static SettingViewController* sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedInstance = [[self alloc] init];
@@ -87,7 +87,7 @@
 }
 
 - (void)reloadMenu {
-    NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/VarCleanRules-custom.plist");
+    NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules-custom.plist");
     NSCharacterSet *CharacterSet = [NSCharacterSet URLQueryAllowedCharacterSet];
     NSString *encodedURLString = [rulesFilePath stringByAddingPercentEncodingWithAllowedCharacters:CharacterSet];
     NSURL *filzaURL = [NSURL URLWithString:[@"filza://view" stringByAppendingString:encodedURLString]];
@@ -109,8 +109,8 @@
             @"groupTitle": Localized(@"Advanced"),
             @"items": @[
                 @{
-                    @"textLabel": Localized(@"Edit VarClean Rules"),
-                    @"detailTextLabel": Localized(@"open the rules file in Filza"),
+                    @"textLabel": Localized(@"Edit varClean Rules"),
+                    @"detailTextLabel": Localized(@"view the rules file in Filza"),
                     @"type": @"url",
                     @"url": filzaURL.absoluteString
                 },

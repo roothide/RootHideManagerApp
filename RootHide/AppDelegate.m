@@ -1,7 +1,7 @@
 #import "AppDelegate.h"
-#import "AppListTableViewController.h"
-#import "VarCleanController.h"
-#import "SettingTableViewController.h"
+#import "BlacklistViewController.h"
+#import "varCleanController.h"
+#import "SettingViewController.h"
 #include "NSJSONSerialization+Comments.h"
 
 #include <sys/mount.h>
@@ -62,7 +62,7 @@
         assert([NSFileManager.defaultManager createDirectoryAtPath:roothideDir withIntermediateDirectories:YES attributes:nil error:nil]);
     }
     
-    NSString* jsonPath = [NSBundle.mainBundle pathForResource:@"VarCleanRules" ofType:@"json"];
+    NSString* jsonPath = [NSBundle.mainBundle pathForResource:@"varCleanRules" ofType:@"json"];
     NSLog(@"jsonPath=%@", jsonPath);
     NSData* jsonData = [NSData dataWithContentsOfFile:jsonPath];
     assert(jsonData != NULL);
@@ -71,14 +71,14 @@
     if(err) NSLog(@"json error=%@", err);
     assert(rules != NULL);
     NSLog(@"default rules=%@", rules);
-    NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/VarCleanRules.plist");
+    NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules.plist");
     if([NSFileManager.defaultManager fileExistsAtPath:rulesFilePath]) {
         assert([NSFileManager.defaultManager removeItemAtPath:rulesFilePath error:nil]);
     }
     NSLog(@"copy default rules to %@", rulesFilePath);
     assert([rules writeToFile:rulesFilePath atomically:YES]);
     
-    NSString *customedRulesFilePath = jbroot(@"/var/mobile/Library/RootHide/VarCleanRules-custom.plist");
+    NSString *customedRulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules-custom.plist");
     if(![NSFileManager.defaultManager fileExistsAtPath:customedRulesFilePath]) {
         NSDictionary* template = [[NSDictionary alloc] init];
         assert([template writeToFile:customedRulesFilePath atomically:YES]);
@@ -88,13 +88,13 @@
     self.window.backgroundColor = [UIColor clearColor];
     [self.window makeKeyAndVisible];
     
-    AppListTableViewController *listController = [AppListTableViewController sharedInstance];
-    VarCleanController *cleanController = [VarCleanController sharedInstance];
-    SettingTableViewController *setController = [SettingTableViewController sharedInstance];
+    BlacklistViewController *listController = [BlacklistViewController sharedInstance];
+    varCleanController *cleanController = [varCleanController sharedInstance];
+    SettingViewController *setController = [SettingViewController sharedInstance];
     
     
     listController.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Blacklist",@"") image:[UIImage systemImageNamed:@"list.bullet.circle"] tag:0];
-    cleanController.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"VarClean",@"") image:[UIImage systemImageNamed:@"trash"] tag:1];
+    cleanController.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"varClean",@"") image:[UIImage systemImageNamed:@"trash"] tag:1];
     setController.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Setting",@"") image:[UIImage systemImageNamed:@"gearshape"] tag:2];
     
 

@@ -1,15 +1,15 @@
-#import "VarCleanController.h"
+#import "varCleanController.h"
 #include "AppDelegate.h"
 #import "ZFCheckbox.h"
 
-@interface VarCleanController ()
+@interface varCleanController ()
 @property (nonatomic, retain) NSMutableArray* tableData;
 @end
 
-@implementation VarCleanController
+@implementation varCleanController
 
 + (instancetype)sharedInstance {
-    static VarCleanController* sharedInstance = nil;
+    static varCleanController* sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedInstance = [[self alloc] init];
@@ -24,7 +24,7 @@
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.clearsSelectionOnViewWillAppear = NO;
     
-    [self setTitle:Localized(@"VarClean")];
+    [self setTitle:Localized(@"varClean")];
     
     UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:Localized(@"Clean") style:UIBarButtonItemStylePlain target:self action:@selector(varClean)];
     self.navigationItem.rightBarButtonItem = button;
@@ -149,10 +149,10 @@
     NSLog(@"updateData...");
     self.tableData = [[NSMutableArray alloc] init];
     
-    NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/VarCleanRules.plist");
+    NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules.plist");
     NSDictionary *rules = [NSDictionary dictionaryWithContentsOfFile:rulesFilePath];
     
-    NSString *customedRulesFilePath = jbroot(@"/var/mobile/Library/RootHide/VarCleanRules-custom.plist");
+    NSString *customedRulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules-custom.plist");
     NSMutableDictionary *customedRules = [NSMutableDictionary dictionaryWithContentsOfFile:customedRulesFilePath];
     
     [self updateForRules:rules customed:customedRules];
@@ -267,7 +267,7 @@
     NSArray *items = groupData[@"items"];
     
     NSDictionary *item = items[indexPath.row];
-    cell.textLabel.text =  [NSString stringWithFormat:@"%@ %@",[item[@"isFolder"] boolValue] ? @"📁" : @"📃", item[@"name"]];
+    cell.textLabel.text =  [NSString stringWithFormat:@"%@ %@",[item[@"isFolder"] boolValue] ? @"🗂️" : @"📄", item[@"name"]];
     ZFCheckbox *checkbox = [[ZFCheckbox alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
     checkbox.userInteractionEnabled = FALSE; //passthrough to didSelectRowAtIndexPath
     [checkbox setSelected:[item[@"checked"] boolValue]];

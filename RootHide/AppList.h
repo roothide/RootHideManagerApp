@@ -1,7 +1,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface LMApp : NSObject
+@interface AppList : NSObject
 @property (nonatomic, strong) NSString *infoPlistPath;
 
 @property (nonatomic, readonly) NSString* bundleIdentifier;

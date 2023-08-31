@@ -1,8 +1,8 @@
 // ref https://github.com/XsF1re/FlyJB-App
 
-#import "AppListTableViewController.h"
+#import "BlacklistViewController.h"
 #include "AppDelegate.h"
-#import "LMApp.h"
+#import "AppList.h"
 
 #include <sys/sysctl.h>
 
@@ -64,7 +64,7 @@ void killBundleForPath(const char* bundlePath)
 - (NSArray*)publicURLSchemes;
 @end
 
-@interface AppListTableViewController () {
+@interface BlacklistViewController () {
     UISearchController *searchController;
     NSArray *appsArray;
     
@@ -74,10 +74,10 @@ void killBundleForPath(const char* bundlePath)
 
 @end
 
-@implementation AppListTableViewController
+@implementation BlacklistViewController
 
 + (instancetype)sharedInstance {
-    static AppListTableViewController* sharedInstance = nil;
+    static BlacklistViewController* sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedInstance = [[self alloc] init];
@@ -101,7 +101,7 @@ void killBundleForPath(const char* bundlePath)
         isFiltered = true;
         filteredApps = [[NSMutableArray alloc] init];
         searchText = searchText.lowercaseString;
-        for (LMApp* app in appsArray) {
+        for (AppList* app in appsArray) {
             NSRange nameRange = [app.name.lowercaseString rangeOfString:searchText options:NSCaseInsensitiveSearch];
             NSRange bundleIdRange = [app.bundleIdentifier.lowercaseString rangeOfString:searchText options:NSCaseInsensitiveSearch];
             if(nameRange.location != NSNotFound || bundleIdRange.location != NSNotFound) {
@@ -173,7 +173,7 @@ void killBundleForPath(const char* bundlePath)
     
     for(id proxy in allInstalledApplications)
     {
-        LMApp* app = [LMApp appWithPrivateProxy:proxy];
+        AppList* app = [AppList appWithPrivateProxy:proxy];
         //if(!app.isHiddenApp && ([app.applicationType containsString:@"User"]))
         if(!app.isHiddenApp
            && ![app.bundleIdentifier hasPrefix:@"com.apple."]
@@ -183,7 +183,7 @@ void killBundleForPath(const char* bundlePath)
         }
     }
     
-    NSArray *appsSortedByName = [applications sortedArrayUsingComparator:^NSComparisonResult(LMApp *app1, LMApp *app2) {
+    NSArray *appsSortedByName = [applications sortedArrayUsingComparator:^NSComparisonResult(AppList *app1, AppList *app2) {
         return [app1.name localizedStandardCompare:app2.name];
     }];
     
@@ -228,7 +228,7 @@ void killBundleForPath(const char* bundlePath)
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
     
-    LMApp* app = appsArray[indexPath.row];
+    AppList* app = appsArray[indexPath.row];
     
     if(isFiltered) {
         app = filteredApps[indexPath.row];
@@ -256,7 +256,7 @@ void killBundleForPath(const char* bundlePath)
     CGPoint pos = [switchInCell convertPoint:switchInCell.bounds.origin toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:pos];
     
-    LMApp* app = appsArray[indexPath.row];
+    AppList* app = appsArray[indexPath.row];
     
     if(isFiltered) {
         app = filteredApps[indexPath.row];
