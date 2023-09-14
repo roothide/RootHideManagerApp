@@ -57,6 +57,32 @@ void killBundleForPath(const char* bundlePath)
     free(info);
 }
 
+
+#define APP_PATH_PREFIX "/private/var/containers/Bundle/Application/"
+
+BOOL isDefaultInstallationPath(NSString* _path)
+{
+    if(!_path) return NO;
+
+    const char* path = _path.UTF8String;
+    
+    char rp[PATH_MAX];
+    if(!realpath(path, rp)) return NO;
+
+    if(strncmp(rp, APP_PATH_PREFIX, sizeof(APP_PATH_PREFIX)-1) != 0)
+        return NO;
+
+    char* p1 = rp + sizeof(APP_PATH_PREFIX)-1;
+    char* p2 = strchr(p1, '/');
+    if(!p2) return NO;
+
+    //is normal app or jailbroken app/daemon?
+    if((p2 - p1) != (sizeof("xxxxxxxx-xxxx-xxxx-yxxx-xxxxxxxxxxxx")-1))
+        return NO;
+
+    return YES;
+}
+
 @interface PrivateApi_LSApplicationWorkspace
 - (NSArray*)allInstalledApplications;
 - (bool)openApplicationWithBundleID:(id)arg1;
@@ -175,9 +201,10 @@ void killBundleForPath(const char* bundlePath)
     {
         AppList* app = [AppList appWithPrivateProxy:proxy];
         //if(!app.isHiddenApp && ([app.applicationType containsString:@"User"]))
+        //some apps can be installed in trollstore but detect jailbreak
         if(!app.isHiddenApp
            && ![app.bundleIdentifier hasPrefix:@"com.apple."]
-           && ([app.bundleURL.path hasPrefix:@"/private/var/containers/Bundle/Application/"]))
+           && isDefaultInstallationPath(app.bundleURL.path))
         {
             [applications addObject:app];
         }

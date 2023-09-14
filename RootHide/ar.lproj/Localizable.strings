@@ -1,0 +1,45 @@
+
+"Blacklist" = "القائمة السوداء";
+"name or identifier" = "الاسم أو المعرف";
+
+"varClean" = "varClean";
+"Clean" = "تنظيف";
+"SelectAll" = "تحديد الكل";
+
+"Setting" = "الإعدادات";
+
+"General" = "عام";
+"Whitelist Mode" = "وضع القائمة البيضاء";
+"auto blacklist newly installed apps" = "القائمة السوداء التلقائية للتطبيقات المثبتة حديثا";
+
+"Advanced" = "إعدادات متقدمة";
+"Edit varClean Rules" = "varClean تعديل قواعد";
+"view the rules file in Filza" = "عرض ملف القواعد في Filza";
+
+"Misc" = "اخرى";
+"Hide xinaA15 Files" = " xinaA15 إخفاء ملفات";
+"hide xinaA15 files without uninstall it" = " بدون حذفها xinaA15 إخفاء ملفات";
+
+
+
+"Got It" = "حصلت عليه";
+
+"SSH Detected" = "SSH الكشف عن";
+"SSH Service has been installed, you can uninstall it via Sileo/Zebra." = "SSH تم تحميل خدمات بامكانك حذفها عن طريق Sileo/Zebra.";
+
+"xinaA15 detected" = "xinaA15 الكشف عن";
+
+"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "تم تثبيت جليبريتم تثبيت جليبريك xinaA15، يمكنك إلغاء تثبيته عبر تطبيق xinaA15 أو إخفائه في إعدادات تطبيق RootHide";
+
+"Process xinaA15 Files" = "معالجة ملفات xinaA15";
+
+"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "تم إخفاء ملفات xinaA15، يرجى إعادة تشغيل جهازك. يمكنك استعادته لاحقًا إذا كنت تريد استخدام xinaA15 مرة أخرى.";
+
+"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "تمت استعادة ملفات xinaA15، ويمكنك إعادة تشغيل جهازك للتبديل إلى xinaA15.";
+
+"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "يوجد عدة ملفات جيلبريك xinaA15، يمكنك استعادتها يدوياً: \n\n%s/";
+
+"restore failed: xinaA15 file not found!" = "فشلت الاستعادة: لم يتم العثور على ملف xinaA15!";
+"restore failed: %@" = "فشلت الاستعادة: %@";
+"hide failed: %@" = "فشل الإخفاء: %@";
+

@@ -11,7 +11,6 @@
 			"datamigrator",
 			"folders",
 			"keybags",
-			"logs",
 			"networkd",
 			"root",
 			"tmp",
@@ -20,7 +19,6 @@
 			"containers",
 			"db",
 			"hardware",
-			"lib",
 			"mobile",
 			"preferences",
 			"run",
@@ -30,6 +28,7 @@
 			"empty",
 			"installd",
 			"log",
+            "logs",
 			"msgs",
 			"protected",
 			"select",
@@ -182,14 +181,14 @@
             ".eksafemode",
         ]
 	},
-	"/var/mobile/Documents" : {
+    "/var/mobile/Documents" : {
         "whitelist":[
             {"match":"regexp", "name":"^com\\.apple\\."},
         ],
-		"blacklist":[
-			{"match":"regexp", "name":".+"},
-		]
-	},
+        "blacklist":[
+            {"match":"regexp", "name":".+"},
+        ]
+    },
 	"/var/mobile/Library" : {
 		"whitelist":[
 			{"match":"regexp", "name":"^com\\.apple\\."},
@@ -425,7 +424,8 @@
 	},
 	"/var/mobile/Library/Caches" : {
 		"whitelist":[
-			{"match":"regexp", "name":"^com\\.apple\\."},
+            {"match":"regexp", "name":"^com\\.apple\\."},
+            {"match":"regexp", "name":"^TelephonyUI-\\d+$"},
 			".com.apple.persistentconnection.settings.lock.lock",
 			"Checkpoint.plist",
 			"CloudKit",
@@ -453,6 +453,7 @@
 			"org.coolstar.SileoStore",
 			"ws.hbang.Terminal",
 			"xyz.willy.Zebra",
+            "Cephei",
 		]
 	},
 	"/var/mobile/Library/Saved Application State" : {

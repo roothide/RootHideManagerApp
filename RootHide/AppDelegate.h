@@ -1,5 +1,5 @@
 #import <UIKit/UIKit.h>
-#include "jbroot.h"
+#include "roothide.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

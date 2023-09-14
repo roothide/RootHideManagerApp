@@ -29,7 +29,7 @@
     UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:Localized(@"Clean") style:UIBarButtonItemStylePlain target:self action:@selector(varClean)];
     self.navigationItem.rightBarButtonItem = button;
     
-    UIBarButtonItem *button2 = [[UIBarButtonItem alloc] initWithTitle:Localized(@"SeleteAll") style:UIBarButtonItemStylePlain target:self action:@selector(batchSelect)];
+    UIBarButtonItem *button2 = [[UIBarButtonItem alloc] initWithTitle:Localized(@"SelectAll") style:UIBarButtonItemStylePlain target:self action:@selector(batchSelect)];
     self.navigationItem.leftBarButtonItem = button2;
     
     self.tableData = [[NSMutableArray alloc] init];

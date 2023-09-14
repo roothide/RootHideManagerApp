@@ -1,0 +1,20 @@
+--- !tapi-tbd
+tbd-version:     4
+targets:         [ arm64-ios, arm64e-ios ]
+uuids:
+  - target:          arm64-ios
+    value:           635FD2AE-3E28-35AB-9DE2-B69BB3E63FE6
+  - target:          arm64e-ios
+    value:           84FCF28A-1845-3F04-9E04-C0C2DB09BF73
+flags:           [ not_app_extension_safe ]
+install-name:    '@loader_path/.jbroot/usr/lib/libroothide.dylib'
+current-version: 0
+compatibility-version: 0
+exports:
+  - targets:         [ arm64-ios, arm64e-ios ]
+    symbols:         [ __Z6jbrootNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE, 
+                       __Z6jbrootP8NSString, __Z6rootfsNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE, 
+                       __Z6rootfsP8NSString, _cache_path, _is_jbrand_value, _is_jbroot_name, 
+                       _jbrand, _jbroot, _jbroot_alloc, _jbrootat_alloc, _rootfs, 
+                       _rootfs_alloc ]
+...

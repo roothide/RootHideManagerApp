@@ -1,11 +1,11 @@
-export ARCHS = arm64
-export TARGET = iphone:latest:15.0
-export DEB_ARCH = iphoneos-arm64
-export IPHONEOS_DEPLOYMENT_TARGET = 15.0
-
-THEOS_DEVICE_IP = iphone11.local
+ARCHS = arm64
+TARGET = iphone:latest:15.0
+DEB_ARCH = iphoneos-arm64e
+IPHONEOS_DEPLOYMENT_TARGET = 15.0
 
 INSTALL_TARGET_PROCESSES = RootHide
+
+THEOS_PACKAGE_SCHEME = roothide
 
 include $(THEOS)/makefiles/common.mk
 
