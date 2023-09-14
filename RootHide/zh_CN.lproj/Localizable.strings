@@ -2,7 +2,7 @@
 "Blacklist" = "黑名单";
 "name or identifier" = "名字或者标识符";
 
-"varClean" = "清理临时数据";
+"varClean" = "清理var目录的垃圾文件";
 "Clean" = "清理";
 "SeleteAll" = "选择全部";
 
@@ -13,7 +13,7 @@
 "auto blacklist newly installed apps" = "自动将新安装的应用列入黑名单";
 
 "Advanced" = "高级";
-"Edit varClean Rules" = "编辑清理临时数据规则";
+"Edit varClean Rules" = "编辑清理var垃圾文件时的规则";
 "view the rules file in Filza" = "查看Filza中的规则文件";
 
 "Misc" = "其他";
