@@ -2,7 +2,7 @@
 "Blacklist" = "Blacklist";
 "name or identifier" = "tên hoặc định danh";
 
-"varClean" = "varClean";
+"varClean" = "Dọn /var";
 "Clean" = "Dọn sạch";
 "SeleteAll" = "Chọn tất cả";
 
@@ -13,7 +13,7 @@
 "auto blacklist newly installed apps" = "Tự động bật blacklist cho app mới cài đặt";
 
 "Advanced" = "Nâng cao";
-"Edit varClean Rules" = "Sửa quy tắc varClean";
+"Edit varClean Rules" = "Sửa quy tắc dọn sạch /var";
 "view the rules file in Filza" = "Xem quy tắc file ở Filza";
 
 "Misc" = "Linh tinh";
