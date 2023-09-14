@@ -26,6 +26,7 @@
 		842F23E52AA321E900EE2E9A /* libroothide.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libroothide.tbd; sourceTree = "<group>"; };
 		8438C17D2AB3361A001BAB8C /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8438C17E2AB33673001BAB8C /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8438C1822AB35DED001BAB8C /* zh_CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh_CN; path = zh_CN.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8477B5DD2A75269B000632D0 /* NSJSONSerialization+Comments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSJSONSerialization+Comments.h"; path = "RootHide/NSJSONSerialization+Comments.h"; sourceTree = SOURCE_ROOT; };
 		8477B5E02A7526AB000632D0 /* NSJSONSerialization+Comments.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSJSONSerialization+Comments.m"; path = "RootHide/NSJSONSerialization+Comments.m"; sourceTree = SOURCE_ROOT; };
 		8477B6062A866437000632D0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -171,6 +172,8 @@
 				de,
 				ar,
 				fr,
+				"zh-Hans",
+				zh_CN,
 			);
 			mainGroup = A672ABA627F748DE00878787;
 			productRefGroup = A672ABB027F748DE00878787 /* Products */;
@@ -221,6 +224,7 @@
 				8477B6092A8668AF000632D0 /* de */,
 				8438C17D2AB3361A001BAB8C /* ar */,
 				8438C17E2AB33673001BAB8C /* fr */,
+				8438C1822AB35DED001BAB8C /* zh_CN */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
