@@ -1,45 +1,27 @@
-
-"Blacklist" = "黑名单";
-"name or identifier" = "名字或者标识符";
-
-"varClean" = "var清理";
-"Clean" = "清理";
-"SeleteAll" = "选择全部";
-
-"Setting" = "设置";
-
-"General" = "通用";
-"Whitelist Mode" = "白名单模式";
-"auto blacklist newly installed apps" = "自动将新安装的应用列入黑名单";
-
 "Advanced" = "高级";
+"Blacklist" = "黑名单";
+"Clean" = "清理";
 "Edit varClean Rules" = "编辑清理var垃圾文件时的规则";
-"view the rules file in Filza" = "查看Filza中的规则文件";
-
-"Misc" = "其他";
-"Hide xinaA15 Files" = "隐藏xinaA15文件";
-"hide xinaA15 files without uninstall it" = "隐藏xinaA15文件而不卸载";
-
-
-
+"General" = "通用";
 "Got It" = "明白了";
-
+"Hide xinaA15 Files" = "隐藏xinaA15文件";
+"Misc" = "其他";
+"Process xinaA15 Files" = "处理xinaA15文件";
 "SSH Detected" = "检测到SSH";
 "SSH Service has been installed, you can uninstall it via Sileo/Zebra." = "SSH服务已经安装,您可以通过Sileo/Zebra卸载它.";
-
-"xinaA15 detected" = "检测到xinaA15";
-
-"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "xinaA15越狱文件已安装,您可以通过xinaA1五应用程序卸载它，也可以将其隐藏在RootHide应用程序的设置中.";
-
-"Process xinaA15 Files" = "处理xinaA15文件";
-
-"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "xinaA15文件已被隐藏，请重新启动您的设备.\n\n如果您想再次使用xina15,可以稍后恢复.";
-
-"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "xinaA15文件已还原,您可以重新启动设备以切换到xinaA15.";
-
-"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "有多个xinaA15越狱文件,您可以手动恢复:\n\n%s/";
-
-"restore failed: xinaA15 file not found!" = "还原失败：找不到xinaA15文件!";
-"restore failed: %@" = "还原失败: %@";
+"SeleteAll" = "选择全部";
+"Setting" = "设置";
+"Whitelist Mode" = "白名单模式";
+"auto blacklist newly installed apps" = "自动将新安装的应用列入黑名单";
 "hide failed: %@" = "隐藏失败: %@";
-
+"hide xinaA15 files without uninstall it" = "隐藏xinaA15文件而不卸载";
+"name or identifier" = "名字或者标识符";
+"restore failed: %@" = "还原失败: %@";
+"restore failed: xinaA15 file not found!" = "还原失败：找不到xinaA15文件!";
+"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "有多个xinaA15越狱文件,您可以手动恢复:\n\n%s/";
+"varClean" = "var清理";
+"view the rules file in Filza" = "查看Filza中的规则文件";
+"xinaA15 detected" = "检测到xinaA15";
+"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "xinaA15文件已被隐藏，请重新启动您的设备.\n\n如果您想再次使用xina15,可以稍后恢复.";
+"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "xinaA15文件已还原,您可以重新启动设备以切换到xinaA15.";
+"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "xinaA15越狱文件已安装,您可以通过xinaA1五应用程序卸载它，也可以将其隐藏在RootHide应用程序的设置中.";
