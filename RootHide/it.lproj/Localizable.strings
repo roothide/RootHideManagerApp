@@ -1,0 +1,45 @@
+
+"Blacklist" = "Lista nera";
+"name or identifier" = "Nome o ID";
+
+"varClean" = "Pulisci var";
+"Clean" = "Pulisci";
+"SelectAll" = "Seleziona tutti";
+
+"Setting" = "Impostazioni";
+
+"General" = "Generali";
+"Whitelist Mode" = "Modalitá lista bianca";
+"auto blacklist newly installed apps" = "Lista nera automatica per le nuove app installate";
+
+"Advanced" = "Avanzate";
+"Edit varClean Rules" = "Modifica le regole di Pulisci var";
+"view the rules file in Filza" = "Visualizza le regole dei file in Filza";
+
+"Misc" = "Varie";
+"Hide xinaA15 Files" = "Nascondi i file di xinaA15";
+"hide xinaA15 files without uninstall it" = "Nascondi i file di xinaA15 senza disintallarli";
+
+
+
+"Got It" = "Fatto";
+
+"SSH Detected" = "SSH Rilevato";
+"SSH Service has been installed, you can uninstall it via Sileo/Zebra." = "Il servizio SSH è stato installato, puoi disintallarlo tramite Sileo/Zebra.";
+
+"xinaA15 detected" = "xinaA15 Rilevato";
+
+"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "I file del jailbreak xinaA15 sono stati installati, puoi disinstallarlo tramite l'app xinaA15 o nasconderli nelle impostazioni dell'app RootHide.";
+
+"Process xinaA15 Files" = "Processo i file di xinaA15";
+
+"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "I file di xinaA15 sono stati nascosti, per favore riavvia il dispositivo.\n\npuoi recuperarli dopo se vuoi usare di nuovo xinaA15.";
+
+"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "I file di xinaA15 sono stati recuperati, puoi riavviare il dispositivo per cambiare in xinaA15.";
+
+"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "Ci sono molteplici file del jailbreak xinaA15, puoi recuperarli manualmente:\n\n%s/";
+
+"restore failed: xinaA15 file not found!" = "Recupero fallito: file di xinaA15 non trovati!";
+"restore failed: %@" = "Recupero fallito: %@";
+"hide failed: %@" = "Nascondere fallito: %@";
+
