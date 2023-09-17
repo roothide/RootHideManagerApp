@@ -1,0 +1,45 @@
+
+"Blacklist" = "Blacklist";
+"name or identifier" = "tên hoặc định danh";
+
+"varClean" = "Dọn /var";
+"Clean" = "Dọn sạch";
+"SeleteAll" = "Chọn tất cả";
+
+"Setting" = "Cài đặt";
+
+"General" = "Cài đặt chung";
+"Whitelist Mode" = "Chế độ Whitelist";
+"auto blacklist newly installed apps" = "Tự động bật blacklist cho app mới cài đặt";
+
+"Advanced" = "Nâng cao";
+"Edit varClean Rules" = "Sửa quy tắc dọn sạch /var";
+"view the rules file in Filza" = "Xem quy tắc file ở Filza";
+
+"Misc" = "Linh tinh";
+"Hide xinaA15 Files" = "Ẩn file XinaA15";
+"hide xinaA15 files without uninstall it" = "Ẩn file XinaA15 mà không gỡ cài đặt";
+
+
+
+"Got It" = "Okay";
+
+"SSH Detected" = "Phát hiện SSH";
+"SSH Service has been installed, you can uninstall it via Sileo/Zebra." = "SSH Service đã được cài đặt, bạn có thể gỡ cài đặt nó qua Sileo/Zebra.";
+
+"xinaA15 detected" = "Phát hiện XinaA15";
+
+"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "Máy đã jailbreak bằng XinaA15, bạn có thể gỡ cài đặt qua XinaA15 hoặc ẩn nó trong cài đặt của RootHide.";
+
+"Process xinaA15 Files" = "Xử lý file XinaA15";
+
+"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "Các file của XinaA15 đã bị ẩn, vui lòng khởi động lại thiết bị của bạn.\n\nBạn có thể khôi phục nó sau nếu muốn sử dụng lại XinaA15.";
+
+"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "Các file XinaA15 đã được khôi phục, bạn có thể khởi động lại thiết bị của mình để chuyển sang XinaA15";
+
+"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "Có nhiều file XinaA15 jailbreak, bạn có thể khôi phục thủ công:\n\n%s/";
+
+"restore failed: xinaA15 file not found!" = "Khôi phục lỗi: không tìm thấy file XinaA15!";
+"restore failed: %@" = "Khôi phục lỗi: %@";
+"hide failed: %@" = "Ẩn lỗi: %@";
+
