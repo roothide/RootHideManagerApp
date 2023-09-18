@@ -1,4 +1,5 @@
 "Blacklist" = "Blacklist";
+
 "name or identifier" = "Name oder Identifier";
 
 "varClean" = "var Bereinigen";
@@ -12,7 +13,7 @@
 "auto blacklist newly installed apps" = "Automatische Blacklist für neu installierte Apps";
 
 "Advanced" = "Erweitert";
-"Edit varClean Rules" = "Regeln für "var Bereinigen" bearbeiten";
+"Edit varClean Rules" = "Regeln für \"var Bereinigen\" bearbeiten";
 "view the rules file in Filza" = "Regeldatei in Filza anzeigen";
 
 "Misc" = "Verschiedenes";
