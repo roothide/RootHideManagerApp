@@ -224,9 +224,7 @@ BOOL isDefaultInstallationPath(NSString* _path)
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if(isFiltered)
-        return filteredApps.count;
-    return appsArray.count;
+    return isFiltered? filteredApps.count : appsArray.count;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -255,11 +253,7 @@ BOOL isDefaultInstallationPath(NSString* _path)
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
     
-    AppList* app = appsArray[indexPath.row];
-    
-    if(isFiltered) {
-        app = filteredApps[indexPath.row];
-    }
+    AppList* app = isFiltered? filteredApps[indexPath.row] : appsArray[indexPath.row];
     
     UIImage *image = app.icon;
     cell.imageView.image = [self imageWithImage:image scaledToSize:CGSizeMake(40, 40)];
@@ -267,13 +261,13 @@ BOOL isDefaultInstallationPath(NSString* _path)
     cell.textLabel.text = app.name;
     cell.detailTextLabel.text = app.bundleIdentifier;
     
-    UISwitch *theSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+    UISwitch *theSwitch = [[UISwitch alloc] init];
     
     NSMutableDictionary* appconfig = [AppDelegate getDefaultsForKey:@"appconfig"];
     [theSwitch setOn:[[appconfig objectForKey:app.bundleIdentifier] boolValue]];
+    [theSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
     
     cell.accessoryView = theSwitch;
-    [theSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
     return cell;
 }
 
@@ -283,11 +277,7 @@ BOOL isDefaultInstallationPath(NSString* _path)
     CGPoint pos = [switchInCell convertPoint:switchInCell.bounds.origin toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:pos];
     
-    AppList* app = appsArray[indexPath.row];
-    
-    if(isFiltered) {
-        app = filteredApps[indexPath.row];
-    }
+    AppList* app = isFiltered? filteredApps[indexPath.row] : appsArray[indexPath.row];
     
     NSMutableDictionary* appconfig = [AppDelegate getDefaultsForKey:@"appconfig"];
     if(!appconfig) appconfig = [[NSMutableDictionary alloc] init];
