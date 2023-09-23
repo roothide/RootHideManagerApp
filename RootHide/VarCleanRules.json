@@ -122,7 +122,8 @@
 			"MobileContainerManager",
 			"Preferences",
 			"USBRestricted",
-			"com.apple.wifianalyticsd"
+			"com.apple.wifianalyticsd",
+            "Catacomb" //FaceID
 		],
 	},
 	"/var/root/Library/Application Support" : {
