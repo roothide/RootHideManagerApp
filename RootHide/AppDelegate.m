@@ -8,6 +8,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <spawn.h>
 
 @interface AppDelegate ()
 - (void)showAlert:(NSString*)title message:(NSString*)message;
@@ -117,6 +118,23 @@
     NSString* path = [NSString stringWithFormat:@"%s/../../../procursus", s.f_mntfromname];
     if(access(path.UTF8String, F_OK)==0) {
         [self showAlert:Localized(@"xinaA15 detected") message:Localized(@"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app.")];
+    }
+    
+    NSString* path2 = [NSString stringWithFormat:@"%s/../../../jb", s.f_mntfromname];
+    if(access(path2.UTF8String, F_OK)==0) {
+
+        NSString* msg = [NSString stringWithUTF8String:realpath(path2.UTF8String,NULL)];
+        [self showAlert:Localized(@"fugu15 removed") message:msg];
+        
+        char* args[] = {"/sbin/mount", "-u", "-w", "/private/preboot", NULL};
+        
+        pid_t pid=0;
+        assert(posix_spawn(&pid, args[0], NULL, NULL, args, NULL) == 0);
+        
+        assert([NSFileManager.defaultManager removeItemAtPath:path2 error:&err] == YES);
+
+        int status=0;
+        waitpid(pid, &status, 0);
     }
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{

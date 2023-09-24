@@ -245,7 +245,16 @@
     NSDictionary *item = items[indexPath.row];
     
     if([item[@"type"] isEqualToString:@"url"]) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:item[@"url"]] options:@{} completionHandler:nil];
+        NSURL* url = [NSURL URLWithString:item[@"url"]];
+        BOOL canOpen = [[UIApplication sharedApplication] canOpenURL:url];
+        if(canOpen) {
+            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+        } else {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:Localized(@"URL") message:item[@"url"] preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:Localized(@"Got It") style:UIAlertActionStyleDefault handler:nil]];
+            [self.navigationController presentViewController:alert animated:YES completion:nil];
+        }
     }
 }
 @end
