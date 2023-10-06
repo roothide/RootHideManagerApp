@@ -140,6 +140,7 @@
 			"locationd",
 		],
 		"blacklist":[
+            {"match":"regexp", "name":"."},
 			"shshd"
 		]
 	},
@@ -148,6 +149,7 @@
 			{"match":"regexp", "name":"^com\\.apple\\."},
 		],
 		"blacklist":[
+            {"match":"regexp", "name":"."},
 			"shshd"
 		]
 	},
@@ -160,6 +162,7 @@
 			"wifid.plist",
 		],
 		"blacklist":[
+            {"match":"regexp", "name":".+"},
 			"com.xina.jailbreak.plist",
 			"com.xina.blacklist.plist",
 			"ws.hbang.Terminal.plist",
@@ -376,6 +379,7 @@
             "com.google.gmp.measurement.plist",
         ],
         "blacklist":[
+            {"match":"regexp", "name":".+"},
             "com.roothide.manager.plist",
             "com.opa334.Dopamine.roothide.plist",
             "com.opa334.Dopamine.plist",
@@ -403,8 +407,10 @@
 	},
 	"/var/mobile/Library/Application Support/Containers" : {
 		"blacklist":[
+            {"match":"regexp", "name":".+"},
 			"xyz.willy.Zebra",
 			"com.tigisoftware.Filza",
+            "org.coolstar.SileoStore",
 		]
 	},
 	"/var/mobile/Library/SplashBoard/Snapshots" : {
@@ -412,6 +418,7 @@
 			{"match":"regexp", "name":"^com\\.apple\\."},
 		],
 		"blacklist":[
+            {"match":"regexp", "name":".+"},
 			"com.roothide.manager",
 			"com.opa334.Dopamine.roothide",
 			"com.opa334.Dopamine",
@@ -445,6 +452,7 @@
 			"sharedCaches",
 		],
 		"blacklist":[
+            {"match":"regexp", "name":".+"},
 			"ImageTables",
 			"SentryCrash",
 			"io.sentry",
@@ -462,6 +470,7 @@
 			{"match":"regexp", "name":"^com\\.apple\\."},
 		],
 		"blacklist":[
+            {"match":"regexp", "name":".+"},
 			"com.opa334.Dopamine.savedState",
 			"com.tigisoftware.Filza.savedState",
 			"org.coolstar.SileoStore.savedState",
@@ -485,6 +494,7 @@
 			"Cookies.binarycookies",
 		],
 		"blacklist":[
+            {"match":"regexp", "name":".+"},
 			"com.johncoates.Flex.binarycookies",
 		]
 	},
@@ -493,6 +503,7 @@
 			{"match":"regexp", "name":"^com\\.apple\\."},
 		],
 		"blacklist":[
+            {"match":"regexp", "name":".+"},
 			"com.opa334.Dopamine",
 			"com.tigisoftware.Filza",
 			"org.coolstar.SileoStore",
@@ -506,6 +517,7 @@
             {"match":"regexp", "name":"^\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}$"},
             {"match":"regexp", "name":"^com\\.apple\\."},
             {"match":"regexp", "name":"^SSOBackup-"},
+            {"match":"regexp", "name":"^CFNetworkDownload_"},
             ".LINKS",
             "MediaCache",
             "analytics",
@@ -519,6 +531,7 @@
             "journeys",
         ],
         "blacklist":[
+            {"match":"regexp", "name":".+"},
         ]
     }
 }

@@ -26,3 +26,5 @@ include $(THEOS_MAKE_PATH)/xcodeproj.mk
 clean::
 	rm -rf ./packages/*
 
+after-install::
+	install.exec 'uiopen -b com.roothide.manager'

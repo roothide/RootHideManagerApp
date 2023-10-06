@@ -273,7 +273,33 @@
     [checkbox setSelected:[item[@"checked"] boolValue]];
     cell.accessoryView = checkbox;
     
+    UILongPressGestureRecognizer *gest = [[UILongPressGestureRecognizer alloc]
+                                          initWithTarget:self action:@selector(cellLongPress:)];
+    [cell.contentView addGestureRecognizer:gest];
+    gest.view.tag = indexPath.row | indexPath.section<<32;
+    gest.minimumPressDuration = 1;
+    
     return cell;
+}
+
+- (void)cellLongPress:(UIGestureRecognizer *)recognizer
+{
+    if (recognizer.state == UIGestureRecognizerStateBegan)
+    {
+        long tag = recognizer.view.tag;
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:tag&0xFFFFFFFF inSection:tag>>32];
+        
+        NSDictionary *groupData = self.tableData[indexPath.section];
+        NSArray *items = groupData[@"items"];
+        NSMutableDictionary *item = items[indexPath.row];
+        NSLog(@"open item %@", item);
+        NSURL* url = [NSURL URLWithString:[@"filza://view" stringByAppendingString:
+                                           [item[@"path"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]
+        ];
+        
+        NSLog(@"open url %@", url);
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

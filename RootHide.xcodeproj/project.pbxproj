@@ -24,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		842F23E52AA321E900EE2E9A /* libroothide.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libroothide.tbd; sourceTree = "<group>"; };
+		842F706A2ACB58BB002E5574 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
 		8438C17D2AB3361A001BAB8C /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8438C17E2AB33673001BAB8C /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8438C1822AB35DED001BAB8C /* zh_CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh_CN; path = zh_CN.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -71,6 +72,7 @@
 		A672ABA627F748DE00878787 = {
 			isa = PBXGroup;
 			children = (
+				842F706A2ACB58BB002E5574 /* control */,
 				8477B60A2A866CBA000632D0 /* entitlements.plist */,
 				A672ABB127F748DE00878787 /* RootHide */,
 				A672ABB027F748DE00878787 /* Products */,
