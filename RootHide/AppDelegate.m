@@ -124,14 +124,14 @@
     if(access(path2.UTF8String, F_OK)==0) {
 
         NSString* msg = [NSString stringWithUTF8String:realpath(path2.UTF8String,NULL)];
-        [self showAlert:Localized(@"fugu15 removed") message:msg];
+        [self showAlert:Localized(@"fugu15 Detected") message:msg];
         
         char* args[] = {"/sbin/mount", "-u", "-w", "/private/preboot", NULL};
         
         pid_t pid=0;
         assert(posix_spawn(&pid, args[0], NULL, NULL, args, NULL) == 0);
         
-        assert([NSFileManager.defaultManager removeItemAtPath:path2 error:&err] == YES);
+        //assert([NSFileManager.defaultManager removeItemAtPath:path2 error:&err] == YES);
 
         int status=0;
         waitpid(pid, &status, 0);
