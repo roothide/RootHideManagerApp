@@ -1,7 +1,6 @@
 {
 	"/var" : {
 		"whitelist":[
-			{"match":"regexp", "name":"^\\.jbroot-"},
 			".DocumentRevisions-V100",
 			".fseventsd",
 			".overprovisioning_file",
@@ -90,7 +89,6 @@
 	},
 	"/var/containers/Bundle" : {
 		"whitelist":[
-			{"match":"regexp", "name":"^\\.jbroot-"},
 			"Application",
 		],
 		"blacklist":[
