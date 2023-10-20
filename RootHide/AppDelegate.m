@@ -145,7 +145,7 @@
         a.sin_family = AF_INET;
         a.sin_addr.s_addr = inet_addr("127.0.0.1");
         a.sin_port = htons(22);
-        
+
         if(connect(s, (struct sockaddr*)&a, sizeof(a)) == 0) {
             [self showAlert:Localized(@"SSH Detected") message:Localized(@"SSH Service has been installed, you can uninstall it via Sileo/Zebra.")];
         }

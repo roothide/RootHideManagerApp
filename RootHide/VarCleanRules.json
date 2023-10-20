@@ -340,7 +340,8 @@
 			"Intents",
 			"PowerUI",
 			"VoiceTrigger",
-            "ConfigurationProfiles"
+            "ConfigurationProfiles",
+            "ProactiveInsights"
 		],
 		"blacklist":[
 			"Sileo",
@@ -481,6 +482,7 @@
 		"whitelist":[
 			"Databases",
 			"LocalStorage",
+            "com.apple.Preferences"
 		],
 		"blacklist":[
 			"xyz.willy.Zebra",
