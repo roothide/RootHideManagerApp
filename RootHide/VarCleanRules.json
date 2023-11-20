@@ -71,11 +71,11 @@
 		]
 	},
 	"/var/log" : {
+        "default" : "blacklist",
 		"whitelist":[
 			{"match":"regexp", "name":"^com\\.apple\\."},
 		],
 		"blacklist":[
-			{"match":"regexp", "name":".+"},
 		]
 	},
 	
@@ -132,26 +132,27 @@
 		]
 	},
 	"/var/root/Library/Caches" : {
+        "default" : "blacklist",
 		"whitelist":[
 			{"match":"regexp", "name":"^com\\.apple\\."},
 			"Backup",
 			"locationd",
 		],
 		"blacklist":[
-            {"match":"regexp", "name":"."},
 			"shshd"
 		]
 	},
 	"/var/root/Library/HTTPStorages" : {
+        "default" : "blacklist",
 		"whitelist":[
 			{"match":"regexp", "name":"^com\\.apple\\."},
 		],
 		"blacklist":[
-            {"match":"regexp", "name":"."},
 			"shshd"
 		]
 	},
 	"/var/root/Library/Preferences" : {
+        "default" : "blacklist",
 		"whitelist":[
 			{"match":"regexp", "name":"^com\\.apple\\."},
 			{"match":"regexp", "name":"^systemgroup\\.com\\.apple\\."},
@@ -160,7 +161,6 @@
 			"wifid.plist",
 		],
 		"blacklist":[
-            {"match":"regexp", "name":".+"},
 			"com.xina.jailbreak.plist",
 			"com.xina.blacklist.plist",
 			"ws.hbang.Terminal.plist",
@@ -188,7 +188,6 @@
             {"match":"regexp", "name":"^com\\.apple\\."},
         ],
         "blacklist":[
-            {"match":"regexp", "name":".+"},
         ]
     },
 	"/var/mobile/Library" : {
@@ -298,7 +297,7 @@
 			"OTALogging",
 			"SyncedPreferences",
 			"coreidvd",
-			"Carrier Bundles",
+            "Carrier Bundles",
 			"FrontBoard",
 			"OnDemandResources",
 			"TCC",
@@ -341,7 +340,10 @@
 			"PowerUI",
 			"VoiceTrigger",
             "ConfigurationProfiles",
-            "ProactiveInsights"
+            "ProactiveInsights",
+            "Carrier Bundle.bundle",
+            "Carrier1Bundle.bundle",
+            "PeopleSuggester",
 		],
 		"blacklist":[
 			"Sileo",
@@ -350,7 +352,19 @@
 			"SBSettings",
 		]
 	},
+    "/var/mobile/Library/UserConfigurationProfiles/PublicInfo/" : {
+            "whitelist":[
+                "MCMeta.plist",
+                "NamespacedUserSettings.plist",
+                "PublicEffectiveUserSettings.plist",
+                "Truth.plist"
+            ],
+            "blacklist":[
+                "Flex3Patches.plist"
+            ]
+    },
     "/var/mobile/Library/Preferences" : {
+        "default" : "blacklist",
         "whitelist":[
             {"match":"regexp", "name":"^com\\.apple\\."},
             {"match":"regexp", "name":"^systemgroup\\.com\\.apple\\."},
@@ -378,7 +392,6 @@
             "com.google.gmp.measurement.plist",
         ],
         "blacklist":[
-            {"match":"regexp", "name":".+"},
             "com.roothide.manager.plist",
             "com.opa334.Dopamine.roothide.plist",
             "com.opa334.Dopamine.plist",
@@ -388,6 +401,8 @@
             "ru.domo.cocoatop64.plist",
             "ws.hbang.Terminal.plist",
             "xyz.willy.Zebra.plist",
+            "com.apple.lockscreencache-new.plist",
+            "com.apple.homescreencache-new.plist",
         ]
     },
 	"/var/mobile/Library/Application Support" : {
@@ -405,19 +420,19 @@
 		]
 	},
 	"/var/mobile/Library/Application Support/Containers" : {
+        "default" : "blacklist",
 		"blacklist":[
-            {"match":"regexp", "name":".+"},
 			"xyz.willy.Zebra",
 			"com.tigisoftware.Filza",
             "org.coolstar.SileoStore",
 		]
 	},
 	"/var/mobile/Library/SplashBoard/Snapshots" : {
+        "default" : "blacklist",
 		"whitelist":[
 			{"match":"regexp", "name":"^com\\.apple\\."},
 		],
 		"blacklist":[
-            {"match":"regexp", "name":".+"},
 			"com.roothide.manager",
 			"com.opa334.Dopamine.roothide",
 			"com.opa334.Dopamine",
@@ -430,6 +445,7 @@
 		]
 	},
 	"/var/mobile/Library/Caches" : {
+        "default" : "blacklist",
 		"whitelist":[
             {"match":"regexp", "name":"^com\\.apple\\."},
             {"match":"regexp", "name":"^TelephonyUI-\\d+$"},
@@ -451,7 +467,6 @@
 			"sharedCaches",
 		],
 		"blacklist":[
-            {"match":"regexp", "name":".+"},
 			"ImageTables",
 			"SentryCrash",
 			"io.sentry",
@@ -465,11 +480,11 @@
 		]
 	},
 	"/var/mobile/Library/Saved Application State" : {
+        "default" : "blacklist",
 		"whitelist":[
 			{"match":"regexp", "name":"^com\\.apple\\."},
 		],
 		"blacklist":[
-            {"match":"regexp", "name":".+"},
 			"com.opa334.Dopamine.savedState",
 			"com.tigisoftware.Filza.savedState",
 			"org.coolstar.SileoStore.savedState",
@@ -489,21 +504,21 @@
 		]
 	},
 	"/var/mobile/Library/Cookies" : {
+        "default" : "blacklist",
 		"whitelist":[
 			{"match":"regexp", "name":"^com\\.apple\\."},
 			"Cookies.binarycookies",
 		],
 		"blacklist":[
-            {"match":"regexp", "name":".+"},
 			"com.johncoates.Flex.binarycookies",
 		]
 	},
 	"/var/mobile/Library/HTTPStorages" : {
+        "default" : "blacklist",
 		"whitelist":[
 			{"match":"regexp", "name":"^com\\.apple\\."},
 		],
 		"blacklist":[
-            {"match":"regexp", "name":".+"},
 			"com.opa334.Dopamine",
 			"com.tigisoftware.Filza",
 			"org.coolstar.SileoStore",
@@ -513,6 +528,7 @@
 	},
     
     "/var/tmp" : {
+        "default" : "blacklist",
         "whitelist":[
             {"match":"regexp", "name":"^\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}$"},
             {"match":"regexp", "name":"^com\\.apple\\."},
@@ -531,7 +547,6 @@
             "journeys",
         ],
         "blacklist":[
-            {"match":"regexp", "name":".+"},
         ]
     }
 }

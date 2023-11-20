@@ -110,11 +110,35 @@
         }.mutableCopy;
         
         for (NSString *file in contents) {
-            if([self checkFileInList:file List:whiteList])
-                continue;
             
-            if([self checkFileInList:file List:customedWhiteList])
+            BOOL checked = NO;
+            
+            // customed default priority
+            NSString* _default = customedRuleItem[@"default"];
+            
+            if(!_default) _default = ruleItem[@"default"];
+            
+            // blacklist priority
+            if([self checkFileInList:file List:blackList] || [self checkFileInList:file List:customedBlackList])
+            {
+                checked = YES;
+            }
+            else if([self checkFileInList:file List:whiteList] || [self checkFileInList:file List:customedWhiteList])
+            {
                 continue;
+            }
+            else if(_default && [_default isEqualToString:@"blacklist"])
+            {
+                checked = YES;
+            }
+            else if(_default && [_default isEqualToString:@"whitelist"])
+            {
+                continue;
+            }
+            else
+            {
+                checked = NO;
+            }
             
             NSString *filePath = [path stringByAppendingPathComponent:file];
             
@@ -126,7 +150,7 @@
                 @"name": file,
                 @"path": filePath,
                 @"isFolder": @(isFolder),
-                @"checked": @([self checkFileInList:file List:blackList] || [self checkFileInList:file List:customedBlackList])
+                @"checked": @(checked)
             }.mutableCopy;
             
             if(isFolder) {
