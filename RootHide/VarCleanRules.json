@@ -31,7 +31,10 @@
 			"msgs",
 			"protected",
 			"select",
-			"wireless"
+			"wireless",
+            "dirs_cleaner",
+            "dextcores",
+            "staged_system_apps",
 		],
 		"blacklist":[
 			"jb",
@@ -74,6 +77,9 @@
         "default" : "blacklist",
 		"whitelist":[
 			{"match":"regexp", "name":"^com\\.apple\\."},
+            "asl",
+            "mDNSResponder",
+            "ppp",
 		],
 		"blacklist":[
 		]
@@ -105,6 +111,7 @@
             ".aks_whitelist",
             ".mkb_seshat_health",
             ".obliterated",
+            ".aks_allowlist",
 		],
 		"blacklist":[
 			".bash_history",
@@ -344,6 +351,21 @@
             "Carrier Bundle.bundle",
             "Carrier1Bundle.bundle",
             "PeopleSuggester",
+            "News",
+            ".locallized",
+            "CloudStorage",
+            "Finance",
+            "Measure",
+            "News",
+            "Recordings",
+            "ResponseKit",
+            "Settings",
+            "studentd",
+            "VirtualCaptureCard",
+            "Wallet",
+            "AppleMediaServices",
+            "IntelligencePlatform",
+            "sessionkitd",
 		],
 		"blacklist":[
 			"Sileo",
@@ -414,6 +436,9 @@
 			"FileProvider",
 			"UsageTrackingAgent",
 			"videosubscriptionsd",
+            "CNDuplication",
+            "icloudsubscriptionoptimizerd",
+            
 		],
 		"blacklist":[
 			"xyz.willy.Zebra"
@@ -449,6 +474,7 @@
 		"whitelist":[
             {"match":"regexp", "name":"^com\\.apple\\."},
             {"match":"regexp", "name":"^TelephonyUI-\\d+$"},
+            {"match":"regexp", "name":"^FamilyMarquee.*Mode-.*\\.png$"},
 			".com.apple.persistentconnection.settings.lock.lock",
 			"Checkpoint.plist",
 			"CloudKit",
@@ -467,7 +493,7 @@
 			"sharedCaches",
 		],
 		"blacklist":[
-			"ImageTables",
+			"ImageTables", //Filza
 			"SentryCrash",
 			"io.sentry",
 			"com.hackemist.SDImageCache",
@@ -497,7 +523,7 @@
 		"whitelist":[
 			"Databases",
 			"LocalStorage",
-            "com.apple.Preferences"
+            {"match":"regexp", "name":"^com\\.apple\\."},
 		],
 		"blacklist":[
 			"xyz.willy.Zebra",
@@ -533,7 +559,9 @@
             {"match":"regexp", "name":"^\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}$"},
             {"match":"regexp", "name":"^com\\.apple\\."},
             {"match":"regexp", "name":"^SSOBackup-"},
+            {"match":"regexp", "name":"^SOSBackup-.*-tomb"},
             {"match":"regexp", "name":"^CFNetworkDownload_"},
+            {"match":"regexp", "name":"^NSIRD_installd_"},
             ".LINKS",
             "MediaCache",
             "analytics",
@@ -545,6 +573,7 @@
             "powerlog",
             "recommendations",
             "journeys",
+            "ClonedAXAsset",
         ],
         "blacklist":[
         ]

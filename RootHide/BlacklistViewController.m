@@ -6,7 +6,7 @@
 
 #include <sys/sysctl.h>
 
-void killBundleForPath(const char* bundlePath)
+void killAllForApp(const char* bundlePath)
 {
     NSLog(@"killBundleForPath: %s", bundlePath);
     
@@ -96,6 +96,8 @@ BOOL isDefaultInstallationPath(NSString* _path)
     
     NSMutableArray* filteredApps;
     BOOL isFiltered;
+    
+    BOOL blacklistDisabled;
 }
 
 @end
@@ -151,6 +153,8 @@ BOOL isDefaultInstallationPath(NSString* _path)
     
     [self setTitle:Localized(@"Blacklist")];
     
+    blacklistDisabled = [[AppDelegate getDefaultsForKey:@"blacklistDisabled"] boolValue];
+    
     isFiltered = false;
     
     searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
@@ -168,10 +172,8 @@ BOOL isDefaultInstallationPath(NSString* _path)
     
     [self updateData];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(startRefresh)
-                                          name:UIApplicationWillEnterForegroundNotification
-                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startRefresh)
+                                          name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 - (void)startRefresh {
@@ -267,6 +269,11 @@ BOOL isDefaultInstallationPath(NSString* _path)
     [theSwitch setOn:[[appconfig objectForKey:app.bundleIdentifier] boolValue]];
     [theSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
     
+    if(blacklistDisabled) {
+        theSwitch.enabled = NO;
+        [theSwitch setOn:NO];
+    }
+    
     cell.accessoryView = theSwitch;
     return cell;
 }
@@ -285,7 +292,7 @@ BOOL isDefaultInstallationPath(NSString* _path)
     [AppDelegate setDefaults:appconfig forKey:@"appconfig"];
     
     
-    killBundleForPath(app.bundleURL.path.UTF8String);
+    killAllForApp(app.bundleURL.path.UTF8String);
     
 }
 @end
