@@ -1,44 +1,44 @@
 
-"Blacklist" = "Blacklist";
-"name or identifier" = "name or identifier";
+"Blacklist" = "黑名單";
+"name or identifier" = "名稱";
 
 "varClean" = "varClean";
-"Clean" = "Clean";
-"SelectAll" = "SelectAll";
+"Clean" = "清除";
+"SelectAll" = "全選";
 
-"Setting" = "Setting";
+"Setting" = "正在設定";
 
-"General" = "General";
-"Whitelist Mode" = "Whitelist Mode";
-"auto blacklist newly installed apps" = "auto blacklist newly installed apps";
+"General" = "一般";
+"Whitelist Mode" = "白名單模式";
+"auto blacklist newly installed apps" = "自動將剛安裝之應用程式加入黑名單";
 
-"Advanced" = "Advanced";
-"Edit varClean Rules" = "Edit varClean Rules";
-"view the rules file in Filza" = "view the rules file in Filza";
+"Advanced" = "進階";
+"Edit varClean Rules" = "自訂 varClean 規則";
+"view the rules file in Filza" = "在 Filza 內查看規則檔案";
 
-"Misc" = "Misc";
-"Hide xinaA15 Files" = "Hide xinaA15 Files";
-"hide xinaA15 files without uninstall it" = "hide xinaA15 files without uninstall it";
+"Misc" = "雜項";
+"Hide xinaA15 Files" = "隱藏 xinaA15 檔案";
+"hide xinaA15 files without uninstall it" = "在不移除 xinaA15 的情況下隱藏其檔案";
 
 
 
-"Got It" = "Got It";
+"Got It" = "完成";
 
-"SSH Detected" = "SSH Detected";
-"SSH Service has been installed, you can uninstall it via Sileo/Zebra." = "SSH Service has been installed, you can uninstall it via Sileo/Zebra.";
+"SSH Detected" = "偵測到 SSH 服務";
+"SSH Service has been installed, you can uninstall it via Sileo/Zebra." = "偵測到 SSH 服務，可從套件管理員中移除 ";
 
-"xinaA15 detected" = "xinaA15 detected";
+"xinaA15 detected" = "偵測到 xinaA15 越獄";
 
-"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app.";
+"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "偵測到 xinaA15 越獄檔案，請從 xinaA15 應用程式中刪除或在 RootHide 設定中隱藏其檔案";
 
-"Process xinaA15 Files" = "Process xinaA15 Files";
+"Process xinaA15 Files" = "處理 xinaA15 檔案";
 
-"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again.";
+"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "已隱藏 xinaA15 越獄檔案，請重新啟動此裝置。\n\n若欲再次使用 xinaA15 越獄可在稍後在此應用程式中回復檔案.";
 
-"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "xinaA15 files has been restored, you can reboot your device to switch to xinaA15.";
+"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "已回復 xinaA15  檔案。請重新啟動此裝置以切換至 xinaA15 越獄。";
 
-"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/";
+"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "這裡有數個 xinaA15 檔案，可從此手動回復：\n\n%s/";
 
-"restore failed: xinaA15 file not found!" = "restore failed: xinaA15 file not found!";
-"restore failed: %@" = "restore failed: %@";
-"hide failed: %@" = "hide failed: %@";
+"restore failed: xinaA15 file not found!" = "回復失敗：xinaA15 檔案不存在！";
+"restore failed: %@" = "回復失敗：%@";
+"hide failed: %@" = "隱藏失敗：%@";
