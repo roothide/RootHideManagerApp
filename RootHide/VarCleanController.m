@@ -70,13 +70,9 @@
 
 - (void)startRefresh {
     [self.tableView.refreshControl beginRefreshing];
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [self updateData];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-            [self.tableView.refreshControl endRefreshing];
-        });
-    });
+    [self updateData];
+    [self.tableView reloadData];
+    [self.tableView.refreshControl endRefreshing];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -240,13 +236,20 @@
             [NSFileManager.defaultManager copyItemAtPath:item[@"path"] toPath:newpath error:nil];
             //*/
             
+            NSDirectoryEnumerator<NSString*>* enumerator = [NSFileManager.defaultManager enumeratorAtPath:item[@"path"]];
+            if(enumerator) for(NSString* subpath in enumerator)
+            {
+                NSError* err;
+                if(![NSFileManager.defaultManager removeItemAtPath:[item[@"path"] stringByAppendingPathComponent:subpath] error:&err]) {
+                    NSLog(@"clean failed=%@", err);
+                }
+            }
             
             NSError* err;
             if(![NSFileManager.defaultManager removeItemAtPath:item[@"path"] error:&err]) {
                 NSLog(@"clean failed=%@", err);
                 continue;
             }
-
             
             NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[group[@"items"] indexOfObject:item]
                                                         inSection:[self.tableData indexOfObject:group] ];

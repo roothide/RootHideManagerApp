@@ -26,5 +26,8 @@ include $(THEOS_MAKE_PATH)/xcodeproj.mk
 clean::
 	rm -rf ./packages/*
 
+before-package::
+	ldid -M -S./nickchan.entitlements ./.theos/_/Applications/RootHide.app/RootHide
+
 after-install::
 	install.exec 'uiopen -b com.roothide.manager'

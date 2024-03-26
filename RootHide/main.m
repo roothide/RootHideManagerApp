@@ -11,6 +11,7 @@ int main(int argc, char * argv[]) {
 //    assert(setgid(0) == 0);
 //    assert(getgid() == 0);
     
+    NSLog(@"uid=%d euid=%d gid=%d egid=%d", getuid(), geteuid(), getgid(), getegid());
     
     NSString * appDelegateClassName;
     @autoreleasepool {
