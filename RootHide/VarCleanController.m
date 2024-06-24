@@ -40,7 +40,7 @@
     self.tableView.refreshControl = refreshControl;
     
     
-    [self updateData];
+    self.tableData = [self updateData];
     
 //doClean will auto refresh list    [[NSNotificationCenter defaultCenter] addObserver:self
 //                                             selector:@selector(startRefresh)
@@ -70,9 +70,14 @@
 
 - (void)startRefresh {
     [self.tableView.refreshControl beginRefreshing];
-    [self updateData];
-    [self.tableView reloadData];
-    [self.tableView.refreshControl endRefreshing];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSMutableArray* newData = [self updateData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.tableData = newData;
+            [self.tableView reloadData];
+            [self.tableView.refreshControl endRefreshing];
+        });
+    });
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -81,7 +86,7 @@
     [self.tableView.refreshControl endRefreshing];
 }
 
-- (void)updateForRules:(NSDictionary*)rules customed:(NSMutableDictionary*)customedRules {
+- (void)updateForRules:(NSDictionary*)rules customed:(NSMutableDictionary*)customedRules newData:(NSMutableArray*)newData {
     for (NSString* path in rules) {
         NSMutableArray *folders = [[NSMutableArray alloc] init];
         NSMutableArray *files = [[NSMutableArray alloc] init];
@@ -161,13 +166,13 @@
         NSArray *sortedFiles = [files sortedArrayUsingDescriptors:@[sortDescriptor]];
         
         tableGroup[@"items"] = [[sortedFolders arrayByAddingObjectsFromArray:sortedFiles] mutableCopy];
-        [self.tableData addObject:tableGroup];
+        [newData addObject:tableGroup];
     }
 }
 
-- (void)updateData {
+- (NSMutableArray*)updateData {
     NSLog(@"updateData...");
-    self.tableData = [[NSMutableArray alloc] init];
+    NSMutableArray* newData = [[NSMutableArray alloc] init];
     
     NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules.plist");
     NSDictionary *rules = [NSDictionary dictionaryWithContentsOfFile:rulesFilePath];
@@ -175,8 +180,8 @@
     NSString *customedRulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules-custom.plist");
     NSMutableDictionary *customedRules = [NSMutableDictionary dictionaryWithContentsOfFile:customedRulesFilePath];
     
-    [self updateForRules:rules customed:customedRules];
-    [self updateForRules:customedRules customed:nil];
+    [self updateForRules:rules customed:customedRules newData:newData];
+    [self updateForRules:customedRules customed:nil newData:newData];
 
     NSComparator sorter = ^NSComparisonResult(NSDictionary* a, NSDictionary* b)
     {
@@ -185,7 +190,9 @@
         
         return [a[@"group"] compare:b[@"group"]];
     };
-    [self.tableData sortUsingComparator:sorter];
+    [newData sortUsingComparator:sorter];
+    
+    return newData;
 }
 
 - (BOOL)checkFileInList:(NSString *)fileName List:(NSArray*)list {
@@ -236,18 +243,25 @@
             [NSFileManager.defaultManager copyItemAtPath:item[@"path"] toPath:newpath error:nil];
             //*/
             
-            NSDirectoryEnumerator<NSString*>* enumerator = [NSFileManager.defaultManager enumeratorAtPath:item[@"path"]];
-            if(enumerator) for(NSString* subpath in enumerator)
-            {
-                NSError* err;
-                if(![NSFileManager.defaultManager removeItemAtPath:[item[@"path"] stringByAppendingPathComponent:subpath] error:&err]) {
-                    NSLog(@"clean failed=%@", err);
-                }
-            }
+//            NSDirectoryEnumerator<NSString*>* enumerator = [NSFileManager.defaultManager enumeratorAtPath:item[@"path"]];
+//            if(enumerator) for(NSString* subpath in enumerator)
+//            {
+//                NSError* err;
+//                if(![NSFileManager.defaultManager removeItemAtPath:[item[@"path"] stringByAppendingPathComponent:subpath] error:&err]) {
+//                    NSLog(@"clean failed=%@", err);
+//                }
+//            }
             
             NSError* err;
             if(![NSFileManager.defaultManager removeItemAtPath:item[@"path"] error:&err]) {
-                NSLog(@"clean failed=%@", err);
+                NSLog(@"clean failed: %@", err);
+                
+                if(geteuid()!=0 || getegid()!=0) {
+                    NSLog(@"try RootUserRemoveItemAtPath: %@", item[@"path"]);
+                    BOOL RootUserRemoveItemAtPath(NSString* path);
+                    BOOL __ret = RootUserRemoveItemAtPath(item[@"path"]);
+                }
+                
                 continue;
             }
             
@@ -263,7 +277,7 @@
     
     [self.tableView.refreshControl endRefreshing];
     
-    [self updateData];
+    self.tableData = [self updateData];
     [self.tableView reloadData];
 }
 

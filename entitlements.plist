@@ -20,6 +20,8 @@
 	<true/>
 	<key>com.apple.private.security.storage.AppDataContainers</key>
 	<true/>
+    <key>com.apple.private.persona-mgmt</key>
+    <true/>
     <!-- Prevent weird sharesheet CoreImage crash -->
     <key>com.apple.security.iokit-user-client-class</key>
     <array>

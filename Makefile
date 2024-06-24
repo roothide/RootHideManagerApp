@@ -7,6 +7,9 @@ INSTALL_TARGET_PROCESSES = RootHide
 
 THEOS_PACKAGE_SCHEME = roothide
 
+FINALPACKAGE ?= 1
+DEBUG ?= 0
+
 include $(THEOS)/makefiles/common.mk
 
 XCODE_SCHEME = RootHide

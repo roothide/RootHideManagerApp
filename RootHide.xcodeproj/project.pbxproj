@@ -7,22 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		842F23E62AA321E900EE2E9A /* libroothide.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 842F23E52AA321E900EE2E9A /* libroothide.tbd */; };
+		840A948D2C6C9F3C00180FFA /* libroothide.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 840A94892C6C9F3C00180FFA /* libroothide.tbd */; };
 		8477B5E22A7526AB000632D0 /* NSJSONSerialization+Comments.m in Sources */ = {isa = PBXBuildFile; fileRef = 8477B5E02A7526AB000632D0 /* NSJSONSerialization+Comments.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8477B6052A866437000632D0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8477B6072A866437000632D0 /* Localizable.strings */; };
 		84BBFAC92A7420100054A68E /* varCleanRules.json in Resources */ = {isa = PBXBuildFile; fileRef = 84BBFAC72A741C800054A68E /* varCleanRules.json */; };
+		84E33D9C2CAE907200991A4E /* AppCleaner.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E33D9B2CAE907200991A4E /* AppCleaner.m */; };
 		A672ABB427F748DE00878787 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A672ABB327F748DE00878787 /* AppDelegate.m */; };
 		A672ABBF27F748E100878787 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A672ABBE27F748E100878787 /* Assets.xcassets */; };
 		A672ABC527F748E100878787 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A672ABC427F748E100878787 /* main.m */; };
 		BF0FF1BD2A550FFA00FFA27E /* varCleanController.m in Sources */ = {isa = PBXBuildFile; fileRef = BF0FF1BC2A550FFA00FFA27E /* varCleanController.m */; };
 		BF0FF1C12A5510CE00FFA27E /* ZFCheckbox.m in Sources */ = {isa = PBXBuildFile; fileRef = BF0FF1BF2A5510CE00FFA27E /* ZFCheckbox.m */; };
-		BF69FE4E28123C7800542668 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF69FE4D28123C7800542668 /* AVFoundation.framework */; };
 		BFA3034B2A47EBA800DC242C /* BlacklistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFA303492A47EBA800DC242C /* BlacklistViewController.m */; };
-		BFA3034C2A47EBA800DC242C /* AppList.m in Sources */ = {isa = PBXBuildFile; fileRef = BFA3034A2A47EBA800DC242C /* AppList.m */; };
+		BFA3034C2A47EBA800DC242C /* AppInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BFA3034A2A47EBA800DC242C /* AppInfo.m */; };
 		BFD8B9732A4BD68D007CCEB8 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD8B9722A4BD68D007CCEB8 /* SettingViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		840A94882C6C9F3C00180FFA /* roothide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = roothide.h; sourceTree = "<group>"; };
+		840A94892C6C9F3C00180FFA /* libroothide.tbd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libroothide.tbd; sourceTree = "<group>"; };
+		840A948A2C6C9F3C00180FFA /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		840A948B2C6C9F3C00180FFA /* stub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stub.h; sourceTree = "<group>"; };
+		840A948C2C6C9F3C00180FFA /* roothide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = roothide.h; sourceTree = "<group>"; };
 		842F23E52AA321E900EE2E9A /* libroothide.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libroothide.tbd; sourceTree = "<group>"; };
 		842F706A2ACB58BB002E5574 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
 		8438C17D2AB3361A001BAB8C /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -30,12 +35,14 @@
 		8438C1822AB35DED001BAB8C /* zh_CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh_CN; path = zh_CN.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8438C1892AB52CED001BAB8C /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8438C18A2AB78A73001BAB8C /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		845F90C02BC4227400E993FB /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		8477B5DD2A75269B000632D0 /* NSJSONSerialization+Comments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSJSONSerialization+Comments.h"; path = "RootHide/NSJSONSerialization+Comments.h"; sourceTree = SOURCE_ROOT; };
 		8477B5E02A7526AB000632D0 /* NSJSONSerialization+Comments.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSJSONSerialization+Comments.m"; path = "RootHide/NSJSONSerialization+Comments.m"; sourceTree = SOURCE_ROOT; };
 		8477B6062A866437000632D0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8477B6092A8668AF000632D0 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8477B60A2A866CBA000632D0 /* entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = entitlements.plist; sourceTree = "<group>"; };
 		84BBFAC72A741C800054A68E /* varCleanRules.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = varCleanRules.json; sourceTree = "<group>"; };
+		84E33D9B2CAE907200991A4E /* AppCleaner.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppCleaner.m; sourceTree = "<group>"; };
 		A672ABAF27F748DE00878787 /* RootHide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RootHide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A672ABB227F748DE00878787 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A672ABB327F748DE00878787 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -47,10 +54,10 @@
 		BF0FF1BF2A5510CE00FFA27E /* ZFCheckbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFCheckbox.m; sourceTree = "<group>"; };
 		BF0FF1C02A5510CE00FFA27E /* ZFCheckbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFCheckbox.h; sourceTree = "<group>"; };
 		BF69FE4D28123C7800542668 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		BFA303472A47EBA800DC242C /* AppList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppList.h; sourceTree = "<group>"; };
+		BFA303472A47EBA800DC242C /* AppInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppInfo.h; sourceTree = "<group>"; };
 		BFA303482A47EBA800DC242C /* BlacklistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlacklistViewController.h; sourceTree = "<group>"; };
 		BFA303492A47EBA800DC242C /* BlacklistViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlacklistViewController.m; sourceTree = "<group>"; };
-		BFA3034A2A47EBA800DC242C /* AppList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppList.m; sourceTree = "<group>"; };
+		BFA3034A2A47EBA800DC242C /* AppInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppInfo.m; sourceTree = "<group>"; };
 		BFD8B9712A4BD68D007CCEB8 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
 		BFD8B9722A4BD68D007CCEB8 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 		BFE9353C27F753D30022D46C /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -61,19 +68,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF69FE4E28123C7800542668 /* AVFoundation.framework in Frameworks */,
-				842F23E62AA321E900EE2E9A /* libroothide.tbd in Frameworks */,
+				840A948D2C6C9F3C00180FFA /* libroothide.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		840A94872C6C9F3C00180FFA /* roothide */ = {
+			isa = PBXGroup;
+			children = (
+				840A94882C6C9F3C00180FFA /* roothide.h */,
+				840A94892C6C9F3C00180FFA /* libroothide.tbd */,
+				840A948A2C6C9F3C00180FFA /* module.modulemap */,
+				840A948B2C6C9F3C00180FFA /* stub.h */,
+			);
+			path = roothide;
+			sourceTree = "<group>";
+		};
 		A672ABA627F748DE00878787 = {
 			isa = PBXGroup;
 			children = (
 				842F706A2ACB58BB002E5574 /* control */,
 				8477B60A2A866CBA000632D0 /* entitlements.plist */,
+				845F90C02BC4227400E993FB /* Makefile */,
 				A672ABB127F748DE00878787 /* RootHide */,
 				A672ABB027F748DE00878787 /* Products */,
 				BFE9353B27F753D30022D46C /* Frameworks */,
@@ -91,13 +109,16 @@
 		A672ABB127F748DE00878787 /* RootHide */ = {
 			isa = PBXGroup;
 			children = (
-				BFA303472A47EBA800DC242C /* AppList.h */,
-				BFA3034A2A47EBA800DC242C /* AppList.m */,
+				840A94872C6C9F3C00180FFA /* roothide */,
+				840A948C2C6C9F3C00180FFA /* roothide.h */,
+				BFA303472A47EBA800DC242C /* AppInfo.h */,
+				BFA3034A2A47EBA800DC242C /* AppInfo.m */,
 				8477B5DD2A75269B000632D0 /* NSJSONSerialization+Comments.h */,
 				8477B5E02A7526AB000632D0 /* NSJSONSerialization+Comments.m */,
 				BF0FF1BE2A5510C100FFA27E /* UIComponent */,
 				A672ABB227F748DE00878787 /* AppDelegate.h */,
 				A672ABB327F748DE00878787 /* AppDelegate.m */,
+				84E33D9B2CAE907200991A4E /* AppCleaner.m */,
 				BFA303482A47EBA800DC242C /* BlacklistViewController.h */,
 				BFA303492A47EBA800DC242C /* BlacklistViewController.m */,
 				BF0FF1BB2A550FFA00FFA27E /* varCleanController.h */,
@@ -209,8 +230,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A672ABB427F748DE00878787 /* AppDelegate.m in Sources */,
-				BFA3034C2A47EBA800DC242C /* AppList.m in Sources */,
+				BFA3034C2A47EBA800DC242C /* AppInfo.m in Sources */,
 				A672ABC527F748E100878787 /* main.m in Sources */,
+				84E33D9C2CAE907200991A4E /* AppCleaner.m in Sources */,
 				8477B5E22A7526AB000632D0 /* NSJSONSerialization+Comments.m in Sources */,
 				BFA3034B2A47EBA800DC242C /* BlacklistViewController.m in Sources */,
 				BF0FF1C12A5510CE00FFA27E /* ZFCheckbox.m in Sources */,
@@ -377,6 +399,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/RootHide",
+					"$(PROJECT_DIR)/RootHide/roothide",
 				);
 				MARKETING_VERSION = 5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.roothide.manager;
@@ -414,6 +437,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/RootHide",
+					"$(PROJECT_DIR)/RootHide/roothide",
 				);
 				MARKETING_VERSION = 5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.roothide.manager;

@@ -1,7 +1,7 @@
 // https://github.com/wujianguo/iOSAppsInfo
 // modified by Shadow-
 
-#import "AppList.h"
+#import "AppInfo.h"
 #import <dlfcn.h>
 
 @interface UIImage ()
@@ -17,6 +17,7 @@
 @property (nonatomic, readonly) NSString* localizedShortName;
 @property (nonatomic, readonly) NSString* localizedName;
 @property (nonatomic, readonly) NSString* bundleIdentifier;
+@property (nonatomic, readonly) NSString* bundleExecutable;
 @property (nonatomic, readonly) NSArray* appTags;
 
 @property (nonatomic, readonly) NSString *applicationDSID;
@@ -27,6 +28,7 @@
 @property (nonatomic, readonly) NSURL *containerURL;
 
 @property (nonatomic, readonly) NSArray *groupIdentifiers;
+@property (nonatomic, readonly) NSDictionary *groupContainerURLs;
 @property (nonatomic, readonly) NSNumber *itemID;
 @property (nonatomic, readonly) NSString *itemName;
 @property (nonatomic, readonly) NSString *minimumSystemVersion;
@@ -39,10 +41,12 @@
 @property (nonatomic, readonly) NSString *teamID;
 @property (nonatomic, readonly) NSString *vendorName;
 
+@property (nonatomic,readonly) NSArray<LSPlugInKitProxy *> *plugInKitPlugins;
+
 @end
 
 
-@implementation AppList
+@implementation AppInfo
 {
     PrivateApi_LSApplicationProxy* _applicationProxy;
     UIImage* _icon;
@@ -72,6 +76,11 @@
 - (NSString*)bundleIdentifier
 {
     return [_applicationProxy bundleIdentifier];
+}
+
+- (NSString*)bundleExecutable
+{
+    return [_applicationProxy bundleExecutable];
 }
 
 - (UIImage*)icon
@@ -109,6 +118,11 @@
 - (NSArray*)groupIdentifiers
 {
     return _applicationProxy.groupIdentifiers;
+}
+
+- (NSDictionary*)groupContainerURLs
+{
+    return _applicationProxy.groupContainerURLs;
 }
 
 - (NSNumber*)itemID
@@ -154,6 +168,11 @@
 - (NSString*)vendorName
 {
     return _applicationProxy.vendorName;
+}
+
+- (NSArray<LSPlugInKitProxy *> *) plugInKitPlugins
+{
+    return _applicationProxy.plugInKitPlugins;
 }
 
 - (BOOL)isHiddenApp
