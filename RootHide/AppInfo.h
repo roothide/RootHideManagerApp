@@ -1,10 +1,15 @@
 #import <UIKit/UIKit.h>
 
+@interface LSPlugInKitProxy : NSObject
+- (NSString *)bundleIdentifier;
+@property (nonatomic,readonly) NSURL *dataContainerURL;
+@end
 
-@interface AppList : NSObject
+@interface AppInfo : NSObject
 @property (nonatomic, strong) NSString *infoPlistPath;
 
 @property (nonatomic, readonly) NSString* bundleIdentifier;
+@property (nonatomic, readonly) NSString* bundleExecutable;
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) UIImage* icon;
 @property (nonatomic, readonly) NSURL *bundleURL;
@@ -16,6 +21,7 @@
 @property (nonatomic, readonly) NSNumber *dynamicDiskUsage;
 
 @property (nonatomic, readonly) NSArray *groupIdentifiers;
+@property (nonatomic, readonly) NSDictionary *groupContainerURLs;
 @property (nonatomic, readonly) NSNumber *itemID;
 @property (nonatomic, readonly) NSString *itemName;
 @property (nonatomic, readonly) NSString *minimumSystemVersion;
@@ -27,6 +33,8 @@
 @property (nonatomic, readonly) NSNumber *staticDiskUsage;
 @property (nonatomic, readonly) NSString *teamID;
 @property (nonatomic, readonly) NSString *vendorName;
+
+@property (nonatomic,readonly) NSArray<LSPlugInKitProxy *> *plugInKitPlugins;
 
 @property (nonatomic, readonly) BOOL isHiddenApp;
 

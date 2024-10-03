@@ -40,7 +40,7 @@
     self.tableView.refreshControl = refreshControl;
     
     
-    [self updateData];
+    self.tableData = [self updateData];
     
 //doClean will auto refresh list    [[NSNotificationCenter defaultCenter] addObserver:self
 //                                             selector:@selector(startRefresh)
@@ -71,8 +71,9 @@
 - (void)startRefresh {
     [self.tableView.refreshControl beginRefreshing];
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [self updateData];
+        NSMutableArray* newData = [self updateData];
         dispatch_async(dispatch_get_main_queue(), ^{
+            self.tableData = newData;
             [self.tableView reloadData];
             [self.tableView.refreshControl endRefreshing];
         });
@@ -85,7 +86,7 @@
     [self.tableView.refreshControl endRefreshing];
 }
 
-- (void)updateForRules:(NSDictionary*)rules customed:(NSMutableDictionary*)customedRules {
+- (void)updateForRules:(NSDictionary*)rules customed:(NSMutableDictionary*)customedRules newData:(NSMutableArray*)newData {
     for (NSString* path in rules) {
         NSMutableArray *folders = [[NSMutableArray alloc] init];
         NSMutableArray *files = [[NSMutableArray alloc] init];
@@ -165,13 +166,13 @@
         NSArray *sortedFiles = [files sortedArrayUsingDescriptors:@[sortDescriptor]];
         
         tableGroup[@"items"] = [[sortedFolders arrayByAddingObjectsFromArray:sortedFiles] mutableCopy];
-        [self.tableData addObject:tableGroup];
+        [newData addObject:tableGroup];
     }
 }
 
-- (void)updateData {
+- (NSMutableArray*)updateData {
     NSLog(@"updateData...");
-    self.tableData = [[NSMutableArray alloc] init];
+    NSMutableArray* newData = [[NSMutableArray alloc] init];
     
     NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules.plist");
     NSDictionary *rules = [NSDictionary dictionaryWithContentsOfFile:rulesFilePath];
@@ -179,8 +180,8 @@
     NSString *customedRulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules-custom.plist");
     NSMutableDictionary *customedRules = [NSMutableDictionary dictionaryWithContentsOfFile:customedRulesFilePath];
     
-    [self updateForRules:rules customed:customedRules];
-    [self updateForRules:customedRules customed:nil];
+    [self updateForRules:rules customed:customedRules newData:newData];
+    [self updateForRules:customedRules customed:nil newData:newData];
 
     NSComparator sorter = ^NSComparisonResult(NSDictionary* a, NSDictionary* b)
     {
@@ -189,7 +190,9 @@
         
         return [a[@"group"] compare:b[@"group"]];
     };
-    [self.tableData sortUsingComparator:sorter];
+    [newData sortUsingComparator:sorter];
+    
+    return newData;
 }
 
 - (BOOL)checkFileInList:(NSString *)fileName List:(NSArray*)list {
@@ -218,15 +221,18 @@
 }
 
 - (void)varClean {
+    // Create a list of files to be deleted
     NSMutableString *deletionList = [NSMutableString stringWithString:Localized(@"You are about to delete the following items:\n")];
 
-        for (NSDictionary* group in self.tableData) {
-            for (NSDictionary* item in group[@"items"]) {
-                if ([item[@"checked"] boolValue]) {
-                    [deletionList appendFormat:@"%@\n", item[@"path"]];
-                }
+    for (NSDictionary* group in self.tableData) {
+        for (NSDictionary* item in group[@"items"]) {
+            if ([item[@"checked"] boolValue]) {
+                [deletionList appendFormat:@"%@\n", item[@"path"]];
             }
         }
+    }
+
+    // Display confirmation alert
     NSString *alertMessage = [NSString stringWithFormat:@"%@\n%@", Localized(@"Are you sure you want to clean selected items?"), deletionList];
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:Localized(@"Confirmation")
                                                                              message:alertMessage
@@ -235,6 +241,7 @@
     UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:Localized(@"Confirm")
                                                             style:UIAlertActionStyleDestructive
                                                           handler:^(UIAlertAction * _Nonnull action) {
+        // Start the cleaning process after confirmation
         NSLog(@"Starting clean process");
         NSLog(@"self.tableData=%@", self.tableData);
         
@@ -245,17 +252,6 @@
                 if (![item[@"checked"] boolValue]) continue;
                 
                 NSLog(@"clean=%@", item);
-                
-                /*
-                NSString* backup = jbroot(@"/var/mobile/Library/RootHide/backup");
-                NSString* newpath = [backup stringByAppendingPathComponent:item[@"path"]];
-                NSString* dirpath = [newpath stringByDeletingLastPathComponent];
-                NSLog(@"newpath=%@, dirpath=%@", newpath, dirpath);
-                if(![NSFileManager.defaultManager fileExistsAtPath:dirpath])
-                    [NSFileManager.defaultManager createDirectoryAtPath:dirpath
-                                            withIntermediateDirectories:YES attributes:nil error:nil];
-                [NSFileManager.defaultManager copyItemAtPath:item[@"path"] toPath:newpath error:nil];
-                //*/
                 
                 NSError *err;
                 if (![NSFileManager.defaultManager removeItemAtPath:item[@"path"] error:&err]) {
@@ -287,6 +283,7 @@
     
     [self presentViewController:alertController animated:YES completion:nil];
 }
+
 
 #pragma mark - Table view data source
 

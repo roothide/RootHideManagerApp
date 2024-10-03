@@ -2,85 +2,13 @@
 
 #import "BlacklistViewController.h"
 #include "AppDelegate.h"
-#import "AppList.h"
+#import "AppInfo.h"
 
-#include <sys/sysctl.h>
+BOOL isUUIDPathOf(NSString* path, NSString* parent);
 
-void killAllForApp(const char* bundlePath)
+BOOL isDefaultInstallationPath(NSString* path)
 {
-    NSLog(@"killBundleForPath: %s", bundlePath);
-    
-    char realBundlePath[PATH_MAX];
-    if(!realpath(bundlePath, realBundlePath))
-        return;
-    
-    static int maxArgumentSize = 0;
-    if (maxArgumentSize == 0) {
-        size_t size = sizeof(maxArgumentSize);
-        if (sysctl((int[]){ CTL_KERN, KERN_ARGMAX }, 2, &maxArgumentSize, &size, NULL, 0) == -1) {
-            perror("sysctl argument size");
-            maxArgumentSize = 4096; // Default
-        }
-    }
-    int mib[3] = { CTL_KERN, KERN_PROC, KERN_PROC_ALL};
-    struct kinfo_proc *info;
-    size_t length;
-    size_t count;
-    
-    if (sysctl(mib, 3, NULL, &length, NULL, 0) < 0)
-        return;
-    if (!(info = malloc(length)))
-        return;
-    if (sysctl(mib, 3, info, &length, NULL, 0) < 0) {
-        free(info);
-        return;
-    }
-    count = length / sizeof(struct kinfo_proc);
-    for (int i = 0; i < count; i++) {
-        pid_t pid = info[i].kp_proc.p_pid;
-        if (pid == 0) {
-            continue;
-        }
-        size_t size = maxArgumentSize;
-        char* buffer = (char *)malloc(length);
-        if (sysctl((int[]){ CTL_KERN, KERN_PROCARGS2, pid }, 3, buffer, &size, NULL, 0) == 0) {
-            char *executablePath = buffer + sizeof(int);
-            NSLog(@"executablePath [%d] %s", pid, executablePath);
-            char realExecutablePath[PATH_MAX];
-            if (realpath(executablePath, realExecutablePath)
-                && strncmp(realExecutablePath, realBundlePath, strlen(realBundlePath)) == 0) {
-                kill(pid, SIGKILL);
-            }
-        }
-        free(buffer);
-    }
-    free(info);
-}
-
-
-#define APP_PATH_PREFIX "/private/var/containers/Bundle/Application/"
-
-BOOL isDefaultInstallationPath(NSString* _path)
-{
-    if(!_path) return NO;
-
-    const char* path = _path.UTF8String;
-    
-    char rp[PATH_MAX];
-    if(!realpath(path, rp)) return NO;
-
-    if(strncmp(rp, APP_PATH_PREFIX, sizeof(APP_PATH_PREFIX)-1) != 0)
-        return NO;
-
-    char* p1 = rp + sizeof(APP_PATH_PREFIX)-1;
-    char* p2 = strchr(p1, '/');
-    if(!p2) return NO;
-
-    //is normal app or jailbroken app/daemon?
-    if((p2 - p1) != (sizeof("xxxxxxxx-xxxx-xxxx-yxxx-xxxxxxxxxxxx")-1))
-        return NO;
-
-    return YES;
+    return isUUIDPathOf(path, @"/private/var/containers/Bundle/Application/");
 }
 
 @interface PrivateApi_LSApplicationWorkspace
@@ -129,7 +57,7 @@ BOOL isDefaultInstallationPath(NSString* _path)
         isFiltered = true;
         filteredApps = [[NSMutableArray alloc] init];
         searchText = searchText.lowercaseString;
-        for (AppList* app in appsArray) {
+        for (AppInfo* app in appsArray) {
             NSRange nameRange = [app.name.lowercaseString rangeOfString:searchText options:NSCaseInsensitiveSearch];
             NSRange bundleIdRange = [app.bundleIdentifier.lowercaseString rangeOfString:searchText options:NSCaseInsensitiveSearch];
             if(nameRange.location != NSNotFound || bundleIdRange.location != NSNotFound) {
@@ -170,17 +98,31 @@ BOOL isDefaultInstallationPath(NSString* _path)
     [refreshControl addTarget:self action:@selector(startRefresh) forControlEvents:UIControlEventValueChanged];
     self.tableView.refreshControl = refreshControl;
     
-    [self updateData];
+    self->appsArray = [self updateData:YES];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startRefresh)
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startRefresh2)
                                           name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 - (void)startRefresh {
     [self.tableView.refreshControl beginRefreshing];
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [self updateData];
+        NSArray* newData = [self updateData:YES];
         dispatch_async(dispatch_get_main_queue(), ^{
+            self->appsArray = newData;
+            [self reloadSearch];
+            [self.tableView reloadData];
+            [self.tableView.refreshControl endRefreshing];
+        });
+    });
+}
+
+- (void)startRefresh2 {
+    [self.tableView.refreshControl beginRefreshing];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSArray* newData = [self updateData:NO];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self->appsArray = newData;
             [self reloadSearch];
             [self.tableView reloadData];
             [self.tableView.refreshControl endRefreshing];
@@ -194,14 +136,14 @@ BOOL isDefaultInstallationPath(NSString* _path)
     [self.tableView.refreshControl endRefreshing];
 }
 
-- (void)updateData {
+- (NSArray*)updateData:(BOOL)sort {
     NSMutableArray* applications = [NSMutableArray new];
     PrivateApi_LSApplicationWorkspace* _workspace = [NSClassFromString(@"LSApplicationWorkspace") new];
     NSArray* allInstalledApplications = [_workspace allInstalledApplications];
     
     for(id proxy in allInstalledApplications)
     {
-        AppList* app = [AppList appWithPrivateProxy:proxy];
+        AppInfo* app = [AppInfo appWithPrivateProxy:proxy];
         //if(!app.isHiddenApp && ([app.applicationType containsString:@"User"]))
         //some apps can be installed in trollstore but detect jailbreak
         if(!app.isHiddenApp
@@ -212,11 +154,64 @@ BOOL isDefaultInstallationPath(NSString* _path)
         }
     }
     
-    NSArray *appsSortedByName = [applications sortedArrayUsingComparator:^NSComparisonResult(AppList *app1, AppList *app2) {
-        return [app1.name localizedStandardCompare:app2.name];
-    }];
+    NSArray *appsSortedByName = nil;
     
-    self->appsArray = appsSortedByName;
+    if(sort)
+    {
+        NSMutableDictionary* appconfig = [AppDelegate getDefaultsForKey:@"appconfig"];
+        
+        appsSortedByName = [applications sortedArrayUsingComparator:^NSComparisonResult(AppInfo *app1, AppInfo *app2) {
+
+            BOOL enabled1 = [[appconfig objectForKey:app1.bundleIdentifier] boolValue];
+            BOOL enabled2 = [[appconfig objectForKey:app2.bundleIdentifier] boolValue];
+            
+            if((enabled1&&!enabled2) || (!enabled1&&enabled2)) {
+                return [@(enabled2) compare:@(enabled1)];
+            }
+            
+            if(app1.isHiddenApp || app2.isHiddenApp) {
+                return (enabled1&&enabled2) ? [@(app2.isHiddenApp) compare:@(app1.isHiddenApp)] : [@(app1.isHiddenApp) compare:@(app2.isHiddenApp)];
+            }
+            
+            return [app1.name localizedStandardCompare:app2.name];
+        }];
+    }
+    else
+    {
+        NSMutableArray *newapps = [NSMutableArray array];
+        [applications enumerateObjectsUsingBlock:^(AppInfo *newobj, NSUInteger idx, BOOL * _Nonnull stop) {
+            __block BOOL hasBeenContained = NO;
+            [self->appsArray enumerateObjectsUsingBlock:^(AppInfo *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if ([obj.bundleIdentifier isEqualToString:newobj.bundleIdentifier]) {
+                    hasBeenContained = YES;
+                    *stop = YES;
+                }
+            }];
+            if (!hasBeenContained) {
+                [newapps addObject:newobj];
+            }
+        }];
+        
+        NSMutableArray *tmpArray = [NSMutableArray array];
+        [self->appsArray enumerateObjectsUsingBlock:^(AppInfo *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [applications enumerateObjectsUsingBlock:^(AppInfo *newobj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if ([obj.bundleIdentifier isEqualToString:newobj.bundleIdentifier]) {
+                    [tmpArray addObject:newobj];
+                    *stop = YES;
+                }
+            }];
+        }];
+
+        [tmpArray addObjectsFromArray:newapps];
+        appsSortedByName = tmpArray.copy;
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self reloadSearch];
+        [self.tableView reloadData];
+    });
+    
+    return appsSortedByName;
 }
 
 #pragma mark - Table view data source
@@ -255,7 +250,7 @@ BOOL isDefaultInstallationPath(NSString* _path)
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
     
-    AppList* app = isFiltered? filteredApps[indexPath.row] : appsArray[indexPath.row];
+    AppInfo* app = isFiltered? filteredApps[indexPath.row] : appsArray[indexPath.row];
     
     UIImage *image = app.icon;
     cell.imageView.image = [self imageWithImage:image scaledToSize:CGSizeMake(40, 40)];
@@ -275,7 +270,55 @@ BOOL isDefaultInstallationPath(NSString* _path)
     }
     
     cell.accessoryView = theSwitch;
+    
+    UILongPressGestureRecognizer *gest = [[UILongPressGestureRecognizer alloc]
+                                          initWithTarget:self action:@selector(cellLongPress:)];
+    [cell.contentView addGestureRecognizer:gest];
+    gest.view.tag = indexPath.row | indexPath.section<<32;
+    gest.minimumPressDuration = 1;
+    
     return cell;
+}
+
+- (void)cellLongPress:(UIGestureRecognizer *)recognizer
+{
+    if (recognizer.state == UIGestureRecognizerStateBegan)
+    {
+        long tag = recognizer.view.tag;
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:tag&0xFFFFFFFF inSection:tag>>32];
+        
+        AppInfo* app = isFiltered? filteredApps[indexPath.row] : appsArray[indexPath.row];
+        
+        UIAlertController* appMenuAlert = [UIAlertController alertControllerWithTitle:app.name?:@"" message:app.bundleIdentifier?:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+        
+        UIAlertAction* cleanAction = [UIAlertAction actionWithTitle:@"Clear App Data" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action)
+        {
+            void killAllForApp(const char* bundlePath);
+            killAllForApp(app.bundleURL.path.UTF8String);
+            
+            NSString* error = nil;
+            if(geteuid()==0 && getegid()==0) {
+                NSString* clearAppData(AppInfo* app);
+                error = clearAppData(app);
+            } else {
+                NSString* RootUserClearAppData(AppInfo* app);
+                error = RootUserClearAppData(app);
+            }
+            if(error) {
+                [AppDelegate showMessage:error title:Localized(@"Error")];
+            } else {
+                [AppDelegate showMessage:@"" title:Localized(@"Cleaned up")];
+            }
+        }];
+        [appMenuAlert addAction:cleanAction];
+        
+        UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction* action)
+        {
+        }];
+        [appMenuAlert addAction:cancelAction];
+        
+        [AppDelegate showAlert:appMenuAlert];
+    }
 }
 
 - (void)switchChanged:(id)sender {
@@ -284,14 +327,14 @@ BOOL isDefaultInstallationPath(NSString* _path)
     CGPoint pos = [switchInCell convertPoint:switchInCell.bounds.origin toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:pos];
     
-    AppList* app = isFiltered? filteredApps[indexPath.row] : appsArray[indexPath.row];
+    AppInfo* app = isFiltered? filteredApps[indexPath.row] : appsArray[indexPath.row];
     
     NSMutableDictionary* appconfig = [AppDelegate getDefaultsForKey:@"appconfig"];
     if(!appconfig) appconfig = [[NSMutableDictionary alloc] init];
     [appconfig setObject:@(switchInCell.on) forKey:app.bundleIdentifier];
     [AppDelegate setDefaults:appconfig forKey:@"appconfig"];
     
-    
+    void killAllForApp(const char* bundlePath);
     killAllForApp(app.bundleURL.path.UTF8String);
     
 }

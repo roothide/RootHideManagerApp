@@ -7,6 +7,9 @@ INSTALL_TARGET_PROCESSES = RootHide
 
 THEOS_PACKAGE_SCHEME = roothide
 
+FINALPACKAGE ?= 1
+DEBUG ?= 0
+
 include $(THEOS)/makefiles/common.mk
 
 XCODE_SCHEME = RootHide
@@ -25,6 +28,9 @@ include $(THEOS_MAKE_PATH)/xcodeproj.mk
 
 clean::
 	rm -rf ./packages/*
+
+before-package::
+	ldid -M -S./nickchan.entitlements ./.theos/_/Applications/RootHide.app/RootHide
 
 after-install::
 	install.exec 'uiopen -b com.roothide.manager'

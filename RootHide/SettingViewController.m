@@ -20,72 +20,6 @@
     return sharedInstance;
 }
 
-- (void)processXinaA15Files:(BOOL)hide withBootpath:(NSString*)bootpath
-{
-    char* args[] = {"/sbin/mount", "-u", "-w", "/private/preboot", NULL};
-    
-    pid_t pid=0;
-    assert(posix_spawn(&pid, args[0], NULL, NULL, args, NULL) == 0);
-    
-    int status=0;
-    waitpid(pid, &status, 0);
-    
-    NSArray* bootfiles = [NSFileManager.defaultManager contentsOfDirectoryAtPath:bootpath error:nil];
-    
-    NSString* msg = nil;
-    
-    if(hide) {
-        for(NSString* name in bootfiles)
-        {
-            if([name isEqualToString:@"procursus"])
-            {
-                NSError* err=nil;
-                if([NSFileManager.defaultManager moveItemAtPath:[bootpath stringByAppendingPathComponent:name] toPath:[bootpath stringByAppendingFormat:@"/xinaA15-%X", arc4random()] error:&err]) {
-                    msg = Localized(@"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again.");
-                } else {
-                    msg = [NSString stringWithFormat:Localized(@"hide failed: %@"), err];
-                }
-            }
-        }
-        
-    } else {
-        NSString* xinafilename=nil;
-        for(NSString* name in bootfiles)
-        {
-            if([name hasPrefix:@"xinaA15-"])
-            {
-                if(xinafilename) {
-                    xinafilename = nil;
-                    char realbootpath[PATH_MAX]={0};
-                    realpath(bootpath.UTF8String, realbootpath);
-                    msg = [NSString stringWithFormat:Localized(@"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/"), realbootpath];
-                    break;
-                } else {
-                    xinafilename = name;
-                }
-            }
-        }
-        
-        if(xinafilename) {
-            NSError* err=nil;
-            if([NSFileManager.defaultManager moveItemAtPath:[bootpath stringByAppendingPathComponent:xinafilename] toPath:[bootpath stringByAppendingPathComponent:@"procursus"] error:&err]) {
-                msg = Localized(@"xinaA15 files has been restored, you can reboot your device to switch to xinaA15.");
-            } else {
-                msg = [NSString stringWithFormat:Localized(@"restore failed: %@"), err];
-            }
-        } else if(!msg) {
-            msg = Localized(@"restore failed: xinaA15 file not found!");
-        }
-    }
-    
-    if(msg) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:Localized(@"Process xinaA15 Files") message:msg preferredStyle:UIAlertControllerStyleAlert];
-        
-        [alert addAction:[UIAlertAction actionWithTitle:Localized(@"Got It") style:UIAlertActionStyleDefault handler:nil]];
-        [self.navigationController presentViewController:alert animated:YES completion:nil];
-    }
-}
-
 - (void)reloadMenu {
     NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules-custom.plist");
     NSCharacterSet *CharacterSet = [NSCharacterSet URLQueryAllowedCharacterSet];
@@ -117,45 +51,6 @@
             ]
         },
     ].mutableCopy;
-    
-    BOOL xinaA15installed = NO;
-    BOOL xinaA15fileshide = NO;
-    
-    struct statfs s={0};
-    statfs("/usr/standalone/firmware", &s);
-    NSString* bootpath = [NSString stringWithFormat:@"%s/../../../", s.f_mntfromname];
-    NSArray* bootfiles = [NSFileManager.defaultManager contentsOfDirectoryAtPath:bootpath error:nil];
-    for(NSString* name in bootfiles)
-    {
-        if([name isEqualToString:@"procursus"]) {
-            xinaA15installed = YES;
-            xinaA15fileshide = NO;
-        } else if([name hasPrefix:@"xinaA15-"]) {
-            if(!xinaA15installed) xinaA15fileshide=YES;
-        }
-    }
-    
-    if(xinaA15installed || xinaA15fileshide) {
-        [self.menuData addObjectsFromArray:@[
-            @{
-                @"groupTitle": Localized(@"Misc"),
-                @"items": @[
-                    @{
-                        @"textLabel": Localized(@"Hide xinaA15 Files"),
-                        @"detailTextLabel": Localized(@"hide xinaA15 files without uninstall it"),
-                        @"type": @"switch",
-                        @"status": @(xinaA15fileshide),
-                        @"action": ^{
-                            [self processXinaA15Files:xinaA15installed withBootpath:bootpath];
-                            [self reloadMenu];
-                            [self.tableView reloadData];
-                        }
-                    },
-                ]
-            },
-        ]];
-    }
-    
 }
 
 - (void)viewDidLoad {

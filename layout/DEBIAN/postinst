@@ -1,4 +1,5 @@
 #!/bin/sh
 
+uicache -p /Applications/RootHide.app
 chown 0:0 /Applications/RootHide.app/RootHide
 chmod +s /Applications/RootHide.app/RootHide

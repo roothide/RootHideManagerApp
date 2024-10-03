@@ -35,6 +35,7 @@
             "dirs_cleaner",
             "dextcores",
             "staged_system_apps",
+            "internal",
 		],
 		"blacklist":[
 			"jb",
@@ -71,6 +72,7 @@
 			"zshenv",
 			"zshrc",
 			"master.passwd",
+            ".keep_symlinks",
 		]
 	},
 	"/var/log" : {
@@ -155,7 +157,8 @@
 			{"match":"regexp", "name":"^com\\.apple\\."},
 		],
 		"blacklist":[
-			"shshd"
+			"shshd",
+            "FilzaHelper",
 		]
 	},
 	"/var/root/Library/Preferences" : {
@@ -182,12 +185,14 @@
 			"Downloads",
 			"Library",
 			"Media",
-			"MobileSoftwareUpdate"
+			"MobileSoftwareUpdate",
+            "tmp",
 		],
         "blacklist":[
             "log.txt",
             ".ekenablelogging",
             ".eksafemode",
+            "Serotonin.jp2",
         ]
 	},
     "/var/mobile/Documents" : {
@@ -366,14 +371,28 @@
             "AppleMediaServices",
             "IntelligencePlatform",
             "sessionkitd",
+            "LiveFiles",
+            "Maps",
+            "OSIntelligence",
+            "Phone",
+            "Seymour",
 		],
 		"blacklist":[
 			"Sileo",
 			"Filza",
 			"Flex3",
 			"SBSettings",
+            "iCleaner",
 		]
 	},
+    "/var/mobile/Library/Logs" : {
+        "default" : "whitelist",
+        "whitelist":[
+        ],
+        "blacklist":[
+            "Cydia"
+        ]
+    },
     "/var/mobile/Library/UserConfigurationProfiles/PublicInfo/" : {
             "whitelist":[
                 "MCMeta.plist",

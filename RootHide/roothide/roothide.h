@@ -1,8 +1,9 @@
 #ifndef ROOTHIDE_H
 #define ROOTHIDE_H
 
-#include <stdio.h>
-#include <stdlib.h>
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnullability-completeness"
+
 #include <string.h>
 
 #ifdef __cplusplus
@@ -33,8 +34,8 @@ const char* jbroot(const char* path);
 const char* rootfs(const char* path);
 
 #ifdef __OBJC__
-NSString* __attribute__((overloadable)) jbroot(NSString* path);
-NSString* __attribute__((overloadable)) rootfs(NSString* path);
+NSString* _Nonnull __attribute__((overloadable)) jbroot(NSString* _Nonnull path);
+NSString* _Nonnull __attribute__((overloadable)) rootfs(NSString* _Nonnull path);
 #endif
 
 #ifdef __cplusplus
@@ -45,5 +46,7 @@ NSString* __attribute__((overloadable)) rootfs(NSString* path);
 std::string jbroot(std::string path);
 std::string rootfs(std::string path);
 #endif
+
+#pragma GCC diagnostic pop
 
 #endif /* ROOTHIDE_H */

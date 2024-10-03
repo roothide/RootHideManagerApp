@@ -8,6 +8,9 @@
 + (id)getDefaultsForKey:(NSString*)value;
 + (void)setDefaults:(NSObject*)value forKey:(NSString*)key;
 
++ (void)showAlert:(UIAlertController*)alert;
++ (void)showMessage:(NSString*)msg title:(NSString*)title;
+
 @end
 
 #define Localized(x) NSLocalizedString(x,nil)
