@@ -10,8 +10,8 @@
 		840A948D2C6C9F3C00180FFA /* libroothide.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 840A94892C6C9F3C00180FFA /* libroothide.tbd */; };
 		8477B5E22A7526AB000632D0 /* NSJSONSerialization+Comments.m in Sources */ = {isa = PBXBuildFile; fileRef = 8477B5E02A7526AB000632D0 /* NSJSONSerialization+Comments.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8477B6052A866437000632D0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8477B6072A866437000632D0 /* Localizable.strings */; };
+		848148292D131A2800CB9FA9 /* AppDataCleaner.m in Sources */ = {isa = PBXBuildFile; fileRef = 848148282D131A2800CB9FA9 /* AppDataCleaner.m */; };
 		84BBFAC92A7420100054A68E /* varCleanRules.json in Resources */ = {isa = PBXBuildFile; fileRef = 84BBFAC72A741C800054A68E /* varCleanRules.json */; };
-		84E33D9C2CAE907200991A4E /* AppCleaner.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E33D9B2CAE907200991A4E /* AppCleaner.m */; };
 		A672ABB427F748DE00878787 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A672ABB327F748DE00878787 /* AppDelegate.m */; };
 		A672ABBF27F748E100878787 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A672ABBE27F748E100878787 /* Assets.xcassets */; };
 		A672ABC527F748E100878787 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A672ABC427F748E100878787 /* main.m */; };
@@ -41,8 +41,8 @@
 		8477B6062A866437000632D0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8477B6092A8668AF000632D0 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8477B60A2A866CBA000632D0 /* entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = entitlements.plist; sourceTree = "<group>"; };
+		848148282D131A2800CB9FA9 /* AppDataCleaner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDataCleaner.m; path = AppDataCleaner/AppDataCleaner.m; sourceTree = "<group>"; };
 		84BBFAC72A741C800054A68E /* varCleanRules.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = varCleanRules.json; sourceTree = "<group>"; };
-		84E33D9B2CAE907200991A4E /* AppCleaner.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppCleaner.m; sourceTree = "<group>"; };
 		A672ABAF27F748DE00878787 /* RootHide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RootHide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A672ABB227F748DE00878787 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A672ABB327F748DE00878787 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -118,9 +118,9 @@
 				BF0FF1BE2A5510C100FFA27E /* UIComponent */,
 				A672ABB227F748DE00878787 /* AppDelegate.h */,
 				A672ABB327F748DE00878787 /* AppDelegate.m */,
-				84E33D9B2CAE907200991A4E /* AppCleaner.m */,
 				BFA303482A47EBA800DC242C /* BlacklistViewController.h */,
 				BFA303492A47EBA800DC242C /* BlacklistViewController.m */,
+				848148282D131A2800CB9FA9 /* AppDataCleaner.m */,
 				BF0FF1BB2A550FFA00FFA27E /* varCleanController.h */,
 				BF0FF1BC2A550FFA00FFA27E /* varCleanController.m */,
 				BFD8B9712A4BD68D007CCEB8 /* SettingViewController.h */,
@@ -232,8 +232,8 @@
 				A672ABB427F748DE00878787 /* AppDelegate.m in Sources */,
 				BFA3034C2A47EBA800DC242C /* AppInfo.m in Sources */,
 				A672ABC527F748E100878787 /* main.m in Sources */,
-				84E33D9C2CAE907200991A4E /* AppCleaner.m in Sources */,
 				8477B5E22A7526AB000632D0 /* NSJSONSerialization+Comments.m in Sources */,
+				848148292D131A2800CB9FA9 /* AppDataCleaner.m in Sources */,
 				BFA3034B2A47EBA800DC242C /* BlacklistViewController.m in Sources */,
 				BF0FF1C12A5510CE00FFA27E /* ZFCheckbox.m in Sources */,
 				BFD8B9732A4BD68D007CCEB8 /* SettingViewController.m in Sources */,
