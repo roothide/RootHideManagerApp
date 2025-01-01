@@ -205,6 +205,21 @@
         close(s);
     });
     
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        
+        int s = socket(AF_INET, SOCK_STREAM, 0);
+        
+        struct sockaddr_in a;
+        a.sin_family = AF_INET;
+        a.sin_addr.s_addr = inet_addr("127.0.0.1");
+        a.sin_port = htons(44);
+
+        if(connect(s, (struct sockaddr*)&a, sizeof(a)) == 0) {
+            [AppDelegate showMessage:Localized(@"Dropbear has been installed, you can uninstall it via Sileo/Zebra.") title:Localized(@"SSH Detected")];
+        }
+        
+        close(s);
+    });
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         

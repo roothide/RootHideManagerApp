@@ -36,16 +36,14 @@
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     refreshControl.tintColor = [UIColor grayColor];
-    [refreshControl addTarget:self action:@selector(startRefresh) forControlEvents:UIControlEventValueChanged];
+    [refreshControl addTarget:self action:@selector(manualRefresh) forControlEvents:UIControlEventValueChanged];
     self.tableView.refreshControl = refreshControl;
     
     
-    self.tableData = [self updateData];
+    self.tableData = [self updateData:NO];
     
-//doClean will auto refresh list    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(startRefresh)
-//                                          name:UIApplicationWillEnterForegroundNotification
-//                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoRefresh)
+                                          name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 - (void)batchSelect {
@@ -68,10 +66,10 @@
     [self.tableView reloadData];
 }
 
-- (void)startRefresh {
+- (void)startRefresh:(BOOL)keepState {
     [self.tableView.refreshControl beginRefreshing];
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        NSMutableArray* newData = [self updateData];
+        NSMutableArray* newData = [self updateData:keepState];
         dispatch_async(dispatch_get_main_queue(), ^{
             self.tableData = newData;
             [self.tableView reloadData];
@@ -80,13 +78,21 @@
     });
 }
 
+- (void)manualRefresh {
+    [self startRefresh:NO];
+}
+
+- (void)autoRefresh {
+    [self startRefresh:YES];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.tableView.refreshControl beginRefreshing];
     [self.tableView.refreshControl endRefreshing];
 }
 
-- (void)updateForRules:(NSDictionary*)rules customed:(NSMutableDictionary*)customedRules newData:(NSMutableArray*)newData {
+- (void)updateForRules:(NSDictionary*)rules customed:(NSMutableDictionary*)customedRules newData:(NSMutableArray*)newData keepState:(BOOL)keepState {
     for (NSString* path in rules) {
         NSMutableArray *folders = [[NSMutableArray alloc] init];
         NSMutableArray *files = [[NSMutableArray alloc] init];
@@ -141,6 +147,25 @@
                 checked = NO;
             }
             
+            if(keepState)
+            {
+                for(NSDictionary* group in self.tableData)
+                {
+                    if([group[@"group"] isEqualToString:path])
+                    {
+                        for(NSDictionary* item in group[@"items"])
+                        {
+                            if([item[@"name"] isEqualToString:file])
+                            {
+                                checked = [item[@"checked"] boolValue];
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            
             NSString *filePath = [path stringByAppendingPathComponent:file];
             
             BOOL isDirectory = NO;
@@ -170,7 +195,7 @@
     }
 }
 
-- (NSMutableArray*)updateData {
+- (NSMutableArray*)updateData:(BOOL)keepState {
     NSLog(@"updateData...");
     NSMutableArray* newData = [[NSMutableArray alloc] init];
     
@@ -180,8 +205,8 @@
     NSString *customedRulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules-custom.plist");
     NSMutableDictionary *customedRules = [NSMutableDictionary dictionaryWithContentsOfFile:customedRulesFilePath];
     
-    [self updateForRules:rules customed:customedRules newData:newData];
-    [self updateForRules:customedRules customed:nil newData:newData];
+    [self updateForRules:rules customed:customedRules newData:newData keepState:keepState];
+    [self updateForRules:customedRules customed:nil newData:newData keepState:keepState];
 
     NSComparator sorter = ^NSComparisonResult(NSDictionary* a, NSDictionary* b)
     {
@@ -277,7 +302,7 @@
     
     [self.tableView.refreshControl endRefreshing];
     
-    self.tableData = [self updateData];
+    self.tableData = [self updateData:NO];
     [self.tableView reloadData];
 }
 
@@ -335,8 +360,7 @@
         NSMutableDictionary *item = items[indexPath.row];
         NSLog(@"open item %@", item);
         NSURL* url = [NSURL URLWithString:[@"filza://view" stringByAppendingString:
-                                           [item[@"path"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]
-        ];
+                                           [item[@"path"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] ];
         
         NSLog(@"open url %@", url);
         [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];

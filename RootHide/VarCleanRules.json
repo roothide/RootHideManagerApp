@@ -444,6 +444,7 @@
             "xyz.willy.Zebra.plist",
             "com.apple.lockscreencache-new.plist",
             "com.apple.homescreencache-new.plist",
+            "com.apple.terminal.plist",
         ]
     },
 	"/var/mobile/Library/Application Support" : {
@@ -460,7 +461,8 @@
             
 		],
 		"blacklist":[
-			"xyz.willy.Zebra"
+			"xyz.willy.Zebra",
+            "com.apple.Terminal",
 		]
 	},
 	"/var/mobile/Library/Application Support/Containers" : {
@@ -469,6 +471,7 @@
 			"xyz.willy.Zebra",
 			"com.tigisoftware.Filza",
             "org.coolstar.SileoStore",
+            "com.apple.Terminal",
 		]
 	},
 	"/var/mobile/Library/SplashBoard/Snapshots" : {
@@ -486,6 +489,7 @@
 			"ru.domo.cocoatop64",
 			"ws.hbang.Terminal",
 			"xyz.willy.Zebra",
+            "com.apple.Terminal",
 		]
 	},
 	"/var/mobile/Library/Caches" : {
@@ -522,6 +526,7 @@
 			"ws.hbang.Terminal",
 			"xyz.willy.Zebra",
             "Cephei",
+            "com.apple.Terminal",
 		]
 	},
 	"/var/mobile/Library/Saved Application State" : {
@@ -536,6 +541,7 @@
 			"ws.hbang.Terminal.savedState",
 			"xyz.willy.Zebra.savedState",
 			"ru.domo.cocoatop64.savedState",
+            "com.apple.Terminal.savedState",
 		]
 	},
 	"/var/mobile/Library/WebKit" : {

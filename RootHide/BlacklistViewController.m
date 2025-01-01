@@ -20,6 +20,7 @@ BOOL isDefaultInstallationPath(NSString* path)
 
 @interface BlacklistViewController () {
     UISearchController *searchController;
+    NSArray *applications;
     NSArray *appsArray;
     
     NSMutableArray* filteredApps;
@@ -45,6 +46,9 @@ BOOL isDefaultInstallationPath(NSString* path)
     [searchBar resignFirstResponder];
 }
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    if(isFiltered) {
+        self->appsArray = [self sortAppList:YES];
+    }
     isFiltered = false;
     [self.tableView reloadData];
 }
@@ -95,21 +99,23 @@ BOOL isDefaultInstallationPath(NSString* path)
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     refreshControl.tintColor = [UIColor grayColor];
-    [refreshControl addTarget:self action:@selector(startRefresh) forControlEvents:UIControlEventValueChanged];
+    [refreshControl addTarget:self action:@selector(manualRefresh) forControlEvents:UIControlEventValueChanged];
     self.tableView.refreshControl = refreshControl;
     
-    self->appsArray = [self updateData:YES];
+    self->applications = [self updateData];
+    self->appsArray = [self sortAppList:YES];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startRefresh2)
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoRefresh)
                                           name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
-- (void)startRefresh {
+- (void)startRefresh:(BOOL)resort {
     [self.tableView.refreshControl beginRefreshing];
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        NSArray* newData = [self updateData:YES];
+        NSArray* newData = [self updateData];
         dispatch_async(dispatch_get_main_queue(), ^{
-            self->appsArray = newData;
+            self->applications = newData;
+            self->appsArray = [self sortAppList:resort];
             [self reloadSearch];
             [self.tableView reloadData];
             [self.tableView.refreshControl endRefreshing];
@@ -117,17 +123,12 @@ BOOL isDefaultInstallationPath(NSString* path)
     });
 }
 
-- (void)startRefresh2 {
-    [self.tableView.refreshControl beginRefreshing];
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        NSArray* newData = [self updateData:NO];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self->appsArray = newData;
-            [self reloadSearch];
-            [self.tableView reloadData];
-            [self.tableView.refreshControl endRefreshing];
-        });
-    });
+- (void)manualRefresh {
+    [self startRefresh:YES];
+}
+
+- (void)autoRefresh {
+    [self startRefresh:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -136,31 +137,14 @@ BOOL isDefaultInstallationPath(NSString* path)
     [self.tableView.refreshControl endRefreshing];
 }
 
-- (NSArray*)updateData:(BOOL)sort {
-    NSMutableArray* applications = [NSMutableArray new];
-    PrivateApi_LSApplicationWorkspace* _workspace = [NSClassFromString(@"LSApplicationWorkspace") new];
-    NSArray* allInstalledApplications = [_workspace allInstalledApplications];
+- (NSArray*)sortAppList:(BOOL)sortWithStatus {
+    NSArray *result = nil;
     
-    for(id proxy in allInstalledApplications)
-    {
-        AppInfo* app = [AppInfo appWithPrivateProxy:proxy];
-        //if(!app.isHiddenApp && ([app.applicationType containsString:@"User"]))
-        //some apps can be installed in trollstore but detect jailbreak
-        if(!app.isHiddenApp
-           && ![app.bundleIdentifier hasPrefix:@"com.apple."]
-           && isDefaultInstallationPath(app.bundleURL.path))
-        {
-            [applications addObject:app];
-        }
-    }
-    
-    NSArray *appsSortedByName = nil;
-    
-    if(sort)
+    if(sortWithStatus)
     {
         NSMutableDictionary* appconfig = [AppDelegate getDefaultsForKey:@"appconfig"];
         
-        appsSortedByName = [applications sortedArrayUsingComparator:^NSComparisonResult(AppInfo *app1, AppInfo *app2) {
+        result = [applications sortedArrayUsingComparator:^NSComparisonResult(AppInfo *app1, AppInfo *app2) {
 
             BOOL enabled1 = [[appconfig objectForKey:app1.bundleIdentifier] boolValue];
             BOOL enabled2 = [[appconfig objectForKey:app2.bundleIdentifier] boolValue];
@@ -203,15 +187,31 @@ BOOL isDefaultInstallationPath(NSString* path)
         }];
 
         [tmpArray addObjectsFromArray:newapps];
-        appsSortedByName = tmpArray.copy;
+        result = tmpArray.copy;
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self reloadSearch];
-        [self.tableView reloadData];
-    });
+    return result;
+}
+
+- (NSArray*)updateData {
+    NSMutableArray* applications = [NSMutableArray new];
+    PrivateApi_LSApplicationWorkspace* _workspace = [NSClassFromString(@"LSApplicationWorkspace") new];
+    NSArray* allInstalledApplications = [_workspace allInstalledApplications];
     
-    return appsSortedByName;
+    for(id proxy in allInstalledApplications)
+    {
+        AppInfo* app = [AppInfo appWithPrivateProxy:proxy];
+        //if(!app.isHiddenApp && ([app.applicationType containsString:@"User"]))
+        //some apps can be installed in trollstore but detect jailbreak
+        if(!app.isHiddenApp
+           && ![app.bundleIdentifier hasPrefix:@"com.apple."]
+           && isDefaultInstallationPath(app.bundleURL.path))
+        {
+            [applications addObject:app];
+        }
+    }
+    
+    return applications;
 }
 
 #pragma mark - Table view data source
