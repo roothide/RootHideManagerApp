@@ -201,10 +201,10 @@
     NSLog(@"updateData...");
     NSMutableArray* newData = [[NSMutableArray alloc] init];
     
-    NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules.plist");
+    NSString *rulesFilePath = @"/var/mobile/Library/RootHide/varCleanRules.plist";
     NSDictionary *rules = [NSDictionary dictionaryWithContentsOfFile:rulesFilePath];
     
-    NSString *customedRulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules-custom.plist");
+    NSString *customedRulesFilePath = @"/var/mobile/Library/RootHide/varCleanRules-custom.plist";
     NSMutableDictionary *customedRules = [NSMutableDictionary dictionaryWithContentsOfFile:customedRulesFilePath];
     
     // Call the updated method with the correct parameters

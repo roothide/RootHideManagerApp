@@ -110,14 +110,14 @@
     if(err) NSLog(@"json error=%@", err);
     assert(rules != NULL);
     NSLog(@"default rules=%@", rules);
-    NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules.plist");
+    NSString *rulesFilePath = @"/var/mobile/Library/RootHide/varCleanRules.plist";
     if([NSFileManager.defaultManager fileExistsAtPath:rulesFilePath]) {
         assert([NSFileManager.defaultManager removeItemAtPath:rulesFilePath error:nil]);
     }
     NSLog(@"copy default rules to %@", rulesFilePath);
     assert([rules writeToFile:rulesFilePath atomically:YES]);
     
-    NSString *customedRulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules-custom.plist");
+    NSString *customedRulesFilePath = @"/var/mobile/Library/RootHide/varCleanRules-custom.plist";
     if(![NSFileManager.defaultManager fileExistsAtPath:customedRulesFilePath]) {
         NSDictionary* template = [[NSDictionary alloc] init];
         assert([template writeToFile:customedRulesFilePath atomically:YES]);
