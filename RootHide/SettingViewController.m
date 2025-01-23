@@ -28,18 +28,6 @@
     
     self.menuData = @[
         @{
-            @"groupTitle": Localized(@"General"),
-            @"items": @[
-                @{
-                    @"textLabel": Localized(@"Whitelist Mode"),
-                    @"detailTextLabel": Localized(@"auto blacklist newly installed apps"),
-                    @"type": @"switch",
-                    @"switchKey": @"whitelistMode",
-                    @"disabled": @YES
-                },
-            ]
-        },
-        @{
             @"groupTitle": Localized(@"Advanced"),
             @"items": @[
                 @{

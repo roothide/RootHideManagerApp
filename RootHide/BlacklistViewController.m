@@ -1,5 +1,3 @@
-// ref https://github.com/XsF1re/FlyJB-App
-
 #import "BlacklistViewController.h"
 #include "AppDelegate.h"
 #import "AppInfo.h"
@@ -18,15 +16,17 @@ BOOL isDefaultInstallationPath(NSString* path)
 - (NSArray*)publicURLSchemes;
 @end
 
-@interface BlacklistViewController () {
+@interface BlacklistViewController () <UISearchBarDelegate> {
     UISearchController *searchController;
+    NSArray *applications;
     NSArray *appsArray;
     
     NSMutableArray* filteredApps;
     BOOL isFiltered;
-    
-    BOOL blacklistDisabled;
 }
+
+// Declare the reloadSearch method
+- (void)reloadSearch;
 
 @end
 
@@ -41,53 +41,19 @@ BOOL isDefaultInstallationPath(NSString* path)
     return sharedInstance;
 }
 
--(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    [searchBar resignFirstResponder];
-}
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    isFiltered = false;
-    [self.tableView reloadData];
-}
-
--(void)reloadSearch {
-    NSString* searchText = searchController.searchBar.text;
-    if(searchText.length == 0) {
-        isFiltered = false;
-    } else {
-        isFiltered = true;
-        filteredApps = [[NSMutableArray alloc] init];
-        searchText = searchText.lowercaseString;
-        for (AppInfo* app in appsArray) {
-            NSRange nameRange = [app.name.lowercaseString rangeOfString:searchText options:NSCaseInsensitiveSearch];
-            NSRange bundleIdRange = [app.bundleIdentifier.lowercaseString rangeOfString:searchText options:NSCaseInsensitiveSearch];
-            if(nameRange.location != NSNotFound || bundleIdRange.location != NSNotFound) {
-                [filteredApps addObject:app];
-            }
-        }
-    }
-}
-
--(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    [self reloadSearch];
-    [self.tableView reloadData];
-}
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBar.hidden = NO;
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleInsetGrouped];
     self.tableView.tableFooterView = [[UIView alloc] init];
     
-    [self setTitle:Localized(@"Blacklist")];
-    
-    blacklistDisabled = [[AppDelegate getDefaultsForKey:@"blacklistDisabled"] boolValue];
+    [self setTitle:Localized(@"App List")];
     
     isFiltered = false;
     
     searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     searchController.searchBar.delegate = self;
-    searchController.searchBar.placeholder = Localized(@"name or identifier");
+    searchController.searchBar.placeholder = Localized(@"Search by name or identifier");
     searchController.searchBar.barTintColor = [UIColor whiteColor];
     searchController.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
     self.navigationItem.searchController = searchController;
@@ -95,39 +61,36 @@ BOOL isDefaultInstallationPath(NSString* path)
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     refreshControl.tintColor = [UIColor grayColor];
-    [refreshControl addTarget:self action:@selector(startRefresh) forControlEvents:UIControlEventValueChanged];
+    [refreshControl addTarget:self action:@selector(manualRefresh) forControlEvents:UIControlEventValueChanged];
     self.tableView.refreshControl = refreshControl;
     
-    self->appsArray = [self updateData:YES];
+    self->applications = [self updateData];
+    self->appsArray = [self sortAppList:YES];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startRefresh2)
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoRefresh)
                                           name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
-- (void)startRefresh {
+- (void)startRefresh:(BOOL)resort {
     [self.tableView.refreshControl beginRefreshing];
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        NSArray* newData = [self updateData:YES];
+        NSArray* newData = [self updateData];
         dispatch_async(dispatch_get_main_queue(), ^{
-            self->appsArray = newData;
-            [self reloadSearch];
+            self->applications = newData;
+            self->appsArray = [self sortAppList:resort];
+            [self reloadSearch]; // Call reloadSearch here
             [self.tableView reloadData];
             [self.tableView.refreshControl endRefreshing];
         });
     });
 }
 
-- (void)startRefresh2 {
-    [self.tableView.refreshControl beginRefreshing];
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        NSArray* newData = [self updateData:NO];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self->appsArray = newData;
-            [self reloadSearch];
-            [self.tableView reloadData];
-            [self.tableView.refreshControl endRefreshing];
-        });
-    });
+- (void)manualRefresh {
+    [self startRefresh:YES];
+}
+
+- (void)autoRefresh {
+    [self startRefresh:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -136,43 +99,12 @@ BOOL isDefaultInstallationPath(NSString* path)
     [self.tableView.refreshControl endRefreshing];
 }
 
-- (NSArray*)updateData:(BOOL)sort {
-    NSMutableArray* applications = [NSMutableArray new];
-    PrivateApi_LSApplicationWorkspace* _workspace = [NSClassFromString(@"LSApplicationWorkspace") new];
-    NSArray* allInstalledApplications = [_workspace allInstalledApplications];
+- (NSArray*)sortAppList:(BOOL)sortWithStatus {
+    NSArray *result = nil;
     
-    for(id proxy in allInstalledApplications)
+    if(sortWithStatus)
     {
-        AppInfo* app = [AppInfo appWithPrivateProxy:proxy];
-        //if(!app.isHiddenApp && ([app.applicationType containsString:@"User"]))
-        //some apps can be installed in trollstore but detect jailbreak
-        if(!app.isHiddenApp
-           && ![app.bundleIdentifier hasPrefix:@"com.apple."]
-           && isDefaultInstallationPath(app.bundleURL.path))
-        {
-            [applications addObject:app];
-        }
-    }
-    
-    NSArray *appsSortedByName = nil;
-    
-    if(sort)
-    {
-        NSMutableDictionary* appconfig = [AppDelegate getDefaultsForKey:@"appconfig"];
-        
-        appsSortedByName = [applications sortedArrayUsingComparator:^NSComparisonResult(AppInfo *app1, AppInfo *app2) {
-
-            BOOL enabled1 = [[appconfig objectForKey:app1.bundleIdentifier] boolValue];
-            BOOL enabled2 = [[appconfig objectForKey:app2.bundleIdentifier] boolValue];
-            
-            if((enabled1&&!enabled2) || (!enabled1&&enabled2)) {
-                return [@(enabled2) compare:@(enabled1)];
-            }
-            
-            if(app1.isHiddenApp || app2.isHiddenApp) {
-                return (enabled1&&enabled2) ? [@(app2.isHiddenApp) compare:@(app1.isHiddenApp)] : [@(app1.isHiddenApp) compare:@(app2.isHiddenApp)];
-            }
-            
+        result = [applications sortedArrayUsingComparator:^NSComparisonResult(AppInfo *app1, AppInfo *app2) {
             return [app1.name localizedStandardCompare:app2.name];
         }];
     }
@@ -203,15 +135,29 @@ BOOL isDefaultInstallationPath(NSString* path)
         }];
 
         [tmpArray addObjectsFromArray:newapps];
-        appsSortedByName = tmpArray.copy;
+        result = tmpArray.copy;
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self reloadSearch];
-        [self.tableView reloadData];
-    });
+    return result;
+}
+
+- (NSArray*)updateData {
+    NSMutableArray* applications = [NSMutableArray new];
+    PrivateApi_LSApplicationWorkspace* _workspace = [NSClassFromString(@"LSApplicationWorkspace") new];
+    NSArray* allInstalledApplications = [_workspace allInstalledApplications];
     
-    return appsSortedByName;
+    for(id proxy in allInstalledApplications)
+    {
+        AppInfo* app = [AppInfo appWithPrivateProxy:proxy];
+        if(!app.isHiddenApp
+           && ![app.bundleIdentifier hasPrefix:@"com.apple."]
+           && isDefaultInstallationPath(app.bundleURL.path))
+        {
+            [applications addObject:app];
+        }
+    }
+    
+    return applications;
 }
 
 #pragma mark - Table view data source
@@ -221,22 +167,23 @@ BOOL isDefaultInstallationPath(NSString* path)
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return isFiltered? filteredApps.count : appsArray.count;
+    return isFiltered ? filteredApps.count : appsArray.count;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return @"Applist";
+    return @"App List";
 }
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     return [[UIView alloc] init];
 }
+
 - (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     return [[UIView alloc] init];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];//
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
@@ -250,7 +197,7 @@ BOOL isDefaultInstallationPath(NSString* path)
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
     
-    AppInfo* app = isFiltered? filteredApps[indexPath.row] : appsArray[indexPath.row];
+    AppInfo* app = isFiltered ? filteredApps[indexPath.row] : appsArray[indexPath.row];
     
     UIImage *image = app.icon;
     cell.imageView.image = [self imageWithImage:image scaledToSize:CGSizeMake(40, 40)];
@@ -258,84 +205,99 @@ BOOL isDefaultInstallationPath(NSString* path)
     cell.textLabel.text = app.name;
     cell.detailTextLabel.text = app.bundleIdentifier;
     
-    UISwitch *theSwitch = [[UISwitch alloc] init];
-    
-    NSMutableDictionary* appconfig = [AppDelegate getDefaultsForKey:@"appconfig"];
-    [theSwitch setOn:[[appconfig objectForKey:app.bundleIdentifier] boolValue]];
-    [theSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
-    
-    if(blacklistDisabled) {
-        theSwitch.enabled = NO;
-        [theSwitch setOn:NO];
-    }
-    
-    cell.accessoryView = theSwitch;
-    
-    UILongPressGestureRecognizer *gest = [[UILongPressGestureRecognizer alloc]
-                                          initWithTarget:self action:@selector(cellLongPress:)];
-    [cell.contentView addGestureRecognizer:gest];
-    gest.view.tag = indexPath.row | indexPath.section<<32;
-    gest.minimumPressDuration = 1;
+    // Add a UISwitch to the cell
+    UISwitch *switchView = [[UISwitch alloc] init];
+    switchView.on = NO; // Default to disabled state
+    [switchView addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
+    cell.accessoryView = switchView;
     
     return cell;
 }
 
-- (void)cellLongPress:(UIGestureRecognizer *)recognizer
-{
-    if (recognizer.state == UIGestureRecognizerStateBegan)
-    {
-        long tag = recognizer.view.tag;
-        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:tag&0xFFFFFFFF inSection:tag>>32];
+- (void)switchChanged:(UISwitch *)sender {
+    // Get the index path of the cell containing the switch
+    CGPoint switchPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:switchPosition];
+    
+    if (indexPath) {
+        AppInfo* app = isFiltered ? filteredApps[indexPath.row] : appsArray[indexPath.row];
         
-        AppInfo* app = isFiltered? filteredApps[indexPath.row] : appsArray[indexPath.row];
+        // Show the same popup as the long-press action
+        [self showClearAppDataPopupForApp:app];
         
-        UIAlertController* appMenuAlert = [UIAlertController alertControllerWithTitle:app.name?:@"" message:app.bundleIdentifier?:@"" preferredStyle:UIAlertControllerStyleActionSheet];
-        
-        UIAlertAction* cleanAction = [UIAlertAction actionWithTitle:@"Clear App Data" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action)
-        {
-            void killAllForApp(const char* bundlePath);
-            killAllForApp(app.bundleURL.path.UTF8String);
-            
-            NSString* error = nil;
-            if(geteuid()==0 && getegid()==0) {
-                NSString* clearAppData(AppInfo* app);
-                error = clearAppData(app);
-            } else {
-                NSString* RootUserClearAppData(AppInfo* app);
-                error = RootUserClearAppData(app);
-            }
-            if(error) {
-                [AppDelegate showMessage:error title:Localized(@"Error")];
-            } else {
-                [AppDelegate showMessage:@"" title:Localized(@"Cleaned up")];
-            }
-        }];
-        [appMenuAlert addAction:cleanAction];
-        
-        UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction* action)
-        {
-        }];
-        [appMenuAlert addAction:cancelAction];
-        
-        [AppDelegate showAlert:appMenuAlert];
+        // Revert the switch to the disabled state
+        sender.on = NO;
     }
 }
 
-- (void)switchChanged:(id)sender {
-    // https://stackoverflow.com/questions/31063571/getting-indexpath-from-switch-on-uitableview
-    UISwitch *switchInCell = (UISwitch *)sender;
-    CGPoint pos = [switchInCell convertPoint:switchInCell.bounds.origin toView:self.tableView];
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:pos];
+- (void)showClearAppDataPopupForApp:(AppInfo*)app {
+    UIAlertController* appMenuAlert = [UIAlertController alertControllerWithTitle:app.name?:@""
+                                                                         message:app.bundleIdentifier?:@""
+                                                                  preferredStyle:UIAlertControllerStyleActionSheet];
     
-    AppInfo* app = isFiltered? filteredApps[indexPath.row] : appsArray[indexPath.row];
+    UIAlertAction* cleanAction = [UIAlertAction actionWithTitle:@"Clear App Data"
+                                                          style:UIAlertActionStyleDefault
+                                                        handler:^(UIAlertAction* action) {
+        // Trigger the clear app data function
+        [self cleanAppDataForApp:app];
+    }];
     
-    NSMutableDictionary* appconfig = [AppDelegate getDefaultsForKey:@"appconfig"];
-    if(!appconfig) appconfig = [[NSMutableDictionary alloc] init];
-    [appconfig setObject:@(switchInCell.on) forKey:app.bundleIdentifier];
-    [AppDelegate setDefaults:appconfig forKey:@"appconfig"];
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:nil];
     
+    [appMenuAlert addAction:cleanAction];
+    [appMenuAlert addAction:cancelAction];
+    
+    [self presentViewController:appMenuAlert animated:YES completion:nil];
+}
+
+- (void)cleanAppDataForApp:(AppInfo*)app {
     void killAllForApp(const char* bundlePath);
     killAllForApp(app.bundleURL.path.UTF8String);
     
+    NSString* error = nil;
+    if(geteuid()==0 && getegid()==0) {
+        NSString* clearAppData(AppInfo* app);
+        error = clearAppData(app);
+    } else {
+        NSString* RootUserClearAppData(AppInfo* app);
+        error = RootUserClearAppData(app);
+    }
+    if(error) {
+        [AppDelegate showMessage:error title:Localized(@"Error")];
+    } else {
+        [AppDelegate showMessage:@"" title:Localized(@"Cleaned up")];
+    }
+}
+
+- (void)reloadSearch {
+    NSString* searchText = searchController.searchBar.text;
+    if (searchText.length == 0) {
+        isFiltered = false;
+    } else {
+        isFiltered = true;
+        filteredApps = [[NSMutableArray alloc] init];
+        searchText = searchText.lowercaseString;
+        for (AppInfo* app in appsArray) {
+            NSRange nameRange = [app.name.lowercaseString rangeOfString:searchText options:NSCaseInsensitiveSearch];
+            NSRange bundleIdRange = [app.bundleIdentifier.lowercaseString rangeOfString:searchText options:NSCaseInsensitiveSearch];
+            if (nameRange.location != NSNotFound || bundleIdRange.location != NSNotFound) {
+                [filteredApps addObject:app];
+            }
+        }
+    }
+}
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    [self reloadSearch];
+    [self.tableView reloadData];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    isFiltered = false;
+    [self.tableView reloadData];
 }
 @end

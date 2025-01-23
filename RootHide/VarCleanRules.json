@@ -1,6 +1,8 @@
 {
 	"/var" : {
+        "default" : "whitelist",
 		"whitelist":[
+			"jb",
 			".DocumentRevisions-V100",
 			".fseventsd",
 			".overprovisioning_file",
@@ -38,7 +40,6 @@
             "internal",
 		],
 		"blacklist":[
-			"jb",
             "stash",
 			"alternatives",
 			"ap",
@@ -162,7 +163,7 @@
 		]
 	},
 	"/var/root/Library/Preferences" : {
-        "default" : "blacklist",
+        "default" : "whitelist",
 		"whitelist":[
 			{"match":"regexp", "name":"^com\\.apple\\."},
 			{"match":"regexp", "name":"^systemgroup\\.com\\.apple\\."},
@@ -382,7 +383,10 @@
 			"Filza",
 			"Flex3",
 			"SBSettings",
+			"RootHide",
             "iCleaner",
+            "Terminal",
+            "varClean",
 		]
 	},
     "/var/mobile/Library/Logs" : {
@@ -405,7 +409,7 @@
             ]
     },
     "/var/mobile/Library/Preferences" : {
-        "default" : "blacklist",
+        "default" : "whitelist",
         "whitelist":[
             {"match":"regexp", "name":"^com\\.apple\\."},
             {"match":"regexp", "name":"^systemgroup\\.com\\.apple\\."},
@@ -433,6 +437,7 @@
             "com.google.gmp.measurement.plist",
         ],
         "blacklist":[
+        	"com.m1337.varClean.plist",
             "com.roothide.manager.plist",
             "com.opa334.Dopamine.roothide.plist",
             "com.opa334.Dopamine.plist",
@@ -444,6 +449,7 @@
             "xyz.willy.Zebra.plist",
             "com.apple.lockscreencache-new.plist",
             "com.apple.homescreencache-new.plist",
+            "com.apple.terminal.plist",
         ]
     },
 	"/var/mobile/Library/Application Support" : {
@@ -460,7 +466,8 @@
             
 		],
 		"blacklist":[
-			"xyz.willy.Zebra"
+			"xyz.willy.Zebra",
+            "com.apple.Terminal",
 		]
 	},
 	"/var/mobile/Library/Application Support/Containers" : {
@@ -469,6 +476,7 @@
 			"xyz.willy.Zebra",
 			"com.tigisoftware.Filza",
             "org.coolstar.SileoStore",
+            "com.apple.Terminal",
 		]
 	},
 	"/var/mobile/Library/SplashBoard/Snapshots" : {
@@ -478,6 +486,7 @@
 		],
 		"blacklist":[
 			"com.roothide.manager",
+			"com.m1337.varClean",
 			"com.opa334.Dopamine.roothide",
 			"com.opa334.Dopamine",
 			"com.tigisoftware.Filza",
@@ -486,6 +495,7 @@
 			"ru.domo.cocoatop64",
 			"ws.hbang.Terminal",
 			"xyz.willy.Zebra",
+            "com.apple.Terminal",
 		]
 	},
 	"/var/mobile/Library/Caches" : {
@@ -522,6 +532,7 @@
 			"ws.hbang.Terminal",
 			"xyz.willy.Zebra",
             "Cephei",
+            "com.apple.Terminal",
 		]
 	},
 	"/var/mobile/Library/Saved Application State" : {
@@ -536,6 +547,7 @@
 			"ws.hbang.Terminal.savedState",
 			"xyz.willy.Zebra.savedState",
 			"ru.domo.cocoatop64.savedState",
+            "com.apple.Terminal.savedState",
 		]
 	},
 	"/var/mobile/Library/WebKit" : {

@@ -4,6 +4,13 @@
 
 @interface varCleanController ()
 @property (nonatomic, retain) NSMutableArray* tableData;
+
+// Declare the method with the correct signature
+- (void)updateForRules:(NSDictionary*)rules
+              customed:(NSMutableDictionary*)customedRules
+               newData:(NSMutableArray*)newData
+             keepState:(BOOL)keepState;
+
 @end
 
 @implementation varCleanController
@@ -16,7 +23,6 @@
     });
     return sharedInstance;
 }
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -36,16 +42,13 @@
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     refreshControl.tintColor = [UIColor grayColor];
-    [refreshControl addTarget:self action:@selector(startRefresh) forControlEvents:UIControlEventValueChanged];
+    [refreshControl addTarget:self action:@selector(manualRefresh) forControlEvents:UIControlEventValueChanged];
     self.tableView.refreshControl = refreshControl;
     
+    self.tableData = [self updateData:NO];
     
-    self.tableData = [self updateData];
-    
-//doClean will auto refresh list    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(startRefresh)
-//                                          name:UIApplicationWillEnterForegroundNotification
-//                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoRefresh)
+                                          name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 - (void)batchSelect {
@@ -68,10 +71,10 @@
     [self.tableView reloadData];
 }
 
-- (void)startRefresh {
+- (void)startRefresh:(BOOL)keepState {
     [self.tableView.refreshControl beginRefreshing];
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        NSMutableArray* newData = [self updateData];
+        NSMutableArray* newData = [self updateData:keepState];
         dispatch_async(dispatch_get_main_queue(), ^{
             self.tableData = newData;
             [self.tableView reloadData];
@@ -80,13 +83,24 @@
     });
 }
 
+- (void)manualRefresh {
+    [self startRefresh:NO];
+}
+
+- (void)autoRefresh {
+    [self startRefresh:YES];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.tableView.refreshControl beginRefreshing];
     [self.tableView.refreshControl endRefreshing];
 }
 
-- (void)updateForRules:(NSDictionary*)rules customed:(NSMutableDictionary*)customedRules newData:(NSMutableArray*)newData {
+- (void)updateForRules:(NSDictionary*)rules
+              customed:(NSMutableDictionary*)customedRules
+               newData:(NSMutableArray*)newData
+             keepState:(BOOL)keepState {
     for (NSString* path in rules) {
         NSMutableArray *folders = [[NSMutableArray alloc] init];
         NSMutableArray *files = [[NSMutableArray alloc] init];
@@ -114,31 +128,44 @@
             
             BOOL checked = NO;
             
-            // customed default priority
+            // Custom default priority
             NSString* _default = customedRuleItem[@"default"];
-            
             if(!_default) _default = ruleItem[@"default"];
             
-            // blacklist priority
-            if([self checkFileInList:file List:blackList] || [self checkFileInList:file List:customedBlackList])
-            {
+            // Blacklist priority: items in blacklist should be checked
+            if ([self checkFileInList:file List:blackList] || [self checkFileInList:file List:customedBlackList]) {
                 checked = YES;
             }
-            else if([self checkFileInList:file List:whiteList] || [self checkFileInList:file List:customedWhiteList])
-            {
-                continue;
+            // Whitelist priority: items explicitly in the whitelist should not be shown (skip them)
+            else if ([self checkFileInList:file List:whiteList] || [self checkFileInList:file List:customedWhiteList]) {
+                continue;  // Skip the explicitly whitelisted items
             }
-            else if(_default && [_default isEqualToString:@"blacklist"])
-            {
+            // Default behavior for blacklisted items: show them and checked
+            else if (_default && [_default isEqualToString:@"blacklist"]) {
                 checked = YES;
             }
-            else if(_default && [_default isEqualToString:@"whitelist"])
-            {
-                continue;
+            // Default behavior for whitelisted items: show them but unchecked
+            else if (_default && [_default isEqualToString:@"whitelist"]) {
+                checked = NO;  // Keep unchecked but still show the item
             }
             else
             {
                 checked = NO;
+            }
+            
+            // If keepState is YES, preserve the checked state from the existing data
+            if (keepState) {
+                for (NSDictionary* group in self.tableData) {
+                    if ([group[@"group"] isEqualToString:path]) {
+                        for (NSDictionary* item in group[@"items"]) {
+                            if ([item[@"name"] isEqualToString:file]) {
+                                checked = [item[@"checked"] boolValue];
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
             }
             
             NSString *filePath = [path stringByAppendingPathComponent:file];
@@ -170,7 +197,7 @@
     }
 }
 
-- (NSMutableArray*)updateData {
+- (NSMutableArray*)updateData:(BOOL)keepState {
     NSLog(@"updateData...");
     NSMutableArray* newData = [[NSMutableArray alloc] init];
     
@@ -180,8 +207,9 @@
     NSString *customedRulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules-custom.plist");
     NSMutableDictionary *customedRules = [NSMutableDictionary dictionaryWithContentsOfFile:customedRulesFilePath];
     
-    [self updateForRules:rules customed:customedRules newData:newData];
-    [self updateForRules:customedRules customed:nil newData:newData];
+    // Call the updated method with the correct parameters
+    [self updateForRules:rules customed:customedRules newData:newData keepState:keepState];
+    [self updateForRules:customedRules customed:nil newData:newData keepState:keepState];
 
     NSComparator sorter = ^NSComparisonResult(NSDictionary* a, NSDictionary* b)
     {
@@ -221,69 +249,100 @@
 }
 
 - (void)varClean {
-    // Create a list of files to be deleted
-    NSMutableString *deletionList = [NSMutableString stringWithString:Localized(@"You are about to delete the following items:\n")];
-
+    // Collect all the files marked for deletion
+    NSMutableArray *filesToDelete = [NSMutableArray array];
     for (NSDictionary* group in self.tableData) {
         for (NSDictionary* item in group[@"items"]) {
             if ([item[@"checked"] boolValue]) {
-                [deletionList appendFormat:@"%@\n", item[@"path"]];
+                [filesToDelete addObject:item[@"path"]];
             }
         }
     }
-
-    // Display confirmation alert
-    NSString *alertMessage = [NSString stringWithFormat:@"%@\n%@", Localized(@"Are you sure you want to clean selected items?"), deletionList];
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:Localized(@"Confirmation")
-                                                                             message:alertMessage
+    
+    // If no files are selected, show an alert and return
+    if (filesToDelete.count == 0) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:Localized(@"No Files Selected")
+                                                                       message:Localized(@"Please select files to clean.")
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:Localized(@"OK")
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:nil];
+        [alert addAction:okAction];
+        [self presentViewController:alert animated:YES completion:nil];
+        return;
+    }
+    
+    // Create a string listing all the files to delete
+    NSMutableString *fileList = [NSMutableString string];
+    for (NSString *filePath in filesToDelete) {
+        [fileList appendFormat:@"%@\n", filePath];
+    }
+    
+    // Show a confirmation popup with the list of files
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:Localized(@"Confirm Deletion")
+                                                                             message:[NSString stringWithFormat:Localized(@"You are about to delete the following files:\n\n%@"), fileList]
                                                                       preferredStyle:UIAlertControllerStyleAlert];
     
+    // Add a "Confirm" button
     UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:Localized(@"Confirm")
                                                             style:UIAlertActionStyleDestructive
                                                           handler:^(UIAlertAction * _Nonnull action) {
-        // Start the cleaning process after confirmation
-        NSLog(@"Starting clean process");
-        NSLog(@"self.tableData=%@", self.tableData);
-        
-        [self.tableView.refreshControl beginRefreshing];
-        
-        for (NSDictionary* group in [self.tableData copy]) {
-            for (NSDictionary* item in [group[@"items"] copy]) {
-                if (![item[@"checked"] boolValue]) continue;
-                
-                NSLog(@"clean=%@", item);
-                
-                NSError *err;
-                if (![NSFileManager.defaultManager removeItemAtPath:item[@"path"] error:&err]) {
-                    NSLog(@"clean failed=%@", err);
-                    continue;
-                }
-
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[group[@"items"] indexOfObject:item]
-                                                            inSection:[self.tableData indexOfObject:group]];
-                
-                [group[@"items"] removeObject:item]; // Delete source data first
-                
-                NSLog(@"indexPath=%@", indexPath);
-                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-            }
-        }
-        
-        [self.tableView.refreshControl endRefreshing];
-        [self updateData];
-        [self.tableView reloadData];
+        // Perform the deletion
+        [self performDeletion];
     }];
     
+    // Add a "Cancel" button
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:Localized(@"Cancel")
                                                            style:UIAlertActionStyleCancel
                                                          handler:nil];
     
+    // Add the actions to the alert controller
     [alertController addAction:confirmAction];
     [alertController addAction:cancelAction];
     
+    // Present the alert controller
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
+- (void)performDeletion {
+    [self.tableView.refreshControl beginRefreshing];
+    
+    for (NSDictionary* group in [self.tableData copy]) {
+        for (NSDictionary* item in [group[@"items"] copy]) {
+            if (![item[@"checked"] boolValue]) continue;
+            
+            NSLog(@"Deleting: %@", item[@"path"]);
+            
+            NSError *err;
+            if (![NSFileManager.defaultManager removeItemAtPath:item[@"path"] error:&err]) {
+                NSLog(@"Deletion failed: %@", err);
+                
+                // Fallback to root user deletion if necessary
+                if (geteuid() != 0 || getegid() != 0) {
+                    NSLog(@"Trying RootUserRemoveItemAtPath: %@", item[@"path"]);
+                    BOOL RootUserRemoveItemAtPath(NSString* path);
+                    BOOL __ret = RootUserRemoveItemAtPath(item[@"path"]);
+                }
+                
+                continue;
+            }
+            
+            // Remove the item from the table data
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[group[@"items"] indexOfObject:item]
+                                                        inSection:[self.tableData indexOfObject:group]];
+            [group[@"items"] removeObject:item];
+            
+            // Remove the row from the table view
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+        }
+    }
+    
+    [self.tableView.refreshControl endRefreshing];
+    
+    // Refresh the data
+    self.tableData = [self updateData:NO];
+    [self.tableView reloadData];
+}
 
 #pragma mark - Table view data source
 
@@ -339,8 +398,7 @@
         NSMutableDictionary *item = items[indexPath.row];
         NSLog(@"open item %@", item);
         NSURL* url = [NSURL URLWithString:[@"filza://view" stringByAppendingString:
-                                           [item[@"path"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]
-        ];
+                                           [item[@"path"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] ];
         
         NSLog(@"open url %@", url);
         [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];

@@ -1,0 +1,69 @@
+name: Build and Package Rootless
+
+on:
+  push:
+    branches: [ roothide ]
+  pull_request:
+    branches: [ roothide ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.0.1'
+
+      - name: Install ldid
+        run: brew install ldid
+
+      - name: Build .app with Xcode
+        run: |
+          xcodebuild -project RootHide.xcodeproj \
+                     -scheme RootHide \
+                     -configuration Release \
+                     -sdk iphoneos \
+                     -destination 'generic/platform=iOS' \
+                     MARKETING_VERSION=$THEOS_PACKAGE_BASE_VERSION \
+                     IPHONEOS_DEPLOYMENT_TARGET=15.0 \
+                     CODE_SIGN_IDENTITY="" \
+                     AD_HOC_CODE_SIGNING_ALLOWED=YES \
+                     build
+
+      - name: Locate .app File and Prepare for Packaging
+        run: |
+          mkdir -p Payload
+          ROOT_HIDE_DIR=$(find /Users/runner/Library/Developer/Xcode/DerivedData/ -name 'RootHide-*' -type d -print | head -n 1)
+          APP_DIR="${ROOT_HIDE_DIR}/Build/Products/Release-iphoneos/RootHide.app"
+          cp -r "$APP_DIR" Payload/
+
+      - name: Sign the .app with entitlements
+        run: |
+          ldid -S./entitlements.plist Payload/RootHide.app/RootHide
+
+      - name: Re-package IPA after signing
+        run: |
+          zip -r9 varClean15.tipa Payload
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: varClean15
+          path: varClean15.tipa
+
+      - name: TEST Create Release and Upload IPA (Rootless)
+        uses: softprops/action-gh-release@v1
+        if: success()
+        with:
+          files: varClean15.tipa
+          tag_name: roothide
+          name: Roothide
+          draft: false
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
