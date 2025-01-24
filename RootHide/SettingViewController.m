@@ -45,15 +45,19 @@
         @{ @"scheme": @"activator://", @"description": @"Activator" }
     ];
     
-    // Create menu items for URL schemes
+    // Create menu items for installed URL schemes
     NSMutableArray *urlSchemeItems = [NSMutableArray array];
     for (NSDictionary *urlScheme in urlSchemes) {
-        [urlSchemeItems addObject:@{
-            @"textLabel": urlScheme[@"description"],
-            @"detailTextLabel": urlScheme[@"scheme"],
-            @"type": @"url",
-            @"url": urlScheme[@"scheme"]
-        }];
+        NSURL *url = [NSURL URLWithString:urlScheme[@"scheme"]];
+        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+            [urlSchemeItems addObject:@{
+                @"textLabel": urlScheme[@"description"],
+                @"detailTextLabel": urlScheme[@"scheme"],
+                @"type": @"url",
+                @"url": urlScheme[@"scheme"],
+                @"isInstalled": @YES // Mark as installed
+            }];
+        }
     }
     
     // Update menuData
@@ -116,6 +120,13 @@
     
     if ([item[@"type"] isEqualToString:@"url"]) {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
+        // Show checkmark for installed apps
+        if ([item[@"isInstalled"] boolValue]) {
+            cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"checkmark"]];
+        } else {
+            cell.accessoryView = nil;
+        }
     }
     
     return cell;
