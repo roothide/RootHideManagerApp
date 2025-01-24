@@ -2,6 +2,7 @@
 #import "BlacklistViewController.h"
 #import "varCleanController.h"
 #import "SettingViewController.h"
+#import "jbroot.h"
 #include "NSJSONSerialization+Comments.h"
 
 #include <sys/mount.h>
@@ -13,13 +14,13 @@
 @implementation AppDelegate
 
 + (id)getDefaultsForKey:(NSString*)key {
-    NSString *configFilePath = @"/var/mobile/Library/RootHide/RootHideConfig.plist";
+    NSString *configFilePath = jbroot(@"/var/mobile/Library/RootHide/RootHideConfig.plist");
     NSDictionary* defaults = [NSDictionary dictionaryWithContentsOfFile:configFilePath];
     return [defaults objectForKey:key];
 }
 
 + (void)setDefaults:(NSObject*)value forKey:(NSString*)key {
-    NSString *configFilePath = @"/var/mobile/Library/RootHide/RootHideConfig.plist";
+    NSString *configFilePath = jbroot(@"/var/mobile/Library/RootHide/RootHideConfig.plist");
     NSMutableDictionary* defaults = [NSMutableDictionary dictionaryWithContentsOfFile:configFilePath];
     if(!defaults) defaults = [[NSMutableDictionary alloc] init];
     [defaults setValue:value forKey:key];
@@ -95,7 +96,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    NSString* roothideDir = @"/var/mobile/Library/RootHide";
+    NSString* roothideDir = jbroot(@"/var/mobile/Library/RootHide");
     if(![NSFileManager.defaultManager fileExistsAtPath:roothideDir]) {
         NSDictionary* attr = @{NSFilePosixPermissions:@(0755), NSFileOwnerAccountID:@(501), NSFileGroupOwnerAccountID:@(501)};
         assert([NSFileManager.defaultManager createDirectoryAtPath:roothideDir withIntermediateDirectories:YES attributes:attr error:nil]);
@@ -110,14 +111,14 @@
     if(err) NSLog(@"json error=%@", err);
     assert(rules != NULL);
     NSLog(@"default rules=%@", rules);
-    NSString *rulesFilePath = @"/var/mobile/Library/RootHide/varCleanRules.plist";
+    NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules.plist");
     if([NSFileManager.defaultManager fileExistsAtPath:rulesFilePath]) {
         assert([NSFileManager.defaultManager removeItemAtPath:rulesFilePath error:nil]);
     }
     NSLog(@"copy default rules to %@", rulesFilePath);
     assert([rules writeToFile:rulesFilePath atomically:YES]);
     
-    NSString *customedRulesFilePath = @"/var/mobile/Library/RootHide/varCleanRules-custom.plist";
+    NSString *customedRulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules-custom.plist");
     if(![NSFileManager.defaultManager fileExistsAtPath:customedRulesFilePath]) {
         NSDictionary* template = [[NSDictionary alloc] init];
         assert([template writeToFile:customedRulesFilePath atomically:YES]);

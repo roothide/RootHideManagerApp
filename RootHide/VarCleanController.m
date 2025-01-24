@@ -1,6 +1,7 @@
 #import "varCleanController.h"
 #include "AppDelegate.h"
 #import "ZFCheckbox.h"
+#import "jbroot.h"
 
 @interface varCleanController ()
 @property (nonatomic, retain) NSMutableArray* tableData;
@@ -201,10 +202,10 @@
     NSLog(@"updateData...");
     NSMutableArray* newData = [[NSMutableArray alloc] init];
     
-    NSString *rulesFilePath = @"/var/mobile/Library/RootHide/varCleanRules.plist";
+    NSString *rulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules.plist");
     NSDictionary *rules = [NSDictionary dictionaryWithContentsOfFile:rulesFilePath];
     
-    NSString *customedRulesFilePath = @"/var/mobile/Library/RootHide/varCleanRules-custom.plist";
+    NSString *customedRulesFilePath = jbroot(@"/var/mobile/Library/RootHide/varCleanRules-custom.plist");
     NSMutableDictionary *customedRules = [NSMutableDictionary dictionaryWithContentsOfFile:customedRulesFilePath];
     
     // Call the updated method with the correct parameters

@@ -1,5 +1,4 @@
 #import <UIKit/UIKit.h>
-#include "roothide.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

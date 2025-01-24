@@ -1,4 +1,5 @@
 #import "SettingViewController.h"
+#import "jbroot.h"
 #include "AppDelegate.h"
 #include <sys/mount.h>
 #include <spawn.h>
@@ -21,7 +22,9 @@
 }
 
 - (void)reloadMenu {
-    NSString *rulesFilePath = @"/var/mobile/Library/varClean/varCleanRules-custom.plist";
+    // Use jbroot to resolve the path
+    NSString *rulesFilePath = jbroot(@"/var/mobile/Library/varClean/varCleanRules-custom.plist");
+    
     NSCharacterSet *CharacterSet = [NSCharacterSet URLQueryAllowedCharacterSet];
     NSString *encodedURLString = [rulesFilePath stringByAddingPercentEncodingWithAllowedCharacters:CharacterSet];
     NSURL *filzaURL = [NSURL URLWithString:[@"filza://view" stringByAppendingString:encodedURLString]];

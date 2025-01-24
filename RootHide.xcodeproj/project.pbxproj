@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C35F6D02D43532200FEE954 /* jbroot.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C35F6CF2D43532200FEE954 /* jbroot.m */; };
 		8477B5E22A7526AB000632D0 /* NSJSONSerialization+Comments.m in Sources */ = {isa = PBXBuildFile; fileRef = 8477B5E02A7526AB000632D0 /* NSJSONSerialization+Comments.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8477B6052A866437000632D0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8477B6072A866437000632D0 /* Localizable.strings */; };
 		848148292D131A2800CB9FA9 /* AppDataCleaner.m in Sources */ = {isa = PBXBuildFile; fileRef = 848148282D131A2800CB9FA9 /* AppDataCleaner.m */; };
@@ -22,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4C35F6CA2D43514400FEE954 /* jbroot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jbroot.h; sourceTree = "<group>"; };
+		4C35F6CF2D43532200FEE954 /* jbroot.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jbroot.m; sourceTree = "<group>"; };
 		842F23E52AA321E900EE2E9A /* libroothide.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libroothide.tbd; sourceTree = "<group>"; };
 		842F706A2ACB58BB002E5574 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
 		8438C17D2AB3361A001BAB8C /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -110,6 +113,8 @@
 				A672ABBE27F748E100878787 /* Assets.xcassets */,
 				A672ABC327F748E100878787 /* Info.plist */,
 				8477B6072A866437000632D0 /* Localizable.strings */,
+				4C35F6CA2D43514400FEE954 /* jbroot.h */,
+				4C35F6CF2D43532200FEE954 /* jbroot.m */,
 			);
 			path = RootHide;
 			sourceTree = "<group>";
@@ -218,6 +223,7 @@
 				BF0FF1C12A5510CE00FFA27E /* ZFCheckbox.m in Sources */,
 				BFD8B9732A4BD68D007CCEB8 /* SettingViewController.m in Sources */,
 				BF0FF1BD2A550FFA00FFA27E /* varCleanController.m in Sources */,
+				4C35F6D02D43532200FEE954 /* jbroot.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
