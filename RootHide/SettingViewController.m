@@ -72,7 +72,7 @@
         @"textLabel": @"Jailbreak Path",
         @"detailTextLabel": jailbreakRootPath,
         @"type": @"url",
-        @"url": [@"filza://" stringByAppendingString:jailbreakRootPath]
+        @"url": jailbreakRootPath
     }];
     
     // Update menuData
