@@ -5,22 +5,28 @@ NSString* detectJailbreakRoot() {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     // Check for Roothide jailbreak root (.jbroot-<randomstring>)
-    NSString *containersPath = @"/var/containers/Bundle";
-    NSArray *contents = [fileManager contentsOfDirectoryAtPath:containersPath error:nil];
+    NSString *applicationPath = @"/var/containers/Bundle/Application";
+    NSArray *contents = [fileManager contentsOfDirectoryAtPath:applicationPath error:nil];
+    NSLog(@"Contents of %@: %@", applicationPath, contents); // Debugging
+    
     for (NSString *item in contents) {
         if ([item hasPrefix:@".jbroot-"]) {
-            return [containersPath stringByAppendingPathComponent:item];
+            NSString *jbRoot = [applicationPath stringByAppendingPathComponent:item];
+            NSLog(@"Detected Roothide jailbreak root: %@", jbRoot);
+            return jbRoot;
         }
     }
     
-    // Check for Dopamine jailbreak root (/var/jb)
+    // Check for traditional jailbreak root (/var/jb)
     NSString *jbPath = @"/var/jb";
     if ([fileManager fileExistsAtPath:jbPath]) {
+        NSLog(@"Detected traditional jailbreak root: %@", jbPath);
         return jbPath;
     }
     
-    // No jailbreak root found 
-    return nil;
+    // No jailbreak root found
+    NSLog(@"No jailbreak root found. Using default root: /");
+    return @"/";
 }
 
 // NSString* version of jbroot
