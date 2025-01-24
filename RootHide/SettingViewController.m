@@ -63,6 +63,18 @@
         }
     }
     
+    // Get the detected jailbreak root path using jbroot("/")
+    NSString *jailbreakRootPath = jbroot(@"/");
+    
+    // Create menu items for the jailbreak path section
+    NSMutableArray *jailbreakPathItems = [NSMutableArray array];
+    [jailbreakPathItems addObject:@{
+        @"textLabel": @"Jailbreak Path",
+        @"detailTextLabel": jailbreakRootPath,
+        @"type": @"url",
+        @"url": [@"filza://" stringByAppendingString:jailbreakRootPath]
+    }];
+    
     // Update menuData
     self.menuData = @[
         @{
@@ -79,6 +91,10 @@
         @{
             @"groupTitle": Localized(@"Installed Apps"),
             @"items": urlSchemeItems
+        },
+        @{
+            @"groupTitle": Localized(@"Jailbreak Path"),
+            @"items": jailbreakPathItems
         }
     ].mutableCopy;
 }
