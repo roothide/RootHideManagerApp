@@ -21,11 +21,42 @@
 }
 
 - (void)reloadMenu {
-    NSString *rulesFilePath = @"/var/mobile/Library/RootHide/varCleanRules-custom.plist";
+    NSString *rulesFilePath = @"/var/mobile/Library/varClean/varCleanRules-custom.plist";
     NSCharacterSet *CharacterSet = [NSCharacterSet URLQueryAllowedCharacterSet];
     NSString *encodedURLString = [rulesFilePath stringByAddingPercentEncodingWithAllowedCharacters:CharacterSet];
     NSURL *filzaURL = [NSURL URLWithString:[@"filza://view" stringByAppendingString:encodedURLString]];
     
+    // Define URL schemes and their descriptions
+    NSArray *urlSchemes = @[
+        @{ @"scheme": @"cydia://", @"description": @"Cydia" },
+        @{ @"scheme": @"undecimus://", @"description": @"Unc0ver" },
+        @{ @"scheme": @"sileo://", @"description": @"Sileo" },
+        @{ @"scheme": @"zbra://", @"description": @"Zebra" },
+        @{ @"scheme": @"apt-repo://", @"description": @"Saily" },
+        @{ @"scheme": @"postbox://", @"description": @"Postbox" },
+        @{ @"scheme": @"xina://", @"description": @"Xina" },
+        @{ @"scheme": @"icleaner://", @"description": @"iCleaner" },
+        @{ @"scheme": @"ssh://", @"description": @"SSH" },
+        @{ @"scheme": @"santander://", @"description": @"Santander" },
+        @{ @"scheme": @"filza://", @"description": @"Filza" },
+        @{ @"scheme": @"db-lmvo0l08204d0a0://", @"description": @"Filza (Dropbox)" },
+        @{ @"scheme": @"boxsdk-810yk37nbrpwaee5907xc4iz8c1ay3my://", @"description": @"Filza (Dropbox SDK)" },
+        @{ @"scheme": @"com.googleusercontent.apps.802910049260-0hf6uv6nsj21itl94v66tphcqnfl172r://", @"description": @"Filza (Google Drive)" },
+        @{ @"scheme": @"activator://", @"description": @"Activator" }
+    ];
+    
+    // Create menu items for URL schemes
+    NSMutableArray *urlSchemeItems = [NSMutableArray array];
+    for (NSDictionary *urlScheme in urlSchemes) {
+        [urlSchemeItems addObject:@{
+            @"textLabel": urlScheme[@"description"],
+            @"detailTextLabel": urlScheme[@"scheme"],
+            @"type": @"url",
+            @"url": urlScheme[@"scheme"]
+        }];
+    }
+    
+    // Update menuData
     self.menuData = @[
         @{
             @"groupTitle": Localized(@"Advanced"),
@@ -38,6 +69,10 @@
                 },
             ]
         },
+        @{
+            @"groupTitle": Localized(@"Installed Apps"),
+            @"items": urlSchemeItems
+        }
     ].mutableCopy;
 }
 
@@ -79,19 +114,7 @@
     cell.textLabel.text = item[@"textLabel"];
     cell.detailTextLabel.text = item[@"detailTextLabel"];
     
-    NSDictionary* settings = [AppDelegate getDefaultsForKey:@"settings"];
-    if([item[@"type"] isEqualToString:@"switch"]) {
-        UISwitch *theSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
-        if(item[@"status"])
-            [theSwitch setOn:[item[@"status"] boolValue] ];
-        else
-            [theSwitch setOn:[[settings objectForKey:item[@"switchKey"]] boolValue] ];
-        [theSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
-        if(item[@"disabled"])[theSwitch setEnabled:![item[@"disabled"] boolValue]];
-        cell.accessoryView = theSwitch;
-    }
-    
-    if([item[@"type"] isEqualToString:@"url"]) {
+    if ([item[@"type"] isEqualToString:@"url"]) {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
@@ -120,20 +143,22 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];//
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSDictionary *groupData = self.menuData[indexPath.section];
     NSArray *items = groupData[@"items"];
     
     NSDictionary *item = items[indexPath.row];
     
-    if([item[@"type"] isEqualToString:@"url"]) {
-        NSURL* url = [NSURL URLWithString:item[@"url"]];
+    if ([item[@"type"] isEqualToString:@"url"]) {
+        NSURL *url = [NSURL URLWithString:item[@"url"]];
         BOOL canOpen = [[UIApplication sharedApplication] canOpenURL:url];
-        if(canOpen) {
+        if (canOpen) {
             [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
         } else {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:Localized(@"URL") message:item[@"url"] preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:Localized(@"App Not Installed")
+                                                                           message:[NSString stringWithFormat:Localized(@"%@ is not installed."), item[@"textLabel"]]
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
             
             [alert addAction:[UIAlertAction actionWithTitle:Localized(@"Got It") style:UIAlertActionStyleDefault handler:nil]];
             [self.navigationController presentViewController:alert animated:YES completion:nil];
