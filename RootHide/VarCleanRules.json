@@ -2,7 +2,6 @@
 	"/var" : {
         "default" : "whitelist",
 		"whitelist":[
-			"jb",
 			".DocumentRevisions-V100",
 			".fseventsd",
 			".overprovisioning_file",
@@ -201,6 +200,7 @@
             {"match":"regexp", "name":"^com\\.apple\\."},
         ],
         "blacklist":[
+            "Flex",
         ]
     },
 	"/var/mobile/Library" : {
@@ -387,6 +387,7 @@
             "iCleaner",
             "Terminal",
             "varClean",
+            "ADManager",
 		]
 	},
     "/var/mobile/Library/Logs" : {
@@ -558,6 +559,7 @@
 		],
 		"blacklist":[
 			"xyz.willy.Zebra",
+            "com.ivanobilenchi.icleaner",
 		]
 	},
 	"/var/mobile/Library/Cookies" : {

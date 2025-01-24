@@ -83,7 +83,7 @@
                 @{
                     @"textLabel": Localized(@"Edit varClean Rules"),
                     @"detailTextLabel": Localized(@"view the rules file in Filza"),
-                    @"type": @"url",
+                    @"type": @"url", // URL scheme
                     @"url": filzaURL.absoluteString
                 },
             ]
@@ -94,7 +94,14 @@
         },
         @{
             @"groupTitle": Localized(@"Jailbreak Path"),
-            @"items": jailbreakPathItems
+            @"items": @[
+                @{
+                    @"textLabel": @"Jailbreak Path",
+                    @"detailTextLabel": jailbreakRootPath,
+                    @"type": @"file", // File path
+                    @"url": [@"filza://" stringByAppendingString:jailbreakRootPath]
+                }
+            ]
         }
     ].mutableCopy;
 }
@@ -174,25 +181,53 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+
     NSDictionary *groupData = self.menuData[indexPath.section];
     NSArray *items = groupData[@"items"];
-    
+
     NSDictionary *item = items[indexPath.row];
-    
-    if ([item[@"type"] isEqualToString:@"url"]) {
+
+    if ([item[@"type"] isEqualToString:@"url"] || [item[@"type"] isEqualToString:@"file"]) {
         NSURL *url = [NSURL URLWithString:item[@"url"]];
         BOOL canOpen = [[UIApplication sharedApplication] canOpenURL:url];
+
         if (canOpen) {
             [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
         } else {
+            NSString *appName = [item[@"type"] isEqualToString:@"file"] ? @"Filza" : item[@"textLabel"];
+
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:Localized(@"App Not Installed")
-                                                                           message:[NSString stringWithFormat:Localized(@"%@ is not installed."), item[@"textLabel"]]
+                                                                           message:[NSString stringWithFormat:Localized(@"%@ is not installed. Do you want to use your own URL scheme?"), appName]
                                                                     preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addAction:[UIAlertAction actionWithTitle:Localized(@"Got It") style:UIAlertActionStyleDefault handler:nil]];
+
+            [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                textField.placeholder = Localized(@"Enter your URL scheme (e.g. santander)");
+            }];
+
+            [alert addAction:[UIAlertAction actionWithTitle:Localized(@"Cancel") style:UIAlertActionStyleCancel handler:nil]];
+
+            [alert addAction:[UIAlertAction actionWithTitle:Localized(@"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                UITextField *textField = alert.textFields.firstObject;
+                NSString *customScheme = textField.text;
+                if (customScheme.length > 0) {
+                    NSString *customURLString = [NSString stringWithFormat:@"%@://%@", customScheme, item[@"url"]];
+                    NSURL *customURL = [NSURL URLWithString:customURLString];
+                    
+                    if ([[UIApplication sharedApplication] canOpenURL:customURL]) {
+                        [[UIApplication sharedApplication] openURL:customURL options:@{} completionHandler:nil];
+                    } else {
+                        UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:Localized(@"Error")
+                                                                                            message:Localized(@"Invalid URL scheme or app not installed.")
+                                                                                     preferredStyle:UIAlertControllerStyleAlert];
+                        [errorAlert addAction:[UIAlertAction actionWithTitle:Localized(@"OK") style:UIAlertActionStyleDefault handler:nil]];
+                        [self.navigationController presentViewController:errorAlert animated:YES completion:nil];
+                    }
+                }
+            }]];
+
             [self.navigationController presentViewController:alert animated:YES completion:nil];
         }
     }
 }
+
 @end
