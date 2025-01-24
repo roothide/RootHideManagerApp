@@ -148,7 +148,7 @@
 			"locationd",
 		],
 		"blacklist":[
-			"shshd"
+			"shshd",
 		]
 	},
 	"/var/root/Library/HTTPStorages" : {
@@ -438,11 +438,11 @@
             "com.google.gmp.measurement.plist",
         ],
         "blacklist":[
-        	"com.m1337.varClean.plist",
+            {"match":"regexp", "name":"^com\\.m1337\\."},
             "com.roothide.manager.plist",
             "com.opa334.Dopamine.roothide.plist",
             "com.opa334.Dopamine.plist",
-            "com.tigisoftware.Filza.plist",
+            {"match":"regexp", "name":"^com\\.tigisoftware\\."},
             "com.xina.jailbreak.plist",
             "org.coolstar.SileoStore.plist",
             "ru.domo.cocoatop64.plist",
@@ -475,7 +475,7 @@
         "default" : "blacklist",
 		"blacklist":[
 			"xyz.willy.Zebra",
-			"com.tigisoftware.Filza",
+            {"match":"regexp", "name":"^com\\.tigisoftware\\."},
             "org.coolstar.SileoStore",
             "com.apple.Terminal",
 		]
@@ -487,10 +487,10 @@
 		],
 		"blacklist":[
 			"com.roothide.manager",
-			"com.m1337.varClean",
+            {"match":"regexp", "name":"^com\\.m1337\\."},
 			"com.opa334.Dopamine.roothide",
 			"com.opa334.Dopamine",
-			"com.tigisoftware.Filza",
+            {"match":"regexp", "name":"^com\\.tigisoftware\\."},
 			"com.xina.jailbreak",
 			"org.coolstar.SileoStore",
 			"ru.domo.cocoatop64",
@@ -528,7 +528,8 @@
 			"io.sentry",
 			"com.hackemist.SDImageCache",
 			"com.opa334.Dopamine",
-			"com.tigisoftware.Filza",
+            {"match":"regexp", "name":"^com\\.tigisoftware\\."},
+            {"match":"regexp", "name":"^com\\.m1337\\."},
 			"org.coolstar.SileoStore",
 			"ws.hbang.Terminal",
 			"xyz.willy.Zebra",
@@ -543,7 +544,7 @@
 		],
 		"blacklist":[
 			"com.opa334.Dopamine.savedState",
-			"com.tigisoftware.Filza.savedState",
+            {"match":"regexp", "name":"^com\\.tigisoftware\\."},
 			"org.coolstar.SileoStore.savedState",
 			"ws.hbang.Terminal.savedState",
 			"xyz.willy.Zebra.savedState",
@@ -578,8 +579,9 @@
 			{"match":"regexp", "name":"^com\\.apple\\."},
 		],
 		"blacklist":[
+            {"match":"regexp", "name":"^com\\.m1337\\."},
 			"com.opa334.Dopamine",
-			"com.tigisoftware.Filza",
+            {"match":"regexp", "name":"^com\\.tigisoftware\\."},
 			"org.coolstar.SileoStore",
 			"ws.hbang.Terminal",
 			"xyz.willy.Zebra",
