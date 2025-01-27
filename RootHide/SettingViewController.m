@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreFoundation/CoreFoundation.h>
 #import <SystemConfiguration/SystemConfiguration.h>
+#import <CoreLocation/CoreLocation.h>
 
 @interface SettingViewController ()
 
@@ -183,6 +184,27 @@
         @"isInstalled": @(vpnDetected)  // Use BOOL as NSNumber for checkmark handling
     }];
 
+    // Location Spoofing Check (iOS 15+)
+    BOOL locationSpoofingDetected = NO;
+    if (@available(iOS 15.0, *)) {
+        CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+        [locationManager requestWhenInUseAuthorization];
+        [locationManager startUpdatingLocation];
+        CLLocation *location = locationManager.location;
+        
+        if (location.sourceInformation && location.sourceInformation.isSimulatedBySoftware) {
+            locationSpoofingDetected = YES;
+            NSLog(@"Location spoofing detected!");
+        }
+    }
+    
+    NSMutableArray *locationSpoofingItems = [NSMutableArray array];
+        [locationSpoofingItems addObject:@{
+            @"textLabel": @"Location Spoofing",
+            @"detailTextLabel": locationSpoofingDetected ? @"Detected" : @"Not Detected",
+            @"type": @"info",
+            @"isInstalled": @(locationSpoofingDetected)
+        }];
     
     // Update menuData
     self.menuData = @[
@@ -214,7 +236,11 @@
                     @"type": @"file", // File path
                     @"url": [@"filza://" stringByAppendingString:jailbreakRootPath]
                 }
-            ]
+            ],
+        },
+        @{
+            @"groupTitle": Localized(@"Location Security"),
+            @"items": locationSpoofingItems,
         }
     ].mutableCopy;
 }
