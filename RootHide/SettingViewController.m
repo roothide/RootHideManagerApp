@@ -67,17 +67,17 @@
         }
     }
     
-    // Detect TrollStore and add it if detected
-    if (detect_trollstpre_app()) {
-        [urlSchemeItems addObject:@{
-            @"textLabel": @"TrollStore",
-            @"detailTextLabel": @"apple-magnifier://",
-            @"type": @"url",
-            @"url": @"apple-magnifier://",
-            @"isInstalled": @YES // Mark as installed
-        }];
-    }
-    
+//    // Detect TrollStore and add it if detected
+//    if (detect_trollstpre_app()) {
+//        [urlSchemeItems addObject:@{
+//            @"textLabel": @"TrollStore",
+//            @"detailTextLabel": @"apple-magnifier://",
+//            @"type": @"url",
+//            @"url": @"apple-magnifier://",
+//            @"isInstalled": @YES // Mark as installed
+//        }];
+//    }
+//
     // Get the detected jailbreak root path using jbroot("/")
     NSString *jailbreakRootPath = jbroot(@"/");
     
