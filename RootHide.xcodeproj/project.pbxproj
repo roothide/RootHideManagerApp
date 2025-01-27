@@ -29,6 +29,7 @@
 		4C35F6CA2D43514400FEE954 /* jbroot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jbroot.h; sourceTree = "<group>"; };
 		4C35F6CF2D43532200FEE954 /* jbroot.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jbroot.m; sourceTree = "<group>"; };
 		4C96E2762D47AFB0004E7A25 /* headers */ = {isa = PBXFileReference; lastKnownFileType = folder; path = headers; sourceTree = "<group>"; };
+		4C96E2782D47B1E6004E7A25 /* detection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = detection.h; sourceTree = "<group>"; };
 		842F23E52AA321E900EE2E9A /* libroothide.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libroothide.tbd; sourceTree = "<group>"; };
 		842F706A2ACB58BB002E5574 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
 		8438C17D2AB3361A001BAB8C /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -121,6 +122,7 @@
 				4C35F6CA2D43514400FEE954 /* jbroot.h */,
 				4C35F6CF2D43532200FEE954 /* jbroot.m */,
 				4C11A75E2D47A94E0027F7CE /* detection.m */,
+				4C96E2782D47B1E6004E7A25 /* detection.h */,
 			);
 			path = RootHide;
 			sourceTree = "<group>";

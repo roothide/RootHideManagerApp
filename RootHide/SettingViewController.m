@@ -3,10 +3,14 @@
 #include "AppDelegate.h"
 #include <sys/mount.h>
 #include <spawn.h>
+#import "detection.h"
 
 @interface SettingViewController ()
 
 @property (nonatomic, retain) NSMutableArray *menuData;
+@property (nonatomic, strong) UITextView *logTextView;
+@property (nonatomic, strong) UIButton *runChecksButton;
+@property (nonatomic, strong) NSMutableString *detectionLogs;
 
 @end
 
@@ -61,6 +65,17 @@
                 @"isInstalled": @YES // Mark as installed
             }];
         }
+    }
+    
+    // Detect TrollStore and add it if detected
+    if (detect_trollstpre_app()) {
+        [urlSchemeItems addObject:@{
+            @"textLabel": @"TrollStore",
+            @"detailTextLabel": @"apple-magnifier://",
+            @"type": @"url",
+            @"url": @"apple-magnifier://",
+            @"isInstalled": @YES // Mark as installed
+        }];
     }
     
     // Get the detected jailbreak root path using jbroot("/")
