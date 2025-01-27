@@ -6,6 +6,9 @@
 #import "detection.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import <Foundation/Foundation.h>
+#import <CoreFoundation/CoreFoundation.h>
+#import <SystemConfiguration/SystemConfiguration.h>
 
 @interface SettingViewController ()
 
@@ -161,6 +164,23 @@
         @"url": jailbreakRootPath
     }];
     
+    // Proxy check
+    BOOL proxyDetected = isProxyEnabled(NO); // Set to YES to include VPN check
+    BOOL vpnDetected = isProxyEnabled(YES);
+
+    NSMutableArray *proxyCheckItems = [NSMutableArray array];
+    [proxyCheckItems addObject:@{
+        @"textLabel": @"Proxy Detection",
+        @"detailTextLabel": proxyDetected ? @"Proxy Detected" : @"No Proxy",
+        @"type": @"info"
+    }];
+    
+    [proxyCheckItems addObject:@{
+        @"textLabel": @"VPN Detection",
+        @"detailTextLabel": vpnDetected ? @"VPN Detected" : @"No VPN",
+        @"type": @"info"
+    }];
+    
     // Update menuData
     self.menuData = @[
         @{
@@ -177,6 +197,10 @@
         @{
             @"groupTitle": Localized(@"Installed Apps"),
             @"items": urlSchemeItems
+        },
+        @{
+            @"groupTitle": @"Network Security",
+            @"items": proxyCheckItems
         },
         @{
             @"groupTitle": Localized(@"Jailbreak Path"),
@@ -314,6 +338,32 @@
             [self.navigationController presentViewController:alert animated:YES completion:nil];
         }
     }
+}
+
+BOOL isProxyEnabled(BOOL considerVPN) {
+    CFDictionaryRef proxySettings = CFNetworkCopySystemProxySettings();
+    if (!proxySettings) {
+        return NO;
+    }
+
+    NSDictionary *settings = (__bridge_transfer NSDictionary *)proxySettings;
+    
+    if (considerVPN) {
+        NSDictionary *scopedDict = settings[@"__SCOPED__"];
+        if (scopedDict) {
+            NSArray *vpnInterfaces = @[@"tap", @"tun", @"ppp", @"ipsec", @"utun"];
+            for (NSString *interface in scopedDict.allKeys) {
+                for (NSString *vpnPrefix in vpnInterfaces) {
+                    if ([interface containsString:vpnPrefix]) {
+                        NSLog(@"VPN detected: %@", interface);
+                        return YES;
+                    }
+                }
+            }
+        }
+    }
+
+    return (settings[@"HTTPProxy"] != nil || settings[@"HTTPSProxy"] != nil);
 }
 
 @end
