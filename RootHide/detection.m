@@ -1,3 +1,5 @@
+#import <Foundation/Foundation.h>
+#import "headers/xpc/xpc.h"
 #import <UIKit/UIKit.h>
 #include <mach/mach.h>
 #include <sys/mount.h>
@@ -5,6 +7,7 @@
 #include <pthread.h>
 #include <dirent.h>
 #include <dlfcn.h>
+#import "jbroot.h"
 extern char**environ;
 
 #define LOG(...) printf(__VA_ARGS__)
@@ -541,7 +544,8 @@ void detect_launchd_jbserver()
 //    }
 //}
 
-BOOL detect_trollstpre_app() {
+BOOL detect_trollstore_app() {
+    // Check via Mach Service (jailbreak-friendly, might not work in rootless environments)
     xpc_connection_t connection = xpc_connection_create_mach_service("com.apple.nehelper", nil, 2);
     xpc_connection_set_event_handler(connection, ^(xpc_object_t object){});
     xpc_connection_resume(connection);
@@ -556,6 +560,39 @@ BOOL detect_trollstpre_app() {
         NSLog(@"TrollStore app installed!");
         return YES;
     }
+    // 1. Check via URL Scheme (sandbox-friendly)
+    NSURL *url = [NSURL URLWithString:@"trollstore://"];
+        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+            NSLog(@"TrollStore detected via URL scheme!");
+            return YES;
+        }
+    // 2. Check for TrollStore-related files using jbroot (jailbreak-friendly)
+        NSArray *knownTrollStorePaths = @[
+            jbroot(@"/var/mobile/Library/TrollStore"),
+            jbroot(@"/private/var/containers/Bundle/Application/TrollStore.app"),
+            jbroot(@"/var/db/TrollStore.plist"),
+            jbroot(@"/var/containers/Bundle/Application/Tips.app/TrollStore"),
+            jbroot(@"/var/mobile/Library/Preferences/com.opa334.trollstore.plist")
+        ];
+        for (NSString *path in knownTrollStorePaths) {
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+                NSLog(@"TrollStore detected at path: %@", path);
+                return YES;
+            }
+        }
+    
+    // 3. Check for environment variables (sandbox-friendly)
+        NSDictionary *env = [[NSProcessInfo processInfo] environment];
+        if (env[@"TSINSTALLER"]) {
+            NSLog(@"TrollStore detected via environment variable!");
+            return YES;
+        }
+
+    // 4. Check via NSUserDefaults (sandbox-friendly)
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:@"TrollStoreInstalled"]) {
+            NSLog(@"TrollStore detected via UserDefaults!");
+            return YES;
+        }
     return NO;
 }
 

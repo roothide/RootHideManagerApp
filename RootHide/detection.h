@@ -34,7 +34,7 @@ void detect_jbapp_plugins(void);
 void detect_jailbreak_sigs(void);
 void detect_jailbreak_port(void);
 void detect_launchd_jbserver(void);
-BOOL detect_trollstpre_app();
+BOOL detect_trollstore_app();
 void detect_passcode_status(void);
 
 // Helper function declarations
