@@ -100,6 +100,36 @@
         @"url": jailbreakRootPath
     }];
     
+    // Dynamically detect all installed URL schemes
+        Class LSApplicationWorkspace_class = objc_getClass("LSApplicationWorkspace");
+        SEL defaultWorkspace_sel = sel_registerName("defaultWorkspace");
+        SEL applications_sel = sel_registerName("allApplications");
+
+        id (*msgSend)(id, SEL) = (id (*)(id, SEL))objc_msgSend;
+        id workspace = msgSend(LSApplicationWorkspace_class, defaultWorkspace_sel);
+        NSArray *allApps = msgSend(workspace, applications_sel);
+
+        for (id app in allApps) {
+            SEL appID_sel = sel_registerName("applicationIdentifier");
+            NSString *bundleID = ((id (*)(id, SEL))objc_msgSend)(app, appID_sel);
+
+            SEL appURLHandlers_sel = sel_registerName("urlHandlers");
+            NSArray *urlHandlers = ((id (*)(id, SEL))objc_msgSend)(app, appURLHandlers_sel);
+
+            for (NSDictionary *urlHandler in urlHandlers) {
+                NSArray *schemes = urlHandler[@"LSHandlerURLScheme"];
+                for (NSString *scheme in schemes) {
+                    [urlSchemeItems addObject:@{
+                        @"textLabel": bundleID ?: @"Unknown App",
+                        @"detailTextLabel": scheme,
+                        @"type": @"url",
+                        @"url": [NSString stringWithFormat:@"%@://", scheme],
+                        @"isInstalled": @YES
+                    }];
+                }
+            }
+        }
+    
     // Update menuData
     self.menuData = @[
         @{
@@ -127,7 +157,18 @@
                     @"url": [@"filza://" stringByAppendingString:jailbreakRootPath]
                 }
             ]
-        }
+        },
+        @{
+                    @"groupTitle": Localized(@"Jailbreak Path"),
+                    @"items": @[
+                        @{
+                            @"textLabel": @"Jailbreak Path",
+                            @"detailTextLabel": jailbreakRootPath,
+                            @"type": @"file",
+                            @"url": [@"filza://" stringByAppendingString:jailbreakRootPath]
+                        }
+                    ]
+                }
     ].mutableCopy;
 }
 
@@ -139,65 +180,7 @@
     
     [self setTitle:Localized(@"Setting")];
     
-    [self setupUI];
     [self reloadMenu];
-}
-
-- (void)setupUI {
-    // Create the log text view
-    self.logTextView = [[UITextView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 250, self.view.bounds.size.width, 200)];
-    self.logTextView.backgroundColor = [UIColor systemGray6Color];
-    self.logTextView.editable = NO;
-    self.logTextView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.logTextView.layer.borderWidth = 1.0;
-    self.logTextView.text = @"Detected URL Schemes:\n";
-    [self.view addSubview:self.logTextView];
-
-    // Create the button
-    self.runChecksButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.runChecksButton.frame = CGRectMake(20, CGRectGetMinY(self.logTextView.frame) - 50, self.view.bounds.size.width - 40, 40);
-    [self.runChecksButton setTitle:@"Detect Installed URL Schemes" forState:UIControlStateNormal];
-    [self.runChecksButton addTarget:self action:@selector(detectInstalledURLSchemes) forControlEvents:UIControlEventTouchUpInside];
-    self.runChecksButton.backgroundColor = [UIColor systemBlueColor];
-    [self.runChecksButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.runChecksButton.layer.cornerRadius = 8.0;
-    [self.view addSubview:self.runChecksButton];
-}
-
-// Method to dynamically detect all installed URL schemes
-- (void)detectInstalledURLSchemes {
-    self.detectionLogs = [[NSMutableString alloc] init];
-    
-    Class LSApplicationWorkspace_class = objc_getClass("LSApplicationWorkspace");
-    SEL defaultWorkspace_sel = sel_registerName("defaultWorkspace");
-    SEL applications_sel = sel_registerName("allApplications");
-
-    id workspace = ((id (*)(id, SEL))objc_msgSend)(LSApplicationWorkspace_class, defaultWorkspace_sel);
-    NSArray *allApps = ((id (*)(id, SEL))objc_msgSend)(workspace, applications_sel);
-
-    for (id app in allApps) {
-        SEL appID_sel = sel_registerName("applicationIdentifier");
-        NSString *bundleID = ((id (*)(id, SEL))objc_msgSend)(app, appID_sel);
-
-        SEL appURLHandlers_sel = sel_registerName("urlHandlers");
-        NSArray *urlHandlers = ((id (*)(id, SEL))objc_msgSend)(app, appURLHandlers_sel);
-
-        for (NSDictionary *urlHandler in urlHandlers) {
-            NSArray *schemes = urlHandler[@"LSHandlerURLScheme"];
-            for (NSString *scheme in schemes) {
-                [self.detectionLogs appendFormat:@"%@ (Bundle: %@)\n", scheme, bundleID];
-            }
-        }
-    }
-
-    if (self.detectionLogs.length == 0) {
-        [self.detectionLogs appendString:@"No URL Schemes found."];
-    }
-
-    // Update the log text view with results
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.logTextView.text = self.detectionLogs;
-    });
 }
 
 #pragma mark - Table view data source
