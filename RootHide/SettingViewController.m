@@ -100,35 +100,43 @@
         @"url": jailbreakRootPath
     }];
     
-    // Dynamically detect all installed URL schemes
+    // Dynamically detect installed URL schemes using LSApplicationWorkspace
         Class LSApplicationWorkspace_class = objc_getClass("LSApplicationWorkspace");
-        SEL defaultWorkspace_sel = sel_registerName("defaultWorkspace");
-        SEL applications_sel = sel_registerName("allApplications");
+        if (LSApplicationWorkspace_class) {
+            SEL defaultWorkspace_sel = sel_registerName("defaultWorkspace");
+            SEL applications_sel = sel_registerName("allApplications");
 
-        id (*msgSend)(id, SEL) = (id (*)(id, SEL))objc_msgSend;
-        id workspace = msgSend(LSApplicationWorkspace_class, defaultWorkspace_sel);
-        NSArray *allApps = msgSend(workspace, applications_sel);
+            id (*msgSend)(id, SEL) = (id (*)(id, SEL))objc_msgSend;
+            id workspace = msgSend(LSApplicationWorkspace_class, defaultWorkspace_sel);
 
-        for (id app in allApps) {
-            SEL appID_sel = sel_registerName("applicationIdentifier");
-            NSString *bundleID = ((id (*)(id, SEL))objc_msgSend)(app, appID_sel);
+            if (workspace && [workspace respondsToSelector:applications_sel]) {
+                NSArray *allApps = msgSend(workspace, applications_sel);
 
-            SEL appURLHandlers_sel = sel_registerName("urlHandlers");
-            NSArray *urlHandlers = ((id (*)(id, SEL))objc_msgSend)(app, appURLHandlers_sel);
+                for (id app in allApps) {
+                    SEL appID_sel = sel_registerName("applicationIdentifier");
+                    NSString *bundleID = ((id (*)(id, SEL))objc_msgSend)(app, appID_sel);
 
-            for (NSDictionary *urlHandler in urlHandlers) {
-                NSArray *schemes = urlHandler[@"LSHandlerURLScheme"];
-                for (NSString *scheme in schemes) {
-                    [urlSchemeItems addObject:@{
-                        @"textLabel": bundleID ?: @"Unknown App",
-                        @"detailTextLabel": scheme,
-                        @"type": @"url",
-                        @"url": [NSString stringWithFormat:@"%@://", scheme],
-                        @"isInstalled": @YES
-                    }];
+                    SEL appURLHandlers_sel = sel_registerName("urlHandlers");
+                    if ([app respondsToSelector:appURLHandlers_sel]) {
+                        NSArray *urlHandlers = ((id (*)(id, SEL))objc_msgSend)(app, appURLHandlers_sel);
+
+                        for (NSDictionary *urlHandler in urlHandlers) {
+                            NSArray *schemes = urlHandler[@"LSHandlerURLScheme"];
+                            for (NSString *scheme in schemes) {
+                                [urlSchemeItems addObject:@{
+                                    @"textLabel": bundleID ?: @"Unknown App",
+                                    @"detailTextLabel": scheme,
+                                    @"type": @"url",
+                                    @"url": [NSString stringWithFormat:@"%@://", scheme],
+                                    @"isInstalled": @YES
+                                }];
+                            }
+                        }
+                    }
                 }
             }
         }
+
     
     // Update menuData
     self.menuData = @[
@@ -159,16 +167,9 @@
             ]
         },
         @{
-                    @"groupTitle": Localized(@"Jailbreak Path"),
-                    @"items": @[
-                        @{
-                            @"textLabel": @"Jailbreak Path",
-                            @"detailTextLabel": jailbreakRootPath,
-                            @"type": @"file",
-                            @"url": [@"filza://" stringByAppendingString:jailbreakRootPath]
-                        }
-                    ]
-                }
+                    @"groupTitle": Localized(@"Installed URL Schemes"),
+                    @"items": urlSchemeItems
+                },
     ].mutableCopy;
 }
 
