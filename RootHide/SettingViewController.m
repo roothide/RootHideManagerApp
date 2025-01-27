@@ -172,14 +172,17 @@
     [proxyCheckItems addObject:@{
         @"textLabel": @"Proxy Detection",
         @"detailTextLabel": proxyDetected ? @"Proxy Detected" : @"No Proxy",
-        @"type": @"info"
+        @"type": @"info",
+        @"isInstalled": @(proxyDetected)  // Use BOOL as NSNumber for checkmark handling
     }];
-    
+
     [proxyCheckItems addObject:@{
         @"textLabel": @"VPN Detection",
         @"detailTextLabel": vpnDetected ? @"VPN Detected" : @"No VPN",
-        @"type": @"info"
+        @"type": @"info",
+        @"isInstalled": @(vpnDetected)  // Use BOOL as NSNumber for checkmark handling
     }];
+
     
     // Update menuData
     self.menuData = @[
