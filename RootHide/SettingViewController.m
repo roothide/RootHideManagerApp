@@ -59,7 +59,50 @@
         @{ @"scheme": @"dumpy2://", @"description": @"Dumpy2" },
         @{ @"scheme": @"dumpy2openpath://", @"description": @"Dumpy2" },
         @{ @"scheme": @"appsdump://", @"description": @"AppsDump2" },
-        @{ @"scheme": @"appsdumpopenpath://", @"description": @"AppsDump2" }
+        @{ @"scheme": @"appsdumpopenpath://", @"description": @"AppsDump2" },
+        @{ @"scheme": @"signulous://", @"description": @"Signulous" },
+        @{ @"scheme": @"checkra1n://", @"description": @"Checkra1n" },
+        @{ @"scheme": @"chimera://", @"description": @"Chimera" },
+        @{ @"scheme": @"electra://", @"description": @"Electra" },
+        @{ @"scheme": @"dopamine://", @"description": @"Dopamine" },
+        @{ @"scheme": @"palera1n://", @"description": @"Palera1n" },
+        @{ @"scheme": @"ifile://", @"description": @"iFile" },
+        @{ @"scheme": @"midnight://", @"description": @"Midnight" },
+        @{ @"scheme": @"flex3://", @"description": @"Flex3" },
+        @{ @"scheme": @"apt://", @"description": @"APT (Advanced Package Tool)" },
+        @{ @"scheme": @"dpkg://", @"description": @"DPKG (Debian Package)" },
+        @{ @"scheme": @"icy://", @"description": @"Icy" },
+        @{ @"scheme": @"prefs:root=CydiaSubstrate", @"description": @"Substrate Preferences"},
+        @{ @"scheme": @"substrate://", @"description": @"Substrate" },
+        @{ @"scheme": @"libhooker://", @"description": @"LibHooker" },
+        @{ @"scheme": @"ellekit://", @"description": @"ElleKit" },
+        @{ @"scheme": @"debug://", @"description": @"Debugger" },
+        @{ @"scheme": @"lldb://", @"description": @"LLDB Debugger" },
+        @{ @"scheme": @"gdb://", @"description": @"GDB Debugger" },
+        @{ @"scheme": @"frida://", @"description": @"Frida" },
+        @{ @"scheme": @"altstore://", @"description": @"AltStore" },
+        @{ @"scheme": @"sidestore://", @"description": @"SideStore" },
+        @{ @"scheme": @"appcake://", @"description": @"AppCake" },
+        @{ @"scheme": @"ignition://", @"description": @"Ignition" },
+        @{ @"scheme": @"tweakbox://", @"description": @"TweakBox" },
+        @{ @"scheme": @"iosgods://", @"description": @"iOSGods" },
+        @{ @"scheme": @"cloneapp://", @"description": @"Clone App" },
+        @{ @"scheme": @"multitweak://", @"description": @"MultiTweak" },
+        @{ @"scheme": @"newterm://", @"description": @"NewTerm" },
+        @{ @"scheme": @"mterminal://", @"description": @"MTerminal" },
+        @{ @"scheme": @"openssh://", @"description": @"OpenSSH" },
+        @{ @"scheme": @"ssh://", @"description": @"SSH" },
+        @{ @"scheme": @"bypass://", @"description": @"Jailbreak Bypass" },
+        @{ @"scheme": @"jailbreak://", @"description": @"Jailbreak Info" },
+        @{ @"scheme": @"cercube://", @"description": @"Cercube for YouTube" },
+        @{ @"scheme": @"youtubedl://", @"description": @"YouTube Downloader" },
+        @{ @"scheme": @"rex://", @"description": @"Rex" },
+        @{ @"scheme": @"locationfakelocation://", @"description": @"LocSim" },
+        @{ @"scheme": @"appcake://", @"description": @"AppCake" },
+        @{ @"scheme": @"appdb://", @"description": @"AppDB" },
+        @{ @"scheme": @"reProvision://", @"description": @"ReProvision" },
+        @{ @"scheme": @"shadow://", @"description": @"Shadow Jailbreak Detection Bypass" },
+        @{ @"scheme": @"filzaplus://", @"description": @"FilzaPlus" }
     ];
     
     // Create menu items for installed URL schemes
@@ -100,44 +143,6 @@
         @"url": jailbreakRootPath
     }];
     
-    // Dynamically detect installed URL schemes using LSApplicationWorkspace
-        Class LSApplicationWorkspace_class = objc_getClass("LSApplicationWorkspace");
-        if (LSApplicationWorkspace_class) {
-            SEL defaultWorkspace_sel = sel_registerName("defaultWorkspace");
-            SEL applications_sel = sel_registerName("allApplications");
-
-            id (*msgSend)(id, SEL) = (id (*)(id, SEL))objc_msgSend;
-            id workspace = msgSend(LSApplicationWorkspace_class, defaultWorkspace_sel);
-
-            if (workspace && [workspace respondsToSelector:applications_sel]) {
-                NSArray *allApps = msgSend(workspace, applications_sel);
-
-                for (id app in allApps) {
-                    SEL appID_sel = sel_registerName("applicationIdentifier");
-                    NSString *bundleID = ((id (*)(id, SEL))objc_msgSend)(app, appID_sel);
-
-                    SEL appURLHandlers_sel = sel_registerName("urlHandlers");
-                    if ([app respondsToSelector:appURLHandlers_sel]) {
-                        NSArray *urlHandlers = ((id (*)(id, SEL))objc_msgSend)(app, appURLHandlers_sel);
-
-                        for (NSDictionary *urlHandler in urlHandlers) {
-                            NSArray *schemes = urlHandler[@"LSHandlerURLScheme"];
-                            for (NSString *scheme in schemes) {
-                                [urlSchemeItems addObject:@{
-                                    @"textLabel": bundleID ?: @"Unknown App",
-                                    @"detailTextLabel": scheme,
-                                    @"type": @"url",
-                                    @"url": [NSString stringWithFormat:@"%@://", scheme],
-                                    @"isInstalled": @YES
-                                }];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-    
     // Update menuData
     self.menuData = @[
         @{
@@ -165,11 +170,7 @@
                     @"url": [@"filza://" stringByAppendingString:jailbreakRootPath]
                 }
             ]
-        },
-        @{
-                    @"groupTitle": Localized(@"Installed URL Schemes"),
-                    @"items": urlSchemeItems
-                },
+        }
     ].mutableCopy;
 }
 
