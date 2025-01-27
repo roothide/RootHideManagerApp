@@ -102,7 +102,8 @@
         @{ @"scheme": @"appdb://", @"description": @"AppDB" },
         @{ @"scheme": @"reProvision://", @"description": @"ReProvision" },
         @{ @"scheme": @"shadow://", @"description": @"Shadow Jailbreak Detection Bypass" },
-        @{ @"scheme": @"filzaplus://", @"description": @"FilzaPlus" }
+        @{ @"scheme": @"filzaplus://", @"description": @"FilzaPlus" },
+        @{ @"scheme": @"adm://", @"description": @"Apps Manager" },
     ];
     
     // Create menu items for installed URL schemes
