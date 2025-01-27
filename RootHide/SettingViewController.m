@@ -257,17 +257,16 @@
     cell.textLabel.text = item[@"textLabel"];
     cell.detailTextLabel.text = item[@"detailTextLabel"];
     
-    if ([item[@"type"] isEqualToString:@"url"]) {
+    if ([item[@"type"] isEqualToString:@"url"] || [item[@"type"] isEqualToString:@"info"]) {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
-        // Show checkmark for installed apps
+        // Show checkmark for installed apps or detected proxies/VPNs
         if ([item[@"isInstalled"] boolValue]) {
             cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"checkmark"]];
         } else {
             cell.accessoryView = nil;
         }
     }
-    
     return cell;
 }
 
