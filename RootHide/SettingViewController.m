@@ -117,15 +117,18 @@
     // Create menu items for installed URL schemes
     NSMutableArray *urlSchemeItems = [NSMutableArray array];
     for (NSDictionary *urlScheme in urlSchemes) {
-        NSURL *url = [NSURL URLWithString:urlScheme[@"scheme"]];
-        if ([[UIApplication sharedApplication] canOpenURL:url]) {
-            [urlSchemeItems addObject:@{
-                @"textLabel": urlScheme[@"description"],
-                @"detailTextLabel": urlScheme[@"scheme"],
-                @"type": @"url",
-                @"url": urlScheme[@"scheme"],
-                @"isInstalled": @YES // Mark as installed
-            }];
+        NSArray *schemes = [urlScheme[@"scheme"] componentsSeparatedByString:@", "];
+        for (NSString *scheme in schemes) {
+            NSURL *url = [NSURL URLWithString:scheme];
+            if ([[UIApplication sharedApplication] canOpenURL:url]) {
+                [urlSchemeItems addObject:@{
+                    @"textLabel": urlScheme[@"description"],
+                    @"detailTextLabel": scheme,
+                    @"type": @"url",
+                    @"url": scheme,
+                    @"isInstalled": @YES // Mark as installed
+                }];
+            }
         }
     }
     
