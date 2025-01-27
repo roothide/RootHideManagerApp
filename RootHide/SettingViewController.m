@@ -186,16 +186,24 @@
 
     // Location Spoofing Check (iOS 15+)
     BOOL locationSpoofingDetected = NO;
+    BOOL locationProducedByAccessory = NO;
     if (@available(iOS 15.0, *)) {
         CLLocationManager *locationManager = [[CLLocationManager alloc] init];
         [locationManager requestWhenInUseAuthorization];
         [locationManager startUpdatingLocation];
         CLLocation *location = locationManager.location;
         
-        if (location.sourceInformation && location.sourceInformation.isSimulatedBySoftware) {
-            locationSpoofingDetected = YES;
-            NSLog(@"Location spoofing detected!");
-        }
+        if (location.sourceInformation) {
+                if (location.sourceInformation.isSimulatedBySoftware) {
+                    locationSpoofingDetected = YES;
+                    NSLog(@"Location spoofing detected via software!");
+                }
+                
+                if (location.sourceInformation.isProducedByAccessory) {
+                    locationProducedByAccessory = YES;
+                    NSLog(@"Location produced by accessory!");
+                }
+            }
     }
     
     NSMutableArray *locationSpoofingItems = [NSMutableArray array];
@@ -205,6 +213,13 @@
             @"type": @"info",
             @"isInstalled": @(locationSpoofingDetected)
         }];
+    
+    [locationSpoofingItems addObject:@{
+        @"textLabel": @"Location Produced by Accessory",
+        @"detailTextLabel": locationProducedByAccessory ? @"Detected" : @"Not Detected",
+        @"type": @"info",
+        @"isInstalled": @(locationProducedByAccessory)
+    }];
     
     // Update menuData
     self.menuData = @[
