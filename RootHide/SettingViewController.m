@@ -221,7 +221,7 @@
             @"isInstalled": @YES,
         }];
     [jailbreakCheckItems addObject:@{
-            @"textLabel": @"Rootless JB",
+            @"textLabel": @"JB Files in var",
             @"detailTextLabel": detect_rootlessJB() ? @"Detected" : @"Not Detected",
             @"type": @"info",
             @"isInstalled": @(detect_rootlessJB()) }];
