@@ -251,7 +251,7 @@
             @"type": @"info",
             @"isInstalled": @(detect_trollStoredFilza()) }];
     [jailbreakCheckItems addObject:@{
-            @"textLabel": @"Jailbreakd",
+            @"textLabel": @"Jailbreakd (TODO)",
             @"detailTextLabel": detect_jailbreakd() ? @"Detected" : @"Not Detected",
             @"type": @"info",
             @"isInstalled": @(detect_jailbreakd()) }];
@@ -311,7 +311,7 @@
             @"type": @"info",
             @"isInstalled": @(detect_jailbreak_port()) }];
     [jailbreakCheckItems addObject:@{
-            @"textLabel": @"Launchd JBserver",
+            @"textLabel": @"Launchd JBserver (TODO)",
             @"detailTextLabel": detect_launchd_jbserver() ? @"Detected" : @"Not Detected",
             @"type": @"info",
             @"isInstalled": @(detect_launchd_jbserver()) }];
