@@ -9,37 +9,39 @@
 #include <dirent.h>
 #include <dlfcn.h>
 
-extern char** environ;
+extern char **environ;
 
-// Macro for logging
-#define LOG(...) printf(__VA_ARGS__)
+// Function declarations now use BOOL (YES/NO)
+BOOL detect_rootlessJB(void);
+BOOL detect_kernBypass(void);
+BOOL detect_chroot(void);
+BOOL detect_mount_fs(void);
+BOOL detect_bootstraps(void);
+BOOL detect_trollStoredFilza(void);
+BOOL detect_jailbreakd(void);
+BOOL detect_proc_flags(void);
+BOOL detect_jb_payload(void);
+BOOL detect_exception_port(void);
+BOOL detect_jb_preboot(void);
+BOOL detect_jailbroken_apps(void);
+BOOL detect_removed_varjb(void);
+BOOL detect_fugu15Max(void);
+BOOL detect_url_schemes(void);
+BOOL detect_jbapp_plugins(void);
+BOOL detect_jailbreak_sigs(void);
+BOOL detect_jailbreak_port(void);
+BOOL detect_launchd_jbserver(void);
+BOOL detect_trollstore_app(void);
+BOOL detect_passcode_status(void);
 
-// Function declarations
-void detect_rootlessJB(void);
-void detect_kernBypass(void);
-void detect_chroot(void);
-void detect_mount_fs(void);
-void detect_bootstraps(void);
-void detect_trollStoredFilza(void);
-void detect_jailbreakd(void);
-void detect_proc_flags(void);
-void detect_jb_payload(void);
-void detect_exception_port(void);
-void detect_jb_preboot(void);
-void detect_jailbroken_apps(void);
-void detect_removed_varjb(void);
-void detect_fugu15Max(void);
-void detect_url_schemes(void);
-void detect_jbapp_plugins(void);
-void detect_jailbreak_sigs(void);
-void detect_jailbreak_port(void);
-void detect_launchd_jbserver(void);
-BOOL detect_trollstore_app();
-void detect_passcode_status(void);
+// Aggregator helper function
+BOOL isJailbroken(void);
+
+
 
 // Helper function declarations
 kern_return_t bootstrap_look_up(mach_port_t bp, const char* service_name, mach_port_t *sp);
-mach_port_t connect_mach_service(const char *name);
-int csops(pid_t pid, unsigned int ops, void * useraddr, size_t usersize);
+
+int csops(pid_t pid, unsigned int ops, void *useraddr, size_t usersize);
 
 #endif /* DETECTION_H */
