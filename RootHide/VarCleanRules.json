@@ -105,6 +105,13 @@
 		]
 	},
 
+    "/var/lib" : {
+        "default" : "blacklist",
+        "blacklist":[
+            "filza",
+        ]
+    },
+    
 	"/var/root" : {
 		"whitelist":[
             "Library",
