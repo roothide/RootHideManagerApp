@@ -158,7 +158,6 @@
     // Proxy check
     BOOL proxyDetected = isProxyEnabled(NO); // Set to YES to include VPN check
     BOOL vpnDetected = isProxyEnabled(YES);
-    BOOL vpnDetectedWithNEVPNManager = isVPNActiveUsingNEVPNManager();
 
     NSMutableArray *proxyCheckItems = [NSMutableArray array];
     [proxyCheckItems addObject:@{
@@ -174,11 +173,13 @@
         @"type": @"info",
         @"isInstalled": @(vpnDetected)  // Use BOOL as NSNumber for checkmark handling
     }];
-    [proxyCheckItems addObject:@{
-        @"textLabel": @"VPN Detection (NEVPNManager)",
-        @"detailTextLabel": vpnDetectedWithNEVPNManager ? @"VPN Detected" : @"No VPN",
-        @"type": @"info",
-        @"isInstalled": @(vpnDetectedWithNEVPNManager)  // Use BOOL as NSNumber for checkmark handling
+    [self isVPNActiveUsingNEVPNManagerWithCompletion:^(BOOL vpnDetectedWithNEVPNManager) {
+        [proxyCheckItems addObject:@{
+            @"textLabel": @"VPN Detection (NEVPNManager)",
+            @"detailTextLabel": vpnDetectedWithNEVPNManager ? @"VPN Detected" : @"No VPN",
+            @"type": @"info",
+            @"isInstalled": @(vpnDetectedWithNEVPNManager)
+        }];
     }];
 
     // Location Spoofing Check (iOS 15+)
@@ -527,30 +528,23 @@ BOOL isProxyEnabled(BOOL considerVPN) {
 }
 
 // Separate NEVPNManager check (private API, optional for TrollStore apps)
-BOOL isVPNActiveUsingNEVPNManager() {
+- (void)isVPNActiveUsingNEVPNManagerWithCompletion:(void (^)(BOOL))completion {
     NEVPNManager *vpnManager = [NEVPNManager sharedManager];
-    
-    // Load the current VPN configuration
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     [vpnManager loadFromPreferencesWithCompletionHandler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"Failed to load VPN preferences: %@", error.localizedDescription);
+            completion(NO);
         } else {
-            NSLog(@"VPN configuration loaded successfully.");
+            NEVPNStatus vpnStatus = vpnManager.connection.status;
+            if (vpnStatus == NEVPNStatusConnected) {
+                NSLog(@"VPN is active via NEVPNManager.");
+                completion(YES);
+            } else {
+                NSLog(@"VPN is not active. Status: %ld", (long)vpnStatus);
+                completion(NO);
+            }
         }
-        dispatch_semaphore_signal(semaphore);
     }];
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    
-    // Check the connection status
-    NEVPNStatus vpnStatus = vpnManager.connection.status;
-    if (vpnStatus == NEVPNStatusConnected) {
-        NSLog(@"VPN is active via NEVPNManager.");
-        return YES;
-    } else {
-        NSLog(@"VPN is not active. Status: %ld", (long)vpnStatus);
-        return NO;
-    }
 }
 
 @end
