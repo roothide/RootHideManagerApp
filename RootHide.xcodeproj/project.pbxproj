@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4C11A75F2D47A94E0027F7CE /* detection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11A75E2D47A94E0027F7CE /* detection.m */; };
 		4C35F6D02D43532200FEE954 /* jbroot.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C35F6CF2D43532200FEE954 /* jbroot.m */; };
+		4C87F8082D4F80E9006FA447 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C87F8062D4F80DF006FA447 /* NetworkExtension.framework */; };
+		4C87F8092D4F80E9006FA447 /* NetworkExtension.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C87F8062D4F80DF006FA447 /* NetworkExtension.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4C96E2772D47AFB0004E7A25 /* headers in Resources */ = {isa = PBXBuildFile; fileRef = 4C96E2762D47AFB0004E7A25 /* headers */; };
 		8477B5E22A7526AB000632D0 /* NSJSONSerialization+Comments.m in Sources */ = {isa = PBXBuildFile; fileRef = 8477B5E02A7526AB000632D0 /* NSJSONSerialization+Comments.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8477B6052A866437000632D0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8477B6072A866437000632D0 /* Localizable.strings */; };
@@ -24,10 +26,25 @@
 		BFD8B9732A4BD68D007CCEB8 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD8B9722A4BD68D007CCEB8 /* SettingViewController.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		4C87F80A2D4F80E9006FA447 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4C87F8092D4F80E9006FA447 /* NetworkExtension.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		4C11A75E2D47A94E0027F7CE /* detection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = detection.m; sourceTree = "<group>"; };
 		4C35F6CA2D43514400FEE954 /* jbroot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jbroot.h; sourceTree = "<group>"; };
 		4C35F6CF2D43532200FEE954 /* jbroot.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jbroot.m; sourceTree = "<group>"; };
+		4C87F8062D4F80DF006FA447 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		4C96E2762D47AFB0004E7A25 /* headers */ = {isa = PBXFileReference; lastKnownFileType = folder; path = headers; sourceTree = "<group>"; };
 		4C96E2782D47B1E6004E7A25 /* detection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = detection.h; sourceTree = "<group>"; };
 		842F23E52AA321E900EE2E9A /* libroothide.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libroothide.tbd; sourceTree = "<group>"; };
@@ -70,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C87F8082D4F80E9006FA447 /* NetworkExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +157,7 @@
 		BFE9353B27F753D30022D46C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C87F8062D4F80DF006FA447 /* NetworkExtension.framework */,
 				842F23E52AA321E900EE2E9A /* libroothide.tbd */,
 				BF69FE4D28123C7800542668 /* AVFoundation.framework */,
 				BFE9353C27F753D30022D46C /* Accelerate.framework */,
@@ -156,6 +175,7 @@
 				A672ABAB27F748DE00878787 /* Sources */,
 				A672ABAC27F748DE00878787 /* Frameworks */,
 				A672ABAD27F748DE00878787 /* Resources */,
+				4C87F80A2D4F80E9006FA447 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

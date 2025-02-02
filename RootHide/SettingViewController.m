@@ -10,6 +10,8 @@
 #import <CoreFoundation/CoreFoundation.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <CoreLocation/CoreLocation.h>
+#import <ifaddrs.h>
+#import <NetworkExtension/NetworkExtension.h>
 
 @interface SettingViewController ()
 
@@ -156,6 +158,7 @@
     // Proxy check
     BOOL proxyDetected = isProxyEnabled(NO); // Set to YES to include VPN check
     BOOL vpnDetected = isProxyEnabled(YES);
+    BOOL vpnDetectedWithNEVPNManager = isVPNActiveUsingNEVPNManager();
 
     NSMutableArray *proxyCheckItems = [NSMutableArray array];
     [proxyCheckItems addObject:@{
@@ -170,6 +173,12 @@
         @"detailTextLabel": vpnDetected ? @"VPN Detected" : @"No VPN",
         @"type": @"info",
         @"isInstalled": @(vpnDetected)  // Use BOOL as NSNumber for checkmark handling
+    }];
+    [proxyCheckItems addObject:@{
+        @"textLabel": @"VPN Detection (NEVPNManager)",
+        @"detailTextLabel": vpnDetectedWithNEVPNManager ? @"VPN Detected" : @"No VPN",
+        @"type": @"info",
+        @"isInstalled": @(vpnDetectedWithNEVPNManager)  // Use BOOL as NSNumber for checkmark handling
     }];
 
     // Location Spoofing Check (iOS 15+)
@@ -482,29 +491,66 @@
 }
 
 BOOL isProxyEnabled(BOOL considerVPN) {
+    // Check for system proxy settings
     CFDictionaryRef proxySettings = CFNetworkCopySystemProxySettings();
-    if (!proxySettings) {
-        return NO;
-    }
-
-    NSDictionary *settings = (__bridge_transfer NSDictionary *)proxySettings;
-    
-    if (considerVPN) {
-        NSDictionary *scopedDict = settings[@"__SCOPED__"];
-        if (scopedDict) {
-            NSArray *vpnInterfaces = @[@"tap", @"tun", @"ppp", @"ipsec", @"utun"];
-            for (NSString *interface in scopedDict.allKeys) {
-                for (NSString *vpnPrefix in vpnInterfaces) {
-                    if ([interface containsString:vpnPrefix]) {
-                        NSLog(@"VPN detected: %@", interface);
-                        return YES;
-                    }
-                }
-            }
+    if (proxySettings) {
+        NSDictionary *settings = (__bridge_transfer NSDictionary *)proxySettings;
+        if (settings[@"HTTPProxy"] || settings[@"HTTPSProxy"]) {
+            NSLog(@"Proxy detected in system settings.");
+            return YES;
         }
     }
 
-    return (settings[@"HTTPProxy"] != nil || settings[@"HTTPSProxy"] != nil);
+    // Check for VPN interfaces if requested
+    if (considerVPN) {
+        struct ifaddrs *ifaddr = NULL;
+        if (getifaddrs(&ifaddr) == 0) {
+            for (struct ifaddrs *ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+                if (ifa->ifa_name) {
+                    NSString *interfaceName = [NSString stringWithUTF8String:ifa->ifa_name];
+                    
+                    NSArray *vpnInterfaces = @[@"tap", @"tun", @"ppp", @"ipsec", @"utun"];
+                    for (NSString *vpnPrefix in vpnInterfaces) {
+                        if ([interfaceName containsString:vpnPrefix]) {
+                            NSLog(@"VPN detected: %@", interfaceName);
+                            freeifaddrs(ifaddr);
+                            return YES;
+                        }
+                    }
+                }
+            }
+            freeifaddrs(ifaddr);
+        }
+    }
+
+    return NO;
+}
+
+// Separate NEVPNManager check (private API, optional for TrollStore apps)
+BOOL isVPNActiveUsingNEVPNManager() {
+    NEVPNManager *vpnManager = [NEVPNManager sharedManager];
+    
+    // Load the current VPN configuration
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    [vpnManager loadFromPreferencesWithCompletionHandler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"Failed to load VPN preferences: %@", error.localizedDescription);
+        } else {
+            NSLog(@"VPN configuration loaded successfully.");
+        }
+        dispatch_semaphore_signal(semaphore);
+    }];
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    
+    // Check the connection status
+    NEVPNStatus vpnStatus = vpnManager.connection.status;
+    if (vpnStatus == NEVPNStatusConnected) {
+        NSLog(@"VPN is active via NEVPNManager.");
+        return YES;
+    } else {
+        NSLog(@"VPN is not active. Status: %ld", (long)vpnStatus);
+        return NO;
+    }
 }
 
 @end
