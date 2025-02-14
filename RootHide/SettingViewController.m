@@ -226,6 +226,14 @@
     BOOL anyJailbreakDetected = [JailbreakDetectorViewController anyJailbreakChecksDetected];
 
         NSMutableArray *jailbreakCheckItems = [NSMutableArray array];
+        // path for reference
+        [jailbreakCheckItems addObject:@{
+            @"textLabel": @"Jailbreak Path",
+            @"detailTextLabel": jailbreakRootPath,
+            @"type": @"info",
+            @"isInstalled": @YES
+        }];
+        // group Roothide JailbreakDetector
         [jailbreakCheckItems addObject:@{
             @"textLabel": @"RootHide JailbreakDetector",
             @"detailTextLabel": anyJailbreakDetected ? @"Jailbreak Detected" : @"No Jailbreak",
@@ -235,7 +243,8 @@
         }];
 
         self.menuData = @[
-    @{ @"groupTitle": @"Jailbreak Checks", @"items": jailbreakCheckItems }
+    @{ @"groupTitle":
+           @"Jailbreak Checks", @"items": jailbreakCheckItems }
         ].mutableCopy;
     
 //    NSMutableArray *jailbreakCheckItems = [NSMutableArray array];
