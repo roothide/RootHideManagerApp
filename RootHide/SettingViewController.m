@@ -12,6 +12,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <ifaddrs.h>
 #import <NetworkExtension/NetworkExtension.h>
+#import "JailbreakDetectorViewController.h"
 
 @interface SettingViewController ()
 
@@ -222,119 +223,133 @@
     // Jailbreak Checks
     // Get the detected jailbreak root path using jbroot("/")
     NSString *jailbreakRootPath = jbroot(@"/");
-    
-    NSMutableArray *jailbreakCheckItems = [NSMutableArray array];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"Jailbreak Path",
-            @"detailTextLabel": jailbreakRootPath,
-            @"type": @"url",
-            @"isInstalled": @YES,
+    BOOL anyJailbreakDetected = [JailbreakDetectorViewController anyJailbreakChecksDetected];
+
+        NSMutableArray *jailbreakCheckItems = [NSMutableArray array];
+        [jailbreakCheckItems addObject:@{
+            @"textLabel": @"RootHide JailbreakDetector",
+            @"detailTextLabel": anyJailbreakDetected ? @"Jailbreak Detected" : @"No Jailbreak",
+            @"type": @"view",
+            @"viewController": [JailbreakDetectorViewController class],
+            @"isInstalled": @(anyJailbreakDetected)
         }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"JB Files in var",
-            @"detailTextLabel": detect_rootlessJB() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_rootlessJB()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"Kernel Bypass",
-            @"detailTextLabel": detect_kernBypass() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_kernBypass()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"Chroot",
-            @"detailTextLabel": detect_chroot() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_chroot()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"Mount FS",
-            @"detailTextLabel": detect_mount_fs() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_mount_fs()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"Bootstraps",
-            @"detailTextLabel": detect_bootstraps() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_bootstraps()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"TrollStored Filza",
-            @"detailTextLabel": detect_trollStoredFilza() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_trollStoredFilza()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"Jailbreakd (TODO)",
-            @"detailTextLabel": detect_jailbreakd() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_jailbreakd()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"Proc Flags",
-            @"detailTextLabel": detect_proc_flags() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_proc_flags()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"JB Payload",
-            @"detailTextLabel": detect_jb_payload() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_jb_payload()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"Exception Port",
-            @"detailTextLabel": detect_exception_port() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_exception_port()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"JB Preboot",
-            @"detailTextLabel": detect_jb_preboot() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_jb_preboot()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"Jailbroken Apps",
-            @"detailTextLabel": detect_jailbroken_apps() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_jailbroken_apps()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"Removed /var/jb",
-            @"detailTextLabel": detect_removed_varjb() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_removed_varjb()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"Fugu15 Max",
-            @"detailTextLabel": detect_fugu15Max() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_fugu15Max()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"URL Schemes",
-            @"detailTextLabel": detect_url_schemes() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_url_schemes()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"JB App Plugins",
-            @"detailTextLabel": detect_jbapp_plugins() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_jbapp_plugins()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"JB Sigs",
-            @"detailTextLabel": detect_jailbreak_sigs() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_jailbreak_sigs()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"JB Port",
-            @"detailTextLabel": detect_jailbreak_port() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_jailbreak_port()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"Launchd JBserver (TODO)",
-            @"detailTextLabel": detect_launchd_jbserver() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_launchd_jbserver()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"TrollStore",
-            @"detailTextLabel": detect_trollstore_app() ? @"Detected" : @"Not Detected",
-            @"type": @"info",
-            @"isInstalled": @(detect_trollstore_app()) }];
-    [jailbreakCheckItems addObject:@{
-            @"textLabel": @"Passcode Status",
-            @"detailTextLabel": detect_passcode_status() ? @"Passcode Set" : @"No Passcode",
-            @"type": @"info",
-            @"isInstalled": @(detect_passcode_status()) }];
+
+        self.menuData = @[
+    @{ @"groupTitle": @"Jailbreak Checks", @"items": jailbreakCheckItems }
+        ].mutableCopy;
+    
+//    NSMutableArray *jailbreakCheckItems = [NSMutableArray array];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"Jailbreak Path",
+//            @"detailTextLabel": jailbreakRootPath,
+//            @"type": @"url",
+//            @"isInstalled": @YES,
+//        }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"JB Files in var",
+//            @"detailTextLabel": detect_rootlessJB() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_rootlessJB()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"Kernel Bypass",
+//            @"detailTextLabel": detect_kernBypass() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_kernBypass()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"Chroot",
+//            @"detailTextLabel": detect_chroot() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_chroot()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"Mount FS",
+//            @"detailTextLabel": detect_mount_fs() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_mount_fs()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"Bootstraps",
+//            @"detailTextLabel": detect_bootstraps() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_bootstraps()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"TrollStored Filza",
+//            @"detailTextLabel": detect_trollStoredFilza() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_trollStoredFilza()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"Jailbreakd (TODO)",
+//            @"detailTextLabel": detect_jailbreakd() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_jailbreakd()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"Proc Flags",
+//            @"detailTextLabel": detect_proc_flags() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_proc_flags()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"JB Payload",
+//            @"detailTextLabel": detect_jb_payload() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_jb_payload()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"Exception Port",
+//            @"detailTextLabel": detect_exception_port() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_exception_port()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"JB Preboot",
+//            @"detailTextLabel": detect_jb_preboot() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_jb_preboot()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"Jailbroken Apps",
+//            @"detailTextLabel": detect_jailbroken_apps() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_jailbroken_apps()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"Removed /var/jb",
+//            @"detailTextLabel": detect_removed_varjb() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_removed_varjb()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"Fugu15 Max",
+//            @"detailTextLabel": detect_fugu15Max() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_fugu15Max()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"URL Schemes",
+//            @"detailTextLabel": detect_url_schemes() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_url_schemes()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"JB App Plugins",
+//            @"detailTextLabel": detect_jbapp_plugins() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_jbapp_plugins()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"JB Sigs",
+//            @"detailTextLabel": detect_jailbreak_sigs() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_jailbreak_sigs()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"JB Port",
+//            @"detailTextLabel": detect_jailbreak_port() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_jailbreak_port()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"Launchd JBserver (TODO)",
+//            @"detailTextLabel": detect_launchd_jbserver() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_launchd_jbserver()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"TrollStore",
+//            @"detailTextLabel": detect_trollstore_app() ? @"Detected" : @"Not Detected",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_trollstore_app()) }];
+//    [jailbreakCheckItems addObject:@{
+//            @"textLabel": @"Passcode Status",
+//            @"detailTextLabel": detect_passcode_status() ? @"Passcode Set" : @"No Passcode",
+//            @"type": @"info",
+//            @"isInstalled": @(detect_passcode_status()) }];
     
     // Update menuData
     self.menuData = @[
@@ -359,11 +374,10 @@
         },
         @{
             @"groupTitle": Localized(@"Location Security"),
-            @"items": locationSpoofingItems,
+            @"items": locationSpoofingItems
         },
         @{
-                    @"groupTitle": @"Jailbreak Checks",
-                    @"items": jailbreakCheckItems
+            @"groupTitle": @"Jailbreak Checks", @"items": jailbreakCheckItems
         },
     ].mutableCopy;
 }
@@ -488,6 +502,9 @@
 
             [self.navigationController presentViewController:alert animated:YES completion:nil];
         }
+    } else if ([item[@"type"] isEqualToString:@"view"]) {
+        JailbreakDetectorViewController *vc = [[item[@"viewController"] alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 

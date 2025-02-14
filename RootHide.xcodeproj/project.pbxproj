@@ -12,6 +12,7 @@
 		4C87F8082D4F80E9006FA447 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C87F8062D4F80DF006FA447 /* NetworkExtension.framework */; };
 		4C87F8092D4F80E9006FA447 /* NetworkExtension.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C87F8062D4F80DF006FA447 /* NetworkExtension.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4C96E2772D47AFB0004E7A25 /* headers in Resources */ = {isa = PBXBuildFile; fileRef = 4C96E2762D47AFB0004E7A25 /* headers */; };
+		4CCA0F382D5F8E8A006A86E5 /* JailbreakDetectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCA0F372D5F8E8A006A86E5 /* JailbreakDetectorViewController.m */; };
 		8477B5E22A7526AB000632D0 /* NSJSONSerialization+Comments.m in Sources */ = {isa = PBXBuildFile; fileRef = 8477B5E02A7526AB000632D0 /* NSJSONSerialization+Comments.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8477B6052A866437000632D0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8477B6072A866437000632D0 /* Localizable.strings */; };
 		848148292D131A2800CB9FA9 /* AppDataCleaner.m in Sources */ = {isa = PBXBuildFile; fileRef = 848148282D131A2800CB9FA9 /* AppDataCleaner.m */; };
@@ -47,6 +48,8 @@
 		4C87F8062D4F80DF006FA447 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		4C96E2762D47AFB0004E7A25 /* headers */ = {isa = PBXFileReference; lastKnownFileType = folder; path = headers; sourceTree = "<group>"; };
 		4C96E2782D47B1E6004E7A25 /* detection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = detection.h; sourceTree = "<group>"; };
+		4CCA0F362D5F8E28006A86E5 /* JailbreakDetectorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JailbreakDetectorViewController.h; sourceTree = "<group>"; };
+		4CCA0F372D5F8E8A006A86E5 /* JailbreakDetectorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JailbreakDetectorViewController.m; sourceTree = "<group>"; };
 		842F23E52AA321E900EE2E9A /* libroothide.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libroothide.tbd; sourceTree = "<group>"; };
 		842F706A2ACB58BB002E5574 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
 		8438C17D2AB3361A001BAB8C /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -141,6 +144,8 @@
 				4C35F6CF2D43532200FEE954 /* jbroot.m */,
 				4C11A75E2D47A94E0027F7CE /* detection.m */,
 				4C96E2782D47B1E6004E7A25 /* detection.h */,
+				4CCA0F362D5F8E28006A86E5 /* JailbreakDetectorViewController.h */,
+				4CCA0F372D5F8E8A006A86E5 /* JailbreakDetectorViewController.m */,
 			);
 			path = RootHide;
 			sourceTree = "<group>";
@@ -249,6 +254,7 @@
 				A672ABC527F748E100878787 /* main.m in Sources */,
 				8477B5E22A7526AB000632D0 /* NSJSONSerialization+Comments.m in Sources */,
 				848148292D131A2800CB9FA9 /* AppDataCleaner.m in Sources */,
+				4CCA0F382D5F8E8A006A86E5 /* JailbreakDetectorViewController.m in Sources */,
 				BFA3034B2A47EBA800DC242C /* BlacklistViewController.m in Sources */,
 				BF0FF1C12A5510CE00FFA27E /* ZFCheckbox.m in Sources */,
 				BFD8B9732A4BD68D007CCEB8 /* SettingViewController.m in Sources */,
