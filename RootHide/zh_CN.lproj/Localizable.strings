@@ -43,3 +43,5 @@
 "restore failed: %@" = "还原失败: %@";
 "hide failed: %@" = "隐藏失败: %@";
 
+"*WARNING*: Don't touch any other files in /private/preboot/, otherwise it will cause bootloop" = "警告: 不要触碰 /private/preboot/ 中的任何其他文件，否则会导致启动循环\n\n从路径中定位最后一个斜杠，提取其后的名称，作为需删除的文件(目录)名。\n\n例如：/private/preboot/xxx/aaa\n 应删除 aaa 目录，而非 xxx 目录。";
+"legacy rootless jailbreak Detected" = "检测到遗留的无根越狱";
