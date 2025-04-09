@@ -50,7 +50,7 @@
     int selected = 0;
     for(NSDictionary* group in self.tableData) {
         for(NSMutableDictionary* item in group[@"items"]) {
-            if(![item[@"checked"] boolValue]) {
+            if(![item[@"checked"] boolValue] && ![item[@"ignored"] boolValue]) {
                 item[@"checked"] = @YES;
                 selected++;
             }
@@ -119,32 +119,56 @@
         for (NSString *file in contents) {
             
             BOOL checked = NO;
-            
-            // customed default priority
-            NSString* _default = customedRuleItem[@"default"];
-            
-            if(!_default) _default = ruleItem[@"default"];
+            BOOL ignored = NO;
             
             // blacklist priority
-            if([self checkFileInList:file List:blackList] || [self checkFileInList:file List:customedBlackList])
+            if([self checkFileInList:file List:blackList])
+            {
+                if([self checkFileInList:file List:customedWhiteList]) {
+                    ignored = YES;
+                    checked = NO;
+                } else {
+                    checked = YES;
+                }
+            }
+            else if([self checkFileInList:file List:customedBlackList])
             {
                 checked = YES;
             }
-            else if([self checkFileInList:file List:whiteList] || [self checkFileInList:file List:customedWhiteList])
+            else if([self checkFileInList:file List:whiteList])
             {
                 continue;
             }
-            else if(_default && [_default isEqualToString:@"blacklist"])
+            else if([ruleItem[@"default"] isEqualToString:@"blacklist"])
             {
-                checked = YES;
+                if([self checkFileInList:file List:customedWhiteList] || [customedRuleItem[@"default"] isEqualToString:@"whitelist"]) {
+                    ignored = YES;
+                    checked = NO;
+                }
+                else {
+                    checked = YES;
+                }
             }
-            else if(_default && [_default isEqualToString:@"whitelist"])
+            else if([ruleItem[@"default"] isEqualToString:@"whitelist"])
             {
-                continue;
+                if([customedRuleItem[@"default"] isEqualToString:@"blacklist"]) {
+                    checked = YES;
+                } else {
+                    continue;
+                }
             }
             else
             {
-                checked = NO;
+                if([self checkFileInList:file List:customedWhiteList] || [customedRuleItem[@"default"] isEqualToString:@"whitelist"]) {
+                    ignored = YES;
+                    checked = NO;
+                }
+                else if([customedRuleItem[@"default"] isEqualToString:@"blacklist"]) {
+                    checked = YES;
+                }
+                else {
+                    checked = NO;
+                }
             }
             
             if(keepState)
@@ -157,7 +181,9 @@
                         {
                             if([item[@"name"] isEqualToString:file])
                             {
-                                checked = [item[@"checked"] boolValue];
+                                if(!ignored) {
+                                    checked = [item[@"checked"] boolValue];
+                                }
                                 break;
                             }
                         }
@@ -176,7 +202,8 @@
                 @"name": file,
                 @"path": filePath,
                 @"isFolder": @(isFolder),
-                @"checked": @(checked)
+                @"checked": @(checked),
+                @"ignored": @(ignored),
             }.mutableCopy;
             
             if(isFolder) {
@@ -206,6 +233,7 @@
     NSMutableDictionary *customedRules = [NSMutableDictionary dictionaryWithContentsOfFile:customedRulesFilePath];
     
     [self updateForRules:rules customed:customedRules newData:newData keepState:keepState];
+    //continue processing the remaining paths that are not in the built-in list
     [self updateForRules:customedRules customed:nil newData:newData keepState:keepState];
 
     NSComparator sorter = ^NSComparisonResult(NSDictionary* a, NSDictionary* b)
@@ -334,6 +362,9 @@
     
     NSDictionary *item = items[indexPath.row];
     cell.textLabel.text =  [NSString stringWithFormat:@"%@ %@",[item[@"isFolder"] boolValue] ? @"🗂️" : @"📄", item[@"name"]];
+    if([item[@"ignored"] boolValue]) {
+        cell.textLabel.textColor = UIColor.grayColor;
+    }
     ZFCheckbox *checkbox = [[ZFCheckbox alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
     checkbox.userInteractionEnabled = FALSE; //passthrough to didSelectRowAtIndexPath
     [checkbox setSelected:[item[@"checked"] boolValue]];
@@ -364,6 +395,7 @@
         
         NSLog(@"open url %@", url);
         [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+        UIPasteboard.generalPasteboard.string = item[@"path"];
     }
 }
 

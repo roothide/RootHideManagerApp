@@ -205,9 +205,9 @@ BOOL isUUIDPathOf(NSString* path, NSString* parent)
 
 int proc_pidpath(int pid, void * buffer, uint32_t  buffersize);
 
-void killAllForApp(const char* bundlePath)
+void killAllForBundle(const char* bundlePath)
 {
-    NSLog(@"killAllForApp: %s", bundlePath);
+    NSLog(@"killAllForBundle: %s", bundlePath);
     
     char realBundlePath[PATH_MAX+1];
     if(!realpath(bundlePath, realBundlePath))
@@ -246,7 +246,7 @@ void killAllForApp(const char* bundlePath)
             if (realpath(executablePath, realExecutablePath)
                 && strncmp(realExecutablePath, realBundlePath, realBundlePathLen) == 0) {
                 int ret = kill(pid, SIGKILL);
-                NSLog(@"killAllForApp %s -> %d", realExecutablePath, ret);
+                NSLog(@"killAllForBundle %s -> %d", realExecutablePath, ret);
             }
         }
     }

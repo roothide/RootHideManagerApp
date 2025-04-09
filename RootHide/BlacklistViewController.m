@@ -11,11 +11,10 @@ BOOL isDefaultInstallationPath(NSString* path)
     return isUUIDPathOf(path, @"/private/var/containers/Bundle/Application/");
 }
 
-@interface PrivateApi_LSApplicationWorkspace
+@interface LSApplicationWorkspace : NSObject
++ (id)defaultWorkspace;
+- (NSArray*)allApplications;
 - (NSArray*)allInstalledApplications;
-- (bool)openApplicationWithBundleID:(id)arg1;
-- (NSArray*)privateURLSchemes;
-- (NSArray*)publicURLSchemes;
 @end
 
 @interface BlacklistViewController () {
@@ -195,9 +194,7 @@ BOOL isDefaultInstallationPath(NSString* path)
 
 - (NSArray*)updateData {
     NSMutableArray* applications = [NSMutableArray new];
-    PrivateApi_LSApplicationWorkspace* _workspace = [NSClassFromString(@"LSApplicationWorkspace") new];
-    NSArray* allInstalledApplications = [_workspace allInstalledApplications];
-    
+    NSArray* allInstalledApplications = [LSApplicationWorkspace.defaultWorkspace allInstalledApplications];
     for(id proxy in allInstalledApplications)
     {
         AppInfo* app = [AppInfo appWithPrivateProxy:proxy];
@@ -293,8 +290,8 @@ BOOL isDefaultInstallationPath(NSString* path)
         
         UIAlertAction* cleanAction = [UIAlertAction actionWithTitle:@"Clear App Data" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action)
         {
-            void killAllForApp(const char* bundlePath);
-            killAllForApp(app.bundleURL.path.UTF8String);
+            void killAllForBundle(const char* bundlePath);
+            killAllForBundle(app.bundleURL.path.UTF8String);
             
             NSString* error = nil;
             if(geteuid()==0 && getegid()==0) {
@@ -334,8 +331,8 @@ BOOL isDefaultInstallationPath(NSString* path)
     [appconfig setObject:@(switchInCell.on) forKey:app.bundleIdentifier];
     [AppDelegate setDefaults:appconfig forKey:@"appconfig"];
     
-    void killAllForApp(const char* bundlePath);
-    killAllForApp(app.bundleURL.path.UTF8String);
+    void killAllForBundle(const char* bundlePath);
+    killAllForBundle(app.bundleURL.path.UTF8String);
     
 }
 @end

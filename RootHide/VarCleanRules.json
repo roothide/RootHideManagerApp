@@ -179,6 +179,8 @@
 
 	"/var/mobile" : {
 		"whitelist":[
+            ".fseventsd",
+            ".DocumentRevisions-V100",
 			"Applications",
 			"Containers",
 			"Documents",
@@ -376,6 +378,7 @@
             "OSIntelligence",
             "Phone",
             "Seymour",
+            "UnifiedAssetFramework",
 		],
 		"blacklist":[
 			"Sileo",
@@ -458,6 +461,7 @@
 			"videosubscriptionsd",
             "CNDuplication",
             "icloudsubscriptionoptimizerd",
+            "networkserviceproxy",
             
 		],
 		"blacklist":[
@@ -514,6 +518,8 @@
 			"mediaanalysisd-service",
 			"rtcreportingd",
 			"sharedCaches",
+            "Backup",
+            "ssu",
 		],
 		"blacklist":[
 			"ImageTables", //Filza
@@ -599,6 +605,10 @@
             "recommendations",
             "journeys",
             "ClonedAXAsset",
+            "internal",
+            "modelDataBlob.mlmodelc",
+            "SoftwareUpdateCore",
+            "CalNotificationsAvailable",
         ],
         "blacklist":[
         ]
