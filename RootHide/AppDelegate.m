@@ -169,7 +169,7 @@
         
         NSMutableArray* items = [NSMutableArray new];
         [prebootContentSet.allObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [items addObject:[NSString stringWithFormat:@"\"%@/%@\"",[path stringByResolvingSymlinksInPath],obj]];
+            [items addObject:[NSString stringWithFormat:@"\"%@\"",obj]];
         }];
 
         [AppDelegate showMessage:[NSString stringWithFormat:@"\n%@\n\n\n(%@)",
