@@ -75,6 +75,13 @@
             ".keep_symlinks",
 		]
 	},
+    "/var/MobileSoftwareUpdate/mnt1" : {
+        "default" : "blacklist",
+        "whitelist":[
+        ],
+        "blacklist":[
+        ]
+    },
 	"/var/log" : {
         "default" : "blacklist",
 		"whitelist":[
@@ -86,7 +93,6 @@
 		"blacklist":[
 		]
 	},
-	
 	"/var/containers" : {
 		"whitelist":[
 			"Bundle",
@@ -197,6 +203,58 @@
             "Serotonin.jp2",
         ]
 	},
+    "/var/mobile/Media" : {
+        "default" : "whitelist",
+        "whitelist":[
+            {"match":"regexp", "name":"^com\\.apple\\."},
+            "AirFair",
+            "Books",
+            "CloudAssets",
+            "DCIM",
+            "Deferred",
+            "Downloads",
+            "EnhancedAudioSharedKeys",
+            "Espresso",
+            "LoFiCloudAssets",
+            "ManagedPurchases",
+            "MediaAnalysis",
+            "Music",
+            "PhotoData",
+            "PhotoStreamsData",
+            "Photos",
+            "Podcasts",
+            "PublicStaging",
+            "Purchases",
+            "Radio",
+            "Recordings",
+            "Vibrations",
+            "iTunes_Control",
+        ],
+        "blacklist":[
+            {"match":"include", "name":"Auto"},
+            {"match":"include", "name":"Touch"},
+            {"match":"include", "name":"Theme"},
+            {"match":"include", "name":"Script"},
+            "Cydia",
+            "CatScript",
+            "TrollRecorder",
+            ".evasi0n7_installed",
+            ".loli",
+            "blackb0x.log",
+            "Divise",
+            ".bootstrapped_electraRemover",
+            "install",
+            "log.txt",
+            "p0laris",
+            ".Trash",
+            "spirit",
+            "TouchSprite",
+            ".bootstrapped_Th0r_remover",
+            "AppRank",
+            "KDTScript",
+            "NeonStaticClockIcon.png",
+        ]
+    },
     "/var/mobile/Documents" : {
         "whitelist":[
             {"match":"regexp", "name":"^com\\.apple\\."},

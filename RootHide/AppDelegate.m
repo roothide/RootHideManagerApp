@@ -152,38 +152,93 @@
     
     self.window.rootViewController = tabBarController;
     
-    struct statfs s={0};
-    statfs("/usr/standalone/firmware", &s);
-    NSString* path = [NSString stringWithFormat:@"%s/../../../", s.f_mntfromname];
-    NSArray* defaultContent = @[
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    NSMutableArray* prebootDefaultContents = @[
+        @".fseventsd",
+        @"active",
+        @"cryptex1",
+        @"Cryptexes",
+    ].mutableCopy;
+    
+    NSArray* activedBootDefaultContents = @[
         @"AppleInternal",
         @"private",
         @"System",
         @"usr",
         @"LocalPolicy.cryptex1.img4", //ios16+?
     ];
-    NSArray* prebootContent = [NSFileManager.defaultManager contentsOfDirectoryAtPath:path error:nil];
-    NSMutableSet* prebootContentSet = [NSMutableSet setWithArray:prebootContent];
-    [prebootContentSet minusSet:[NSSet setWithArray:defaultContent]];
-    if(prebootContentSet.count > 0) {
+    
+    NSError* error = nil;
+    NSString* activedBootHash = [NSString stringWithContentsOfFile:@"/private/preboot/active" encoding:NSUTF8StringEncoding error:&error];
+    if(activedBootHash && activedBootHash.length>0 && error==nil)
+    {
+        [prebootDefaultContents addObject:activedBootHash];
         
-        NSMutableArray* items = [NSMutableArray new];
-        [prebootContentSet.allObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [items addObject:[NSString stringWithFormat:@"\"%@\"",obj]];
-        }];
+        NSArray* prebootContent = [NSFileManager.defaultManager contentsOfDirectoryAtPath:@"/private/preboot" error:nil];
+        
+        NSArray* activedBootContent = [NSFileManager.defaultManager contentsOfDirectoryAtPath:[@"/private/preboot" stringByAppendingPathComponent:activedBootHash] error:nil];
+        
+        NSMutableSet* prebootContentUnknownSet = [NSMutableSet setWithArray:prebootContent];
+        [prebootContentUnknownSet minusSet:[NSSet setWithArray:prebootDefaultContents]];
+        
+        NSMutableSet* activedBootContentUnknownSet = [NSMutableSet setWithArray:activedBootContent];
+        [activedBootContentUnknownSet minusSet:[NSSet setWithArray:activedBootDefaultContents]];
+        
+        NSArray* unknownContents = [prebootContentUnknownSet.allObjects arrayByAddingObjectsFromArray:activedBootContentUnknownSet.allObjects];
+        
+        if(unknownContents.count > 0)
+        {
+            NSMutableArray* items = [NSMutableArray new];
+            [unknownContents enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                [items addObject:[NSString stringWithFormat:@"\"%@\"",obj]];
+            }];
+            
+            [AppDelegate showMessage:[NSString stringWithFormat:@"\n%@\n\n\n(%@)", [items componentsJoinedByString:@"\n\n"],
+                                      Localized(@"*WARNING*: Don't touch any other files in /private/preboot/, otherwise it will cause bootloop")]
+                               title:Localized(@"legacy rootless jailbreak Detected")];
+            
+            pid_t pid=0;
+            char* args[] = {"/sbin/mount", "-u", "-w", "/private/preboot", NULL};
+            posix_spawn(&pid, args[0], NULL, NULL, args, NULL);
+            if(pid > 0) {
+                int status=0;
+                waitpid(pid, &status, 0);
+            }
+        }
+    }
+    else
+    {
+        [AppDelegate showMessage:Localized(@"Error") title:Localized(@"Unknown preboot system")];
+    }
 
-        [AppDelegate showMessage:[NSString stringWithFormat:@"\n%@\n\n\n(%@)",
-                                  [items componentsJoinedByString:@"\n\n"],
-                                  Localized(@"*WARNING*: Don't touch any other files in /private/preboot/, otherwise it will cause bootloop")]
-                           title:Localized(@"legacy rootless jailbreak Detected")];
+    
+    NSArray* defaultBindMounts = @[
+        @"/usr/standalone/firmware",
+        @"/System/Library/Pearl/ReferenceFrames",
+        @"/System/Library/Caches/com.apple.factorydata",
+    ];
+    
+    NSMutableArray* unknownBindMounts = [NSMutableArray new];
+    
+    struct statfs * ss=NULL;
+    int n = getmntinfo(&ss, 0); //MNT_NOWAIT);
+    for(int i=0; i<n; i++) {
+        if(strcmp(ss[i].f_fstypename,"bindfs")==0) {
+            if(![defaultBindMounts containsObject:@(ss[i].f_mntonname)]) {
+                [unknownBindMounts addObject:@(ss[i].f_mntonname)];
+            }
+        }
+    }
+    
+    if(unknownBindMounts.count > 0)
+    {
+        NSMutableArray* items = [NSMutableArray new];
+        for(NSString* mnt in unknownBindMounts) {
+            [items addObject:[NSString stringWithFormat:@"\n\"%@\"", mnt]];
+        }
         
-        char* args[] = {"/sbin/mount", "-u", "-w", "/private/preboot", NULL};
-        
-        pid_t pid=0;
-        assert(posix_spawn(&pid, args[0], NULL, NULL, args, NULL) == 0);
-        
-        int status=0;
-        waitpid(pid, &status, 0);
+        [AppDelegate showMessage:[items componentsJoinedByString:@"\n"] title:Localized(@"Unknown Bindfs Mount(s) Detected")];
     }
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{

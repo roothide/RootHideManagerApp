@@ -262,7 +262,7 @@ BOOL isDefaultInstallationPath(NSString* path)
     [theSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
     
     if(blacklistDisabled) {
-        theSwitch.enabled = NO;
+        //theSwitch.enabled = NO;
         [theSwitch setOn:NO];
     }
     
@@ -321,6 +321,22 @@ BOOL isDefaultInstallationPath(NSString* path)
 - (void)switchChanged:(id)sender {
     // https://stackoverflow.com/questions/31063571/getting-indexpath-from-switch-on-uitableview
     UISwitch *switchInCell = (UISwitch *)sender;
+    
+    if(blacklistDisabled)
+    {
+        [switchInCell setOn:NO];
+        
+        NSString* msg = Localized(@"Blacklist is not supported in current environment.");
+        if([NSFileManager.defaultManager fileExistsAtPath:jbroot(@"/.bootstrapped")]
+           || [NSFileManager.defaultManager fileExistsAtPath:jbroot(@"/.thebootstrapped")]) {
+            msg = [NSString stringWithFormat:@"%@ %@",msg,Localized(@"Just disable tweaks for this app in the AppList of Bootstrap.")];
+        }
+        
+        [AppDelegate showMessage:msg title:@""];
+        
+        return;
+    }
+    
     CGPoint pos = [switchInCell convertPoint:switchInCell.bounds.origin toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:pos];
     
