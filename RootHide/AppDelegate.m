@@ -171,13 +171,14 @@
     
     NSError* error = nil;
     NSString* activedBootHash = [NSString stringWithContentsOfFile:@"/private/preboot/active" encoding:NSUTF8StringEncoding error:&error];
-    if(activedBootHash && activedBootHash.length>0 && error==nil)
+    NSString* activedBootPath = (activedBootHash && activedBootHash.length>0 && error==nil) ? [@"/private/preboot" stringByAppendingPathComponent:activedBootHash] : nil;
+    if(activedBootHash && [NSFileManager.defaultManager fileExistsAtPath:activedBootPath])
     {
         [prebootDefaultContents addObject:activedBootHash];
         
         NSArray* prebootContent = [NSFileManager.defaultManager contentsOfDirectoryAtPath:@"/private/preboot" error:nil];
         
-        NSArray* activedBootContent = [NSFileManager.defaultManager contentsOfDirectoryAtPath:[@"/private/preboot" stringByAppendingPathComponent:activedBootHash] error:nil];
+        NSArray* activedBootContent = [NSFileManager.defaultManager contentsOfDirectoryAtPath:activedBootPath error:nil];
         
         NSMutableSet* prebootContentUnknownSet = [NSMutableSet setWithArray:prebootContent];
         [prebootContentUnknownSet minusSet:[NSSet setWithArray:prebootDefaultContents]];
@@ -209,7 +210,7 @@
     }
     else
     {
-        [AppDelegate showMessage:Localized(@"Error") title:Localized(@"Unknown preboot system")];
+        [AppDelegate showMessage:[NSString stringWithFormat:@"%@: %@\n\n%@",Localized(@"Unknown preboot system"),activedBootHash,error] title:Localized(@"Error")];
     }
 
     

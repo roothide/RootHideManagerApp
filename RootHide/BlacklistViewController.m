@@ -337,6 +337,17 @@ BOOL isDefaultInstallationPath(NSString* path)
         return;
     }
     
+#ifdef __arm64e__
+    if (NSProcessInfo.processInfo.operatingSystemVersion.majorVersion == 15) {
+        static BOOL Alerted = NO;
+        if(!Alerted && switchInCell.on) {
+            Alerted = YES;
+            [AppDelegate showMessage:Localized(@"For iOS15 A12+ devices: the blacklisted app will have its app extension disabled, and may cause a spinlock panic when the app is running in the foreground. You can try to disable tweak injection in Choicy first.") title:Localized(@"Warning")];
+        }
+    }
+#endif
+
+    
     CGPoint pos = [switchInCell convertPoint:switchInCell.bounds.origin toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:pos];
     

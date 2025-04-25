@@ -75,14 +75,8 @@
             ".keep_symlinks",
 		]
 	},
-    "/var/MobileSoftwareUpdate/mnt1" : {
-        "default" : "blacklist",
-        "whitelist":[
-        ],
-        "blacklist":[
-        ]
-    },
-	"/var/log" : {
+    
+    "/var/log" : {
         "default" : "blacklist",
 		"whitelist":[
 			{"match":"regexp", "name":"^com\\.apple\\."},
@@ -93,6 +87,7 @@
 		"blacklist":[
 		]
 	},
+    
 	"/var/containers" : {
 		"whitelist":[
 			"Bundle",
@@ -670,5 +665,13 @@
         ],
         "blacklist":[
         ]
-    }
+    },
+    
+    "/var/MobileSoftwareUpdate/mnt1" : {
+        "default" : "blacklist",
+        "whitelist":[
+        ],
+        "blacklist":[
+        ]
+    },
 }
