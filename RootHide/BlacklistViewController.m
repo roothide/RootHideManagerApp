@@ -26,6 +26,7 @@ BOOL isDefaultInstallationPath(NSString* path)
     BOOL isFiltered;
     
     BOOL blacklistDisabled;
+    BOOL spinlockFixApplied;
 }
 
 @end
@@ -84,7 +85,8 @@ BOOL isDefaultInstallationPath(NSString* path)
     
     [self setTitle:Localized(@"Blacklist")];
     
-    blacklistDisabled = [[AppDelegate getDefaultsForKey:@"blacklistDisabled"] boolValue];
+    self->blacklistDisabled = [[AppDelegate getDefaultsForKey:@"blacklistDisabled"] boolValue];
+    self->spinlockFixApplied = [[AppDelegate getDefaultsForKey:@"spinlockFixApplied"] boolValue];
     
     isFiltered = false;
     
@@ -338,11 +340,11 @@ BOOL isDefaultInstallationPath(NSString* path)
     }
     
 #ifdef __arm64e__
-    if (NSProcessInfo.processInfo.operatingSystemVersion.majorVersion == 15) {
+    if (spinlockFixApplied && NSProcessInfo.processInfo.operatingSystemVersion.majorVersion==15) {
         static BOOL Alerted = NO;
         if(!Alerted && switchInCell.on) {
             Alerted = YES;
-            [AppDelegate showMessage:Localized(@"For iOS15 A12+ devices: the blacklisted app will have its app extension disabled, and may cause a spinlock panic when the app is running in the foreground. You can try to disable tweak injection in Choicy first.") title:Localized(@"Warning")];
+            [AppDelegate showMessage:Localized(@"\nFor iOS15 A12+ devices:\n\nthe blacklisted app will have its app extension disabled, and may cause a spinlock panic when the app is running in the foreground/background.\n\nYou can first try disabling tweak injection for this app in Choicy, and only blacklist the app if it doesn't work.") title:Localized(@"Warning")];
         }
     }
 #endif

@@ -12,6 +12,7 @@
 		8477B6052A866437000632D0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8477B6072A866437000632D0 /* Localizable.strings */; };
 		847EBF812D9B01DB0052E18F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 847EBF802D9B01DB0052E18F /* MobileCoreServices.framework */; };
 		848148292D131A2800CB9FA9 /* AppDataCleaner.m in Sources */ = {isa = PBXBuildFile; fileRef = 848148282D131A2800CB9FA9 /* AppDataCleaner.m */; };
+		848D86672DBC606D003C680F /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 848D86662DBC606D003C680F /* IOKit.framework */; };
 		84BBFAC92A7420100054A68E /* varCleanRules.json in Resources */ = {isa = PBXBuildFile; fileRef = 84BBFAC72A741C800054A68E /* varCleanRules.json */; };
 		A672ABB427F748DE00878787 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A672ABB327F748DE00878787 /* AppDelegate.m */; };
 		A672ABBF27F748E100878787 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A672ABBE27F748E100878787 /* Assets.xcassets */; };
@@ -44,6 +45,7 @@
 		8477B60A2A866CBA000632D0 /* entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = entitlements.plist; sourceTree = "<group>"; };
 		847EBF802D9B01DB0052E18F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		848148282D131A2800CB9FA9 /* AppDataCleaner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDataCleaner.m; path = AppDataCleaner/AppDataCleaner.m; sourceTree = "<group>"; };
+		848D86662DBC606D003C680F /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		84BBFAC72A741C800054A68E /* varCleanRules.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = varCleanRules.json; sourceTree = "<group>"; };
 		A672ABAF27F748DE00878787 /* RootHide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RootHide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A672ABB227F748DE00878787 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				848D86672DBC606D003C680F /* IOKit.framework in Frameworks */,
 				847EBF812D9B01DB0052E18F /* MobileCoreServices.framework in Frameworks */,
 				840A948D2C6C9F3C00180FFA /* libroothide.tbd in Frameworks */,
 			);
@@ -149,6 +152,7 @@
 		BFE9353B27F753D30022D46C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				848D86662DBC606D003C680F /* IOKit.framework */,
 				847EBF802D9B01DB0052E18F /* MobileCoreServices.framework */,
 				842F23E52AA321E900EE2E9A /* libroothide.tbd */,
 				BF69FE4D28123C7800542668 /* AVFoundation.framework */,

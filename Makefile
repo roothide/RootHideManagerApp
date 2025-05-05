@@ -26,6 +26,9 @@ RootHide_INSTALL_PATH = /Applications
 
 include $(THEOS_MAKE_PATH)/xcodeproj.mk
 
+before-all::
+	echo "#define VARCLEANRULESHASH" $$(cksum -o 3 RootHide/VarCleanRules.json | awk '{print $$1}') > RootHide/VarCleanRules.h
+
 clean::
 	rm -rf ./packages/*
 

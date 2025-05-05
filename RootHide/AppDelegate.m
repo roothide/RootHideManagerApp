@@ -1,14 +1,17 @@
 #import "AppDelegate.h"
+#import "VarCleanRules.h"
 #import "BlacklistViewController.h"
 #import "varCleanController.h"
 #import "SettingViewController.h"
 #include "NSJSONSerialization+Comments.h"
 
+#include <zlib.h>
+#include <spawn.h>
 #include <sys/mount.h>
+#include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <arpa/inet.h>
-#include <spawn.h>
+#include <IOKit/IOKitLib.h>
 
 @implementation AppDelegate
 
@@ -106,6 +109,11 @@
     NSLog(@"jsonPath=%@", jsonPath);
     NSData* jsonData = [NSData dataWithContentsOfFile:jsonPath];
     assert(jsonData != NULL);
+    
+    uLong hash = crc32(0, jsonData.bytes, (uInt)jsonData.length);
+    NSLog(@"hash=%lx", hash);
+    assert(hash==VARCLEANRULESHASH);
+    
     NSError* err;
     NSDictionary *rules = [NSJSONSerialization JSONObjectWithCommentedData:jsonData options:NSJSONReadingMutableContainers error:&err];
     if(err) NSLog(@"json error=%@", err);
@@ -156,7 +164,7 @@
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     NSMutableArray* prebootDefaultContents = @[
         @".fseventsd",
-        @"active",
+        @"active", //why don't some guys have this file on their devices?
         @"cryptex1",
         @"Cryptexes",
     ].mutableCopy;
@@ -169,10 +177,21 @@
         @"LocalPolicy.cryptex1.img4", //ios16+?
     ];
     
-    NSError* error = nil;
-    NSString* activedBootHash = [NSString stringWithContentsOfFile:@"/private/preboot/active" encoding:NSUTF8StringEncoding error:&error];
-    NSString* activedBootPath = (activedBootHash && activedBootHash.length>0 && error==nil) ? [@"/private/preboot" stringByAppendingPathComponent:activedBootHash] : nil;
-    if(activedBootHash && [NSFileManager.defaultManager fileExistsAtPath:activedBootPath])
+    NSMutableString* activedBootHash = [NSMutableString new];
+    io_registry_entry_t registryEntry = IORegistryEntryFromPath(kIOMainPortDefault, "IODeviceTree:/chosen");
+    if (registryEntry) {
+        CFDataRef bootManifestHashData = IORegistryEntryCreateCFProperty(registryEntry, CFSTR("boot-manifest-hash"), NULL, 0);
+        CFIndex bootManifestHashLength = CFDataGetLength(bootManifestHashData);
+        const UInt8* bytes = CFDataGetBytePtr(bootManifestHashData);
+        if(bytes) for(int i=0; i<bootManifestHashLength; i++) {
+            [activedBootHash appendFormat:@"%02X",bytes[i]];
+        }
+        CFRelease(bootManifestHashData);
+        IOObjectRelease(registryEntry);
+    }
+    
+    NSString* activedBootPath = (activedBootHash && activedBootHash.length>0) ? [@"/private/preboot" stringByAppendingPathComponent:activedBootHash] : nil;
+    if(activedBootHash && activedBootPath && [NSFileManager.defaultManager fileExistsAtPath:activedBootPath])
     {
         [prebootDefaultContents addObject:activedBootHash];
         
@@ -210,7 +229,7 @@
     }
     else
     {
-        [AppDelegate showMessage:[NSString stringWithFormat:@"%@: %@\n\n%@",Localized(@"Unknown preboot system"),activedBootHash,error] title:Localized(@"Error")];
+        [AppDelegate showMessage:[NSString stringWithFormat:@"%@: %@",Localized(@"Unknown preboot system"),activedBootHash] title:Localized(@"Error")];
     }
 
     
