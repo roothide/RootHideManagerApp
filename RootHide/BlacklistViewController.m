@@ -316,6 +316,10 @@ BOOL isDefaultInstallationPath(NSString* path)
         }];
         [appMenuAlert addAction:cancelAction];
         
+        //fix crashing on ipad
+        appMenuAlert.popoverPresentationController.sourceView = recognizer.view;
+        appMenuAlert.popoverPresentationController.sourceRect = recognizer.view.bounds;
+        
         [AppDelegate showAlert:appMenuAlert];
     }
 }
