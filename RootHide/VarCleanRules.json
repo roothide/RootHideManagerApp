@@ -118,6 +118,8 @@
 		],
 		"blacklist":[
 			".bash_history",
+            ".config", //FilzaTS Shell
+            ".local", //FilzaTS Shell
 		]
 	},
 	"/var/root/Library" : {

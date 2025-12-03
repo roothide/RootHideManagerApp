@@ -216,7 +216,7 @@
             
             [AppDelegate showMessage:[NSString stringWithFormat:@"\n%@\n\n\n(%@)", [items componentsJoinedByString:@"\n\n"],
                                       Localized(@"*WARNING*: Don't touch any other files in /private/preboot/, otherwise it will cause bootloop")]
-                               title:Localized(@"legacy rootless jailbreak Detected")];
+                               title:Localized(@"Warning: Legacy rootless jailbreak Detected")];
             
             pid_t pid=0;
             char* args[] = {"/sbin/mount", "-u", "-w", "/private/preboot", NULL};
@@ -258,7 +258,7 @@
             [items addObject:[NSString stringWithFormat:@"\n\"%@\"", mnt]];
         }
         
-        [AppDelegate showMessage:[items componentsJoinedByString:@"\n"] title:Localized(@"Unknown Bindfs Mount(s) Detected")];
+        [AppDelegate showMessage:[items componentsJoinedByString:@"\n"] title:Localized(@"Warning: Unknown Bindfs Mount(s) Detected")];
     }
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -271,7 +271,7 @@
         a.sin_port = htons(22);
 
         if(connect(s, (struct sockaddr*)&a, sizeof(a)) == 0) {
-            [AppDelegate showMessage:Localized(@"SSH Service has been installed, you can uninstall it via Sileo/Zebra.") title:Localized(@"SSH Detected")];
+            [AppDelegate showMessage:Localized(@"SSH Service has been installed, you can uninstall it via Sileo/Zebra.") title:Localized(@"Warning: SSH Detected")];
         }
         
         close(s);
@@ -287,7 +287,7 @@
         a.sin_port = htons(44);
 
         if(connect(s, (struct sockaddr*)&a, sizeof(a)) == 0) {
-            [AppDelegate showMessage:Localized(@"Dropbear has been installed, you can uninstall it via Sileo/Zebra.") title:Localized(@"SSH Detected")];
+            [AppDelegate showMessage:Localized(@"Dropbear has been installed, you can uninstall it via Sileo/Zebra.") title:Localized(@"Warning: SSH Detected")];
         }
         
         close(s);
@@ -303,11 +303,17 @@
         a.sin_port = htons(27042);
         
         if(connect(s, (struct sockaddr*)&a, sizeof(a)) == 0) {
-            [AppDelegate showMessage:Localized(@"Frida Service has been installed, you can uninstall it via Sileo/Zebra.") title:Localized(@"Frida Detected")];
+            [AppDelegate showMessage:Localized(@"Frida Service has been installed, you can uninstall it via Sileo/Zebra.") title:Localized(@"Warning: Frida Detected")];
         }
         
         close(s);
     });
+    
+    NSDictionary *proxySettings = (__bridge NSDictionary *)(CFNetworkCopySystemProxySettings());
+    NSNumber* vpn = proxySettings[(NSString *)kCFNetworkProxiesHTTPEnable];
+    if(vpn && vpn.boolValue) {
+        [AppDelegate showMessage:Localized(@"Some apps may refuse to run because a VPN/Proxy is enabled.") title:Localized(@"Warning: VPN/Proxy Detected")];
+    }
     
     return YES;
 }
