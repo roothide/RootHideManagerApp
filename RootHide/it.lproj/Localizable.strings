@@ -25,7 +25,7 @@
 "Got It" = "Fatto";
 
 "SSH Detected" = "SSH Rilevato";
-"SSH Service has been installed, you can uninstall it via Sileo/Zebra." = "Il servizio SSH è stato installato, puoi disintallarlo tramite Sileo/Zebra.";
+"SSH Server  has been installed, you can uninstall it via Sileo/Zebra." = "Il servizio SSH è stato installato, puoi disintallarlo tramite Sileo/Zebra.";
 
 "xinaA15 detected" = "xinaA15 Rilevato";
 

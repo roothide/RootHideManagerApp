@@ -25,7 +25,7 @@
 "Got It" = "明白了";
 
 "SSH Detected" = "检测到SSH";
-"SSH Service has been installed, you can uninstall it via Sileo/Zebra." = "SSH服务已经安装,您可以通过Sileo/Zebra卸载它.";
+"SSH Server  has been installed, you can uninstall it via Sileo/Zebra." = "SSH服务已经安装,您可以通过Sileo/Zebra卸载它.";
 
 "xinaA15 detected" = "检测到xinaA15";
 

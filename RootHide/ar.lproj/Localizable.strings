@@ -24,7 +24,7 @@
 "Got It" = "لقد فهمت";
 
 "SSH Detected" = "تم اكتشاف SSH";
-"SSH Service has been installed, you can uninstall it via Sileo/Zebra." = "تم تثبيت خدمة SSH، يمكنك إلغاء تثبيتها عبر Sileo أو Zebra.";
+"SSH Server  has been installed, you can uninstall it via Sileo/Zebra." = "تم تثبيت خدمة SSH، يمكنك إلغاء تثبيتها عبر Sileo أو Zebra.";
 
 "xinaA15 detected" = "تم اكتشاف XinaA15";
 

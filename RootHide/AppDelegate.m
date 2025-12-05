@@ -60,10 +60,11 @@
 }
 
 + (void)showMessage:(NSString*)msg title:(NSString*)title {
-    
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:msg preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:Localized(@"Got It") style:UIAlertActionStyleDefault handler:nil]];
-    [self showAlert:alert];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:msg preferredStyle:UIAlertControllerStyleAlert]; //may crash if on non-main thread
+        [alert addAction:[UIAlertAction actionWithTitle:Localized(@"Got It") style:UIAlertActionStyleDefault handler:nil]];
+        [self showAlert:alert];
+    });
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -214,9 +215,9 @@
                 [items addObject:[NSString stringWithFormat:@"\"%@\"",obj]];
             }];
             
-            [AppDelegate showMessage:[NSString stringWithFormat:@"\n%@\n\n\n(%@)", [items componentsJoinedByString:@"\n\n"],
+            [AppDelegate showMessage:[NSString stringWithFormat:@"%@\n\n%@:\n\n%@\n\n(%@)",Localized(@"⚠️Jailbreak Detection Warning⚠️"), Localized(@"Legacy rootless jailbreak(s)"), [items componentsJoinedByString:@"\n\n"],
                                       Localized(@"*WARNING*: Don't touch any other files in /private/preboot/, otherwise it will cause bootloop")]
-                               title:Localized(@"Warning: Legacy rootless jailbreak Detected")];
+                               title:Localized(@"⚠️Warning⚠️")];
             
             pid_t pid=0;
             char* args[] = {"/sbin/mount", "-u", "-w", "/private/preboot", NULL};
@@ -258,23 +259,33 @@
             [items addObject:[NSString stringWithFormat:@"\n\"%@\"", mnt]];
         }
         
-        [AppDelegate showMessage:[items componentsJoinedByString:@"\n"] title:Localized(@"Warning: Unknown Bindfs Mount(s) Detected")];
+        [AppDelegate showMessage:[NSString stringWithFormat:@"%@\n\n%@:\n%@\n",Localized(@"⚠️Jailbreak Detection Warning⚠️"),Localized(@"Unknown Bindfs Mount(s)"),[items componentsJoinedByString:@"\n"]] title:Localized(@"⚠️Warning⚠️")];
     }
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         
-        int s = socket(AF_INET, SOCK_STREAM, 0);
-        
-        struct sockaddr_in a;
-        a.sin_family = AF_INET;
-        a.sin_addr.s_addr = inet_addr("127.0.0.1");
-        a.sin_port = htons(22);
-
-        if(connect(s, (struct sockaddr*)&a, sizeof(a)) == 0) {
-            [AppDelegate showMessage:Localized(@"SSH Service has been installed, you can uninstall it via Sileo/Zebra.") title:Localized(@"Warning: SSH Detected")];
+        int ports[] = { 22, 2222 };
+        for(int i=0; i<sizeof(ports)/sizeof(ports[0]); i++)
+        {
+            int s = socket(AF_INET, SOCK_STREAM, 0);
+            
+            struct sockaddr_in a;
+            a.sin_family = AF_INET;
+            a.sin_addr.s_addr = inet_addr("127.0.0.1");
+            a.sin_port = htons(ports[i]);
+            
+            BOOL detected = NO;
+            
+            if(connect(s, (struct sockaddr*)&a, sizeof(a)) == 0) {
+                [AppDelegate showMessage:[NSString stringWithFormat:@"%@\n\n%@\n",Localized(@"⚠️Jailbreak Detection Warning⚠️"),Localized(@"SSH Server has been installed, you can uninstall it via Sileo/Zebra.")] title:Localized(@"⚠️Warning⚠️")];
+                
+                detected = YES;
+            }
+            
+            close(s);
+            
+            if(detected) break;
         }
-        
-        close(s);
     });
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -287,7 +298,7 @@
         a.sin_port = htons(44);
 
         if(connect(s, (struct sockaddr*)&a, sizeof(a)) == 0) {
-            [AppDelegate showMessage:Localized(@"Dropbear has been installed, you can uninstall it via Sileo/Zebra.") title:Localized(@"Warning: SSH Detected")];
+            [AppDelegate showMessage:[NSString stringWithFormat:@"%@\n\n%@\n",Localized(@"⚠️Jailbreak Detection Warning⚠️"),Localized(@"Dropbear has been installed, you can uninstall it via Sileo/Zebra.")] title:Localized(@"⚠️Warning⚠️")];
         }
         
         close(s);
@@ -303,7 +314,7 @@
         a.sin_port = htons(27042);
         
         if(connect(s, (struct sockaddr*)&a, sizeof(a)) == 0) {
-            [AppDelegate showMessage:Localized(@"Frida Service has been installed, you can uninstall it via Sileo/Zebra.") title:Localized(@"Warning: Frida Detected")];
+            [AppDelegate showMessage:[NSString stringWithFormat:@"%@\n\n%@\n",Localized(@"⚠️Jailbreak Detection Warning⚠️"),Localized(@"Frida Server has been installed, you can uninstall it via Sileo/Zebra.")] title:Localized(@"⚠️Warning⚠️")];
         }
         
         close(s);
@@ -312,7 +323,7 @@
     NSDictionary *proxySettings = (__bridge NSDictionary *)(CFNetworkCopySystemProxySettings());
     NSNumber* vpn = proxySettings[(NSString *)kCFNetworkProxiesHTTPEnable];
     if(vpn && vpn.boolValue) {
-        [AppDelegate showMessage:Localized(@"Some apps may refuse to run because a VPN/Proxy is enabled.") title:Localized(@"Warning: VPN/Proxy Detected")];
+        [AppDelegate showMessage:[NSString stringWithFormat:@"%@\n\n%@\n",Localized(@"⚠️Jailbreak Detection Warning⚠️"),Localized(@"Some apps may refuse to run because a VPN/Proxy is enabled.")] title:Localized(@"⚠️Warning⚠️")];
     }
     
     return YES;
