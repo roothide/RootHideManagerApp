@@ -1,0 +1,45 @@
+
+"Blacklist" = "ブラックリスト";
+"name or identifier" = "名前　または　識別子";
+
+"varClean" = "varClean";
+"Clean" = "クリーン";
+"SelectAll" = "すべて選択";
+
+"Setting" = "設定";
+
+"General" = "一般";
+"Whitelist Mode" = "ホワイトリストモード";
+"auto blacklist newly installed apps" = "アプリがインストールされると自動で登録します";
+
+"Advanced" = "詳細";
+"Edit varClean Rules" = "varCleanの設定";
+"view the rules file in Filza" = "Filzaを起動しルールを編集します";
+
+"Misc" = "その他";
+"Hide xinaA15 Files" = "xinaA15のファイルを非表示にする";
+"hide xinaA15 files without uninstall it" = "アンインストールせずにxinaA15のファイルを非表示にします";
+
+
+
+"Got It" = "了解";
+
+"SSH Detected" = "SSHの検出";
+"SSH Service has been installed, you can uninstall it via Sileo/Zebra." = "SSHがインストールされています SileoまたはZebraを使用してアンインストールできます";
+
+"xinaA15 detected" = "xinaA15を検出";
+
+"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "xinaA15をアンインストールするかRootHideを使用して非表示にできます";
+
+"Process xinaA15 Files" = "xinaA15のファイルを処理しています";
+
+"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "xinaA15を非表示にしました 端末を再起動してください\n再度使用したい場合あとで復元できます";
+
+"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "xinaA15のファイルを復元しました 端末を再起動してxinaA15に切り替えてください";
+
+"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "複数のxinaA15のファイルを検出しました 手動で復元可能です:\n\n%s/";
+
+"restore failed: xinaA15 file not found!" = "復元に失敗: xinaA15のファイルが見つかりません";
+"restore failed: %@" = "復元に失敗: %@";
+"hide failed: %@" = "非表示に失敗: %@";
+

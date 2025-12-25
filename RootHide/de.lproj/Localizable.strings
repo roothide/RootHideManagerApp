@@ -1,0 +1,42 @@
+"Blacklist" = "Blacklist";
+
+"name or identifier" = "Name oder Identifier";
+
+"varClean" = "var Bereinigen";
+"Clean" = "Bereinigen";
+"SelectAll" = "Alles auswählen";
+
+"Setting" = "Einstellungen";
+
+"General" = "Allgemein";
+"Whitelist Mode" = "Whitelist-Modus";
+"auto blacklist newly installed apps" = "Automatische Blacklist für neu installierte Apps";
+
+"Advanced" = "Erweitert";
+"Edit varClean Rules" = "Regeln für \"var Bereinigen\" bearbeiten";
+"view the rules file in Filza" = "Regeldatei in Filza anzeigen";
+
+"Misc" = "Verschiedenes";
+"Hide xinaA15 Files" = "xinaA15-Dateien ausblenden";
+"hide xinaA15 files without uninstall it" = "xinaA15-Dateien ausblenden, ohne sie zu deinstallieren";
+
+"Got It" = "Verstanden";
+
+"SSH Detected" = "SSH erkannt";
+"SSH Server  has been installed, you can uninstall it via Sileo/Zebra." = "SSH-Dienst wurde installiert, Sie können ihn über Sileo/Zebra deinstallieren.";
+
+"xinaA15 detected" = "xinaA15 erkannt";
+
+"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "Die xinaA15-Jailbreak-Datei wurde installiert. Sie können sie über die xinaA15-App deinstallieren oder in den Einstellungen der RootHide-App ausblenden.";
+
+"Process xinaA15 Files" = "xinaA15-Dateien verarbeiten";
+
+"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "xinaA15-Dateien wurden ausgeblendet. Bitte starten Sie Ihr Gerät neu.\n\nSie können sie später wiederherstellen, wenn Sie xinaA15 erneut verwenden möchten.";
+
+"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "xinaA15-Dateien wurden wiederhergestellt. Sie können Ihr Gerät neu starten, um zu xinaA15 zu wechseln.";
+
+"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "Es gibt mehrere xinaA15-Jailbreak-Dateien. Sie können sie manuell wiederherstellen:\n\n%s/";
+
+"restore failed: xinaA15 file not found!" = "Wiederherstellung fehlgeschlagen: xinaA15-Datei nicht gefunden!";
+"restore failed: %@" = "Wiederherstellung fehlgeschlagen: %@";
+"hide failed: %@" = "Ausblenden fehlgeschlagen: %@";
