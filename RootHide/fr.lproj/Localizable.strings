@@ -1,0 +1,45 @@
+
+"Blacklist" = "Liste noire";
+"name or identifier" = "nom ou identifiant";
+
+"varClean" = "varClean";
+"Clean" = "Faire le ménage";
+"SelectAll" = "Tout sélectionner";
+
+"Setting" = "Paramètre";
+
+"General" = "Général";
+"Whitelist Mode" = "Mode liste blanche";
+"auto blacklist newly installed apps" = "liste noire automatique des applications nouvellement installées";
+
+"Advanced" = "Avancée";
+"Edit varClean Rules" = "Modifier les règles varClean";
+"view the rules file in Filza" = "afficher le fichier de règles dans Filza";
+
+"Misc" = "Divers";
+"Hide xinaA15 Files" = "Masquer les fichiers xinaA15";
+"hide xinaA15 files without uninstall it" = "masquer les fichiers xinaA15 sans les désinstaller";
+
+
+
+"Got It" = "J'ai compris";
+
+"SSH Detected" = "SSH détecté";
+"SSH Server  has been installed, you can uninstall it via Sileo/Zebra." = "Le Server SSH a été installé, vous pouvez le désinstaller via Sileo/Zebra.";
+
+"xinaA15 detected" = "xinaA15 détecté";
+
+"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "Le fichier jailbreak xinaA15 a été installé, vous pouvez le désinstaller via l'application xinaA15 ou le masquer dans les paramètres de l'application RootHide.";
+
+"Process xinaA15 Files" = "Traiter les fichiers xinaA15";
+
+"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "Les fichiers xinaA15 ont été masqués, veuillez redémarrer votre appareil.\n\vous pourrez le restaurer plus tard si vous souhaitez utiliser à nouveau xinaA15.";
+
+"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "Les fichiers xinaA15 ont été restaurés, vous pouvez redémarrer votre appareil pour passer à xinaA15.";
+
+"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "il existe plusieurs fichiers de jailbreak xinaA15, vous pouvez le restaurer manuellement :\n\n%s/";
+
+"restore failed: xinaA15 file not found!" = "échec de la restauration : fichier xinaA15 introuvable !";
+"restore failed: %@" = "échec de la restauration : %@";
+"hide failed: %@" = "échec du masquage : %@";
+
