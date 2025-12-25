@@ -1,0 +1,45 @@
+
+"Blacklist" = "Blacklist";
+"name or identifier" = "name or identifier";
+
+"varClean" = "varClean";
+"Clean" = "Clean";
+"SelectAll" = "SelectAll";
+
+"Setting" = "Setting";
+
+"General" = "General";
+"Whitelist Mode" = "Whitelist Mode";
+"auto blacklist newly installed apps" = "auto blacklist newly installed apps";
+
+"Advanced" = "Advanced";
+"Edit varClean Rules" = "Edit varClean Rules";
+"view the rules file in Filza" = "view the rules file in Filza";
+
+"Misc" = "Misc";
+"Hide xinaA15 Files" = "Hide xinaA15 Files";
+"hide xinaA15 files without uninstall it" = "hide xinaA15 files without uninstall it";
+
+
+
+"Got It" = "Got It";
+
+"SSH Detected" = "SSH Detected";
+"SSH Server  has been installed, you can uninstall it via Sileo/Zebra." = "SSH Server  has been installed, you can uninstall it via Sileo/Zebra.";
+
+"xinaA15 detected" = "xinaA15 detected";
+
+"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app.";
+
+"Process xinaA15 Files" = "Process xinaA15 Files";
+
+"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again.";
+
+"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "xinaA15 files has been restored, you can reboot your device to switch to xinaA15.";
+
+"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/";
+
+"restore failed: xinaA15 file not found!" = "restore failed: xinaA15 file not found!";
+"restore failed: %@" = "restore failed: %@";
+"hide failed: %@" = "hide failed: %@";
+
