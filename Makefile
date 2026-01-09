@@ -33,7 +33,7 @@ clean::
 	rm -rf ./packages/*
 
 before-package::
-	ldid -M -S./nickchan.entitlements ./.theos/_/Applications/RootHide.app/RootHide
+	ldid -M -S./nickchan.entitlements $(THEOS_STAGING_DIR)/Applications/RootHide.app/RootHide
 
 after-install::
 	install.exec 'uiopen -b com.roothide.manager'

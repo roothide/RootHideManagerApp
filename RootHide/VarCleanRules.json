@@ -36,6 +36,7 @@
             "dextcores",
             "staged_system_apps",
             "internal",
+            "iomfb_bics_daemon",
 		],
 		"blacklist":[
 			"jb",
@@ -73,6 +74,8 @@
 			"zshrc",
 			"master.passwd",
             ".keep_symlinks",
+            "QPEhelper", //com.ui.speed.tipa
+            "testrebuild", //com.ui.speed.tipa
 		]
 	},
     
@@ -139,6 +142,7 @@
 	"/var/root/Library/Application Support" : {
 		"whitelist":[
 			{"match":"regexp", "name":"^com\\.apple\\."},
+            "DumpPanic",
 		],
 		"blacklist":[
 		]
@@ -198,6 +202,7 @@
             ".ekenablelogging",
             ".eksafemode",
             "Serotonin.jp2",
+            "zp.unject.plist",
         ]
 	},
     "/var/mobile/Media" : {
@@ -517,6 +522,8 @@
             "CNDuplication",
             "icloudsubscriptionoptimizerd",
             "networkserviceproxy",
+            "Multitouch",
+            "AskPermission",
             
 		],
 		"blacklist":[
@@ -588,6 +595,9 @@
 			"xyz.willy.Zebra",
             "Cephei",
             "com.apple.Terminal",
+            "GDFileManagerCache.sqlite", //Filza
+            "GDFileManagerCache.sqlite-shm", //Filza
+            "GDFileManagerCache.sqlite-wal", //Filza
 		]
 	},
 	"/var/mobile/Library/Saved Application State" : {
@@ -648,6 +658,9 @@
             {"match":"regexp", "name":"^SOSBackup-.*-tomb"},
             {"match":"regexp", "name":"^CFNetworkDownload_"},
             {"match":"regexp", "name":"^NSIRD_installd_"},
+            {"match":"regexp", "name":"^NSIRD_nsurlsessiond_"},
+            {"match":"regexp", "name":"^NSIRD_contextstored_"},
+            {"match":"regexp", "name":"^modelDataBlob_"},
             ".LINKS",
             "MediaCache",
             "analytics",
@@ -664,16 +677,19 @@
             "modelDataBlob.mlmodelc",
             "SoftwareUpdateCore",
             "CalNotificationsAvailable",
+            "biokit_hw_issue_notification",
         ],
         "blacklist":[
         ]
     },
     
-    "/var/MobileSoftwareUpdate/mnt1" : {
-        "default" : "blacklist",
+    "/var/db/com.apple.xpc.roleaccountd.staging" : {
+        "default" : "whitelist",
         "whitelist":[
         ],
         "blacklist":[
+            {"match":"regexp", "name":"^exec-"},
+            "exec",
         ]
     },
 }

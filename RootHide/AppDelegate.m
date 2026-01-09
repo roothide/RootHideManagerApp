@@ -67,6 +67,10 @@
     });
 }
 
++ (void)showDetectionWarning:(NSString*)msg {
+    [AppDelegate showMessage:[NSString stringWithFormat:@"%@\n\n%@\n",Localized(@"⚠️Jailbreak Detection Warning⚠️"),msg] title:Localized(@"⚠️Warning⚠️")];
+}
+
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     __block int repeatCount=0;
     [NSTimer scheduledTimerWithTimeInterval:0.1 repeats:YES block:^(NSTimer* timer) {
@@ -215,9 +219,7 @@
                 [items addObject:[NSString stringWithFormat:@"\"%@\"",obj]];
             }];
             
-            [AppDelegate showMessage:[NSString stringWithFormat:@"%@\n\n%@:\n\n%@\n\n(%@)",Localized(@"⚠️Jailbreak Detection Warning⚠️"), Localized(@"Legacy rootless jailbreak(s)"), [items componentsJoinedByString:@"\n\n"],
-                                      Localized(@"*WARNING*: Don't touch any other files in /private/preboot/, otherwise it will cause bootloop")]
-                               title:Localized(@"⚠️Warning⚠️")];
+            [AppDelegate showDetectionWarning:[NSString stringWithFormat:@"%@:\n\n%@\n\n(%@)",Localized(@"Legacy rootless jailbreak(s)"), [items componentsJoinedByString:@"\n\n"], Localized(@"*WARNING*: Don't touch any other files in /private/preboot/, otherwise it will cause bootloop")]];
             
             pid_t pid=0;
             char* args[] = {"/sbin/mount", "-u", "-w", "/private/preboot", NULL};
@@ -259,7 +261,7 @@
             [items addObject:[NSString stringWithFormat:@"\n\"%@\"", mnt]];
         }
         
-        [AppDelegate showMessage:[NSString stringWithFormat:@"%@\n\n%@:\n%@\n",Localized(@"⚠️Jailbreak Detection Warning⚠️"),Localized(@"Unknown Bindfs Mount(s)"),[items componentsJoinedByString:@"\n"]] title:Localized(@"⚠️Warning⚠️")];
+        [AppDelegate showDetectionWarning:[NSString stringWithFormat:@"%@:\n%@\n",Localized(@"Unknown Bindfs Mount(s)"),[items componentsJoinedByString:@"\n"]]];
     }
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -277,7 +279,7 @@
             BOOL detected = NO;
             
             if(connect(s, (struct sockaddr*)&a, sizeof(a)) == 0) {
-                [AppDelegate showMessage:[NSString stringWithFormat:@"%@\n\n%@\n",Localized(@"⚠️Jailbreak Detection Warning⚠️"),Localized(@"SSH Server has been installed, you can uninstall it via Sileo/Zebra.")] title:Localized(@"⚠️Warning⚠️")];
+                [AppDelegate showDetectionWarning:Localized(@"SSH Server has been installed, you can uninstall it via Sileo/Zebra.")];
                 
                 detected = YES;
             }
@@ -298,7 +300,7 @@
         a.sin_port = htons(44);
 
         if(connect(s, (struct sockaddr*)&a, sizeof(a)) == 0) {
-            [AppDelegate showMessage:[NSString stringWithFormat:@"%@\n\n%@\n",Localized(@"⚠️Jailbreak Detection Warning⚠️"),Localized(@"Dropbear has been installed, you can uninstall it via Sileo/Zebra.")] title:Localized(@"⚠️Warning⚠️")];
+            [AppDelegate showDetectionWarning:Localized(@"Dropbear has been installed, you can uninstall it via Sileo/Zebra.")];
         }
         
         close(s);
@@ -314,7 +316,7 @@
         a.sin_port = htons(27042);
         
         if(connect(s, (struct sockaddr*)&a, sizeof(a)) == 0) {
-            [AppDelegate showMessage:[NSString stringWithFormat:@"%@\n\n%@\n",Localized(@"⚠️Jailbreak Detection Warning⚠️"),Localized(@"Frida Server has been installed, you can uninstall it via Sileo/Zebra.")] title:Localized(@"⚠️Warning⚠️")];
+            [AppDelegate showDetectionWarning:Localized(@"Frida Server has been installed, you can uninstall it via Sileo/Zebra.")];
         }
         
         close(s);
@@ -323,7 +325,7 @@
     NSDictionary *proxySettings = (__bridge NSDictionary *)(CFNetworkCopySystemProxySettings());
     NSNumber* vpn = proxySettings[(NSString *)kCFNetworkProxiesHTTPEnable];
     if(vpn && vpn.boolValue) {
-        [AppDelegate showMessage:[NSString stringWithFormat:@"%@\n\n%@\n",Localized(@"⚠️Jailbreak Detection Warning⚠️"),Localized(@"Some apps may refuse to run because a VPN/Proxy is enabled.")] title:Localized(@"⚠️Warning⚠️")];
+        [AppDelegate showDetectionWarning:Localized(@"Some apps may refuse to run because a VPN/Proxy is enabled.")];
     }
     
     return YES;

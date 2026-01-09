@@ -92,6 +92,26 @@
     [self.tableView.refreshControl endRefreshing];
 }
 
+NSArray* GetDirectoryContents(NSString* path)
+{
+    NSError* error=nil;
+    NSArray* contents = [NSFileManager.defaultManager contentsOfDirectoryAtPath:path error:&error];
+    if(!contents) {
+        NSLog(@"contentsOfDirectoryAtPath: %@ : %@", path, error);
+        return nil;
+    }
+    
+    NSMutableArray* result = [NSMutableArray new];
+    for(NSString* item in contents) {
+        NSString* fullPath = [path stringByAppendingPathComponent:item];
+
+        BOOL isDirectory = NO;
+        BOOL exists = [NSFileManager.defaultManager fileExistsAtPath:fullPath isDirectory:&isDirectory];
+        [result addObject:@{@"name":item, @"isDirectory":@(exists && isDirectory)}];
+    }
+    return result;
+}
+
 - (void)updateForRules:(NSDictionary*)rules customed:(NSMutableDictionary*)customedRules newData:(NSMutableArray*)newData keepState:(BOOL)keepState {
     for (NSString* path in rules) {
         NSMutableArray *folders = [[NSMutableArray alloc] init];
@@ -101,7 +121,21 @@
         
         NSFileManager *fileManager = [NSFileManager defaultManager];
         
-        NSArray *contents = [fileManager contentsOfDirectoryAtPath:path error:nil];
+        NSError* error=nil;
+        NSArray* contents = GetDirectoryContents(path);
+        if(!contents && [fileManager fileExistsAtPath:path])
+        {
+            if(geteuid()!=0 || getegid()!=0)
+            {
+                NSString* cacheFile = jbroot(@"/tmp/.dircontentscache");
+                BOOL RootUserGetDirectoryContents(NSString*, NSString*);
+                BOOL ret = RootUserGetDirectoryContents(path, cacheFile);
+                if(ret) {
+                    contents = [NSArray arrayWithContentsOfFile:cacheFile];
+                    [fileManager removeItemAtPath:cacheFile error:nil];
+                }
+            }
+        }
         
         NSArray *whiteList = ruleItem[@"whitelist"];
         NSArray *blackList = ruleItem[@"blacklist"];
@@ -116,7 +150,9 @@
             @"items": @[]
         }.mutableCopy;
         
-        for (NSString *file in contents) {
+        for (NSDictionary* item in contents) {
+            
+            NSString* file = item[@"name"];
             
             BOOL checked = NO;
             BOOL ignored = NO;
@@ -192,15 +228,13 @@
                 }
             }
             
-            NSString *filePath = [path stringByAppendingPathComponent:file];
+            NSString *fullPath = [path stringByAppendingPathComponent:file];
             
-            BOOL isDirectory = NO;
-            BOOL exists = [fileManager fileExistsAtPath:filePath isDirectory:&isDirectory];
-            BOOL isFolder = exists && isDirectory;
+            BOOL isFolder = [item[@"isDirectory"] boolValue];
             
             NSMutableDictionary *tableItem = @{
                 @"name": file,
-                @"path": filePath,
+                @"path": fullPath,
                 @"isFolder": @(isFolder),
                 @"checked": @(checked),
                 @"ignored": @(ignored),
@@ -217,6 +251,7 @@
         NSArray *sortedFolders = [folders sortedArrayUsingDescriptors:@[sortDescriptor]];
         NSArray *sortedFiles = [files sortedArrayUsingDescriptors:@[sortDescriptor]];
         
+        tableGroup[@"error"] = @(!contents && [fileManager fileExistsAtPath:path]);
         tableGroup[@"items"] = [[sortedFolders arrayByAddingObjectsFromArray:sortedFiles] mutableCopy];
         [newData addObject:tableGroup];
     }
@@ -351,6 +386,21 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     NSDictionary *groupData = self.tableData[section];
     return groupData[@"group"];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    NSDictionary *groupData = self.tableData[section];
+    UITableViewHeaderFooterView* header = (UITableViewHeaderFooterView*)view;
+    
+    if([groupData[@"error"] boolValue]) {
+        header.textLabel.textColor = UIColor.systemRedColor;
+    }
+    else if([groupData[@"items"] count] > 0) {
+        header.textLabel.textColor = UIColor.secondaryLabelColor;
+    }
+    else {
+        header.textLabel.textColor = UIColor.tertiaryLabelColor;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

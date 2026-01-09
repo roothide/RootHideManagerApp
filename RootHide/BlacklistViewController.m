@@ -328,19 +328,38 @@ BOOL isDefaultInstallationPath(NSString* path)
     // https://stackoverflow.com/questions/31063571/getting-indexpath-from-switch-on-uitableview
     UISwitch *switchInCell = (UISwitch *)sender;
     
+    CGPoint pos = [switchInCell convertPoint:switchInCell.bounds.origin toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:pos];
+    
+    AppInfo* app = isFiltered? filteredApps[indexPath.row] : appsArray[indexPath.row];
+    
     if(blacklistDisabled)
     {
         [switchInCell setOn:NO];
         
         NSString* msg = Localized(@"Blacklist is not supported in current environment.");
         if([NSFileManager.defaultManager fileExistsAtPath:jbroot(@"/.bootstrapped")]
-           || [NSFileManager.defaultManager fileExistsAtPath:jbroot(@"/.thebootstrapped")]) {
-            msg = [NSString stringWithFormat:@"%@ %@",msg,Localized(@"Just disable tweaks for this app in the AppList of Bootstrap.")];
+           || [NSFileManager.defaultManager fileExistsAtPath:jbroot(@"/.thebootstrapped")])
+        {
+            msg = Localized(@"Apps are blacklisted by default in current environment, just disable tweaks for this app in the AppList of Bootstrap.");
         }
         
         [AppDelegate showMessage:msg title:@""];
         
         return;
+    }
+    
+    
+    if([NSFileManager.defaultManager fileExistsAtPath:jbroot(@"/.thebootstrapped")])
+    {
+        if([NSFileManager.defaultManager fileExistsAtPath:[app.bundleURL.path stringByAppendingString:@"/../.appbackup"]]
+           || [NSFileManager.defaultManager fileExistsAtPath:[app.bundleURL.path stringByAppendingPathExtension:@"appbackup"]]
+           || [NSFileManager.defaultManager fileExistsAtPath:[app.bundleURL.path stringByAppendingPathComponent:@".jbroot"]])
+        {
+            [AppDelegate showMessage:Localized(@"This app is tweaked by Bootstrap, please disable tweak for it in the AppList of Bootstrap first.") title:@""];
+            [switchInCell setOn:NO];
+            return;
+        }
     }
     
 #ifdef __arm64e__
@@ -352,12 +371,6 @@ BOOL isDefaultInstallationPath(NSString* path)
         }
     }
 #endif
-
-    
-    CGPoint pos = [switchInCell convertPoint:switchInCell.bounds.origin toView:self.tableView];
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:pos];
-    
-    AppInfo* app = isFiltered? filteredApps[indexPath.row] : appsArray[indexPath.row];
     
     NSMutableDictionary* appconfig = [AppDelegate getDefaultsForKey:@"appconfig"];
     if(!appconfig) appconfig = [[NSMutableDictionary alloc] init];

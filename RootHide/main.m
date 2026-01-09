@@ -276,6 +276,18 @@ BOOL RootUserRemoveItemAtPath(NSString* path)
     return YES;
 }
 
+BOOL RootUserGetDirectoryContents(NSString* path, NSString* cacheFile)
+{
+    NSString* error=nil;
+    NSString* result=nil;
+    int ret = spawnRoot(NSBundle.mainBundle.executablePath, @[@"getDirectoryContents", path, cacheFile], &result, &error);
+    if(ret != 0) {
+        NSLog(@"getDirectoryContents failed: %@", error);
+        return NO;
+    }
+    return YES;
+}
+
 int main(int argc, char * argv[]) {
     
     //Keyboard Preference & Localized won't work
@@ -293,6 +305,17 @@ int main(int argc, char * argv[]) {
             if(![NSFileManager.defaultManager removeItemAtPath:@(argv[2]) error:&err]) {
                 fprintf(stderr, "%s", err.description.UTF8String);
                 return -1;
+            }
+            return 0;
+        }
+        if(argc==4 && strcmp(argv[1], "getDirectoryContents")==0) {
+            NSArray* GetDirectoryContents(NSString* path);
+            NSArray* contents = GetDirectoryContents(@(argv[2]));
+            if(!contents) {
+                return -1;
+            }
+            if(![contents writeToFile:@(argv[3]) atomically:YES]) {
+                return -2;
             }
             return 0;
         }
