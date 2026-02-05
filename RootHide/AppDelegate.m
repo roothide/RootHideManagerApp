@@ -104,6 +104,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
+    NSLog(@"didFinishLaunchingWithOptions uid=%d euid=%d gid=%d egid=%d issetugid=%d", getuid(), geteuid(), getgid(), getegid(), issetugid());
+    
     NSString* roothideDir = jbroot(@"/var/mobile/Library/RootHide");
     if(![NSFileManager.defaultManager fileExistsAtPath:roothideDir]) {
         NSDictionary* attr = @{NSFilePosixPermissions:@(0755), NSFileOwnerAccountID:@(501), NSFileGroupOwnerAccountID:@(501)};
