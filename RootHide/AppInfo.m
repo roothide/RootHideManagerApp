@@ -11,45 +11,15 @@
 
 #pragma mark -
 
-@interface PrivateApi_LSApplicationProxy
-
-+ (instancetype)applicationProxyForIdentifier:(NSString*)identifier;
-@property (nonatomic, readonly) NSString* localizedShortName;
-@property (nonatomic, readonly) NSString* localizedName;
-@property (nonatomic, readonly) NSString* bundleIdentifier;
-@property (nonatomic, readonly) NSString* bundleExecutable;
-@property (nonatomic, readonly) NSArray* appTags;
-
-@property (nonatomic, readonly) NSString *applicationDSID;
-@property (nonatomic, readonly) NSString *applicationIdentifier;
-@property (nonatomic, readonly) NSString *applicationType;
-@property (nonatomic, readonly) NSNumber *dynamicDiskUsage;
-@property (nonatomic, readonly) NSURL *bundleURL;
-@property (nonatomic, readonly) NSURL *containerURL;
-
-@property (nonatomic, readonly) NSArray *groupIdentifiers;
-@property (nonatomic, readonly) NSDictionary *groupContainerURLs;
-@property (nonatomic, readonly) NSNumber *itemID;
-@property (nonatomic, readonly) NSString *itemName;
-@property (nonatomic, readonly) NSString *minimumSystemVersion;
-@property (nonatomic, readonly) NSArray *requiredDeviceCapabilities;
-@property (nonatomic, readonly) NSString *roleIdentifier;
-@property (nonatomic, readonly) NSString *sdkVersion;
-@property (nonatomic, readonly) NSString *shortVersionString;
-@property (nonatomic, readonly) NSString *sourceAppIdentifier;
-@property (nonatomic, readonly) NSNumber *staticDiskUsage;
-@property (nonatomic, readonly) NSString *teamID;
-@property (nonatomic, readonly) NSString *vendorName;
-
-@property (nonatomic,readonly) NSArray<LSPlugInKitProxy *> *plugInKitPlugins;
-
-@end
-
-
 @implementation RHMInstalledAppInfo
 {
-    PrivateApi_LSApplicationProxy* _applicationProxy;
     UIImage* _icon;
+    LSApplicationProxy* _applicationProxy;
+}
+
+- (LSApplicationProxy*)applicationProxy
+{
+    return _applicationProxy;
 }
 
 - (NSString*)name
@@ -77,10 +47,6 @@
     return _icon;
 }
 
-- (NSString*)applicationDSID
-{
-    return _applicationProxy.applicationDSID;
-}
 - (NSURL*)bundleURL
 {
     return _applicationProxy.bundleURL;
@@ -89,19 +55,10 @@
 {
     return _applicationProxy.containerURL;
 }
-- (NSString*)applicationIdentifier
-{
-    return _applicationProxy.applicationIdentifier;
-}
 
 - (NSString*)applicationType
 {
     return _applicationProxy.applicationType;
-}
-
-- (NSArray*)groupIdentifiers
-{
-    return _applicationProxy.groupIdentifiers;
 }
 
 - (NSDictionary*)groupContainerURLs
@@ -109,49 +66,9 @@
     return _applicationProxy.groupContainerURLs;
 }
 
-- (NSNumber*)itemID
-{
-    return _applicationProxy.itemID;
-}
-
-- (NSString*)itemName
-{
-    return _applicationProxy.itemName;
-}
-
-- (NSString*)minimumSystemVersion
-{
-    return _applicationProxy.minimumSystemVersion;
-}
-
-- (NSArray*)requiredDeviceCapabilities
-{
-    return _applicationProxy.requiredDeviceCapabilities;
-}
-
-- (NSString*)sdkVersion
-{
-    return _applicationProxy.sdkVersion;
-}
-
-- (NSString*)shortVersionString
-{
-    return _applicationProxy.shortVersionString;
-}
-
-- (NSNumber*)staticDiskUsage
-{
-    return _applicationProxy.staticDiskUsage;
-}
-
 - (NSString*)teamID
 {
     return _applicationProxy.teamID;
-}
-
-- (NSString*)vendorName
-{
-    return _applicationProxy.vendorName;
 }
 
 - (NSArray<LSPlugInKitProxy *> *) plugInKitPlugins
@@ -169,7 +86,7 @@
     self = [super init];
     if(self != nil)
     {
-        _applicationProxy = (PrivateApi_LSApplicationProxy*)privateProxy;
+        _applicationProxy = (LSApplicationProxy*)privateProxy;
     }
     
     return self;

@@ -1,12 +1,18 @@
 
 "Blacklist" = "Blacklist";
 "name or identifier" = "name or identifier";
+"Clear App Data" = "Clear App Data";
+"Cleaned up" = "Cleaned Up";
+"Cancel" = "Cancel";
 
 "varClean" = "varClean";
 "Clean" = "Clean";
-"SelectAll" = "SelectAll";
+"SelectAll" = "Select All";
+"Scanning..." = "Scanning...";
+"Cleaning up..." = "Cleaning up...";
+"Rescanning files..." = "Rescanning files...";
 
-"Setting" = "Setting";
+"Settings" = "Settings";
 
 "General" = "General";
 "Whitelist Mode" = "Whitelist Mode";
@@ -16,30 +22,30 @@
 "Edit varClean Rules" = "Edit varClean Rules";
 "view the rules file in Filza" = "view the rules file in Filza";
 
-"Misc" = "Misc";
-"Hide xinaA15 Files" = "Hide xinaA15 Files";
-"hide xinaA15 files without uninstall it" = "hide xinaA15 files without uninstall it";
-
-
-
 "Got It" = "Got It";
+"Error" = "Error";
+"Warning" = "Warning";
+"URL" = "URL";
 
-"SSH Detected" = "SSH Detected";
-"SSH Server  has been installed, you can uninstall it via Sileo/Zebra." = "SSH Server  has been installed, you can uninstall it via Sileo/Zebra.";
+"⚠️Jailbreak Detection Warning⚠️" = "⚠️Jailbreak Detection Warning⚠️";
+"⚠️Warning⚠️" = "⚠️Warning⚠️";
+"Legacy rootless jailbreak(s)" = "Legacy rootless jailbreak(s)";
+"*WARNING*: Don't touch any other files in /private/preboot/, otherwise it will cause bootloop" = "*WARNING*: Don't touch any other files in /private/preboot/, otherwise it will cause a boot loop";
+"Unknown preboot system" = "Unknown preboot system";
+"Unknown Bindfs Mount(s)" = "Unknown Bindfs Mount(s)";
 
-"xinaA15 detected" = "xinaA15 detected";
+"SSH Server has been installed, you can uninstall it via Sileo/Zebra." = "SSH Server has been installed, you can uninstall it via Sileo/Zebra.";
+"Dropbear has been installed, you can uninstall it via Sileo/Zebra." = "Dropbear has been installed, you can uninstall it via Sileo/Zebra.";
+"Frida Server has been installed, you can uninstall it via Sileo/Zebra." = "Frida Server has been installed, you can uninstall it via Sileo/Zebra.";
+"Some apps may refuse to run because a VPN/Proxy is enabled." = "Some apps may refuse to run because a VPN/Proxy is enabled.";
 
-"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app.";
+"Blacklist is not supported in current environment." = "Blacklisting is not supported in the current environment.";
+"Apps are blacklisted by default in current environment, just disable tweaks for this app in the AppList of Bootstrap." = "Apps are blacklisted by default in the current environment. Just disable tweaks for this app in Bootstrap's AppList.";
+"This app is tweaked by Bootstrap, please disable tweak for it in the AppList of Bootstrap first." = "This app has tweaks enabled in Bootstrap. Please disable them in Bootstrap's AppList first.";
+"\nFor iOS15 A12+ devices:\n\nthe blacklisted app will have its app extension disabled, and may cause a spinlock panic when the app is running in the foreground/background.\n\nYou can first try disabling tweak injection for this app in Choicy, and only blacklist the app if it doesn't work." = "\nFor iOS 15 devices with A12 or newer chips:\n\nBlacklisting an app disables its app extensions and may cause a spinlock panic while the app is running in the foreground or background.\n\nTry disabling tweak injection for this app in Choicy first, and only blacklist it if that doesn't work.";
 
-"Process xinaA15 Files" = "Process xinaA15 Files";
-
-"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again.";
-
-"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "xinaA15 files has been restored, you can reboot your device to switch to xinaA15.";
-
-"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/";
-
-"restore failed: xinaA15 file not found!" = "restore failed: xinaA15 file not found!";
-"restore failed: %@" = "restore failed: %@";
-"hide failed: %@" = "hide failed: %@";
-
+"Failed to open db, error %d" = "Failed to open the database, error %d";
+"Failed to exec %@, error %d,%s" = "Failed to execute %@, error %d: %s";
+"Failed to remove app group container:\n%@" = "Failed to clear the app group container:\n%@";
+"Failed to remove app data container:\n%@" = "Failed to clear the app data container:\n%@";
+"Failed to remove app plugin container:\n%@" = "Failed to clear the app extension container:\n%@";

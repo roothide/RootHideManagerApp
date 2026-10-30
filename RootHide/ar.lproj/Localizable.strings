@@ -1,11 +1,17 @@
 "Blacklist" = "القائمة السوداء";
 "name or identifier" = "الاسم أو المعرف";
+"Clear App Data" = "مسح بيانات التطبيق";
+"Cleaned up" = "اكتمل التنظيف";
+"Cancel" = "إلغاء";
 
 "varClean" = "مسح مسار var";
 "Clean" = "مسح";
 "SelectAll" = "تحديد الكل";
+"Scanning..." = "جارٍ الفحص...";
+"Cleaning up..." = "جارٍ التنظيف...";
+"Rescanning files..." = "جارٍ إعادة فحص الملفات...";
 
-"Setting" = "الإعدادات";
+"Settings" = "الإعدادات";
 
 "General" = "عام";
 "Whitelist Mode" = "نمط القائمة البيضاء";
@@ -15,29 +21,30 @@
 "Edit varClean Rules" = "تعديل قواعد مسح مسار var";
 "view the rules file in Filza" = "عرض ملف القواعد في Filza.";
 
-"Misc" = "متنوع";
-"Hide xinaA15 Files" = "إخفاء ملفات XinaA15";
-"hide xinaA15 files without uninstall it" = "إخفاء ملفات XinaA15 دون إزالته.";
-
-
-
 "Got It" = "لقد فهمت";
+"Error" = "خطأ";
+"Warning" = "تحذير";
+"URL" = "الرابط";
 
-"SSH Detected" = "تم اكتشاف SSH";
-"SSH Server  has been installed, you can uninstall it via Sileo/Zebra." = "تم تثبيت خدمة SSH، يمكنك إلغاء تثبيتها عبر Sileo أو Zebra.";
+"⚠️Jailbreak Detection Warning⚠️" = "⚠️تحذير من اكتشاف الجيلبريك⚠️";
+"⚠️Warning⚠️" = "⚠️تحذير⚠️";
+"Legacy rootless jailbreak(s)" = "جيلبريك قديم من نوع rootless";
+"*WARNING*: Don't touch any other files in /private/preboot/, otherwise it will cause bootloop" = "*تحذير*: لا تعدّل أي ملفات أخرى في /private/preboot/، وإلا فسيدخل الجهاز في حلقة إعادة تشغيل";
+"Unknown preboot system" = "نظام preboot غير معروف";
+"Unknown Bindfs Mount(s)" = "عمليات تركيب Bindfs غير معروفة";
 
-"xinaA15 detected" = "تم اكتشاف XinaA15";
+"SSH Server has been installed, you can uninstall it via Sileo/Zebra." = "تم تثبيت خادم SSH، ويمكنك إلغاء تثبيته عبر Sileo/Zebra.";
+"Dropbear has been installed, you can uninstall it via Sileo/Zebra." = "تم تثبيت Dropbear، ويمكنك إلغاء تثبيته عبر Sileo/Zebra.";
+"Frida Server has been installed, you can uninstall it via Sileo/Zebra." = "تم تثبيت Frida Server، ويمكنك إلغاء تثبيته عبر Sileo/Zebra.";
+"Some apps may refuse to run because a VPN/Proxy is enabled." = "قد ترفض بعض التطبيقات العمل بسبب تفعيل VPN أو خادم وكيل.";
 
-"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "ملفات جيلبريك XinaA15 مثبتة، يمكنك إلغاء تثبيتها عبر تطبيق XinaA15 أو إخفائها من إعدادات تطبيق RootHide.";
+"Blacklist is not supported in current environment." = "القائمة السوداء غير مدعومة في البيئة الحالية.";
+"Apps are blacklisted by default in current environment, just disable tweaks for this app in the AppList of Bootstrap." = "تُدرج التطبيقات في القائمة السوداء افتراضيًا في البيئة الحالية. ما عليك سوى تعطيل التعديلات لهذا التطبيق في AppList ضمن Bootstrap.";
+"This app is tweaked by Bootstrap, please disable tweak for it in the AppList of Bootstrap first." = "التعديلات مفعّلة لهذا التطبيق عبر Bootstrap. يرجى تعطيلها أولًا في AppList ضمن Bootstrap.";
+"\nFor iOS15 A12+ devices:\n\nthe blacklisted app will have its app extension disabled, and may cause a spinlock panic when the app is running in the foreground/background.\n\nYou can first try disabling tweak injection for this app in Choicy, and only blacklist the app if it doesn't work." = "\nللأجهزة التي تعمل بنظام iOS 15 وتحتوي على شريحة A12 أو أحدث:\n\nتؤدي إضافة التطبيق إلى القائمة السوداء إلى تعطيل امتداداته، وقد تتسبب في انهيار النواة بسبب قفل دوراني أثناء تشغيل التطبيق في المقدمة أو الخلفية.\n\nجرّب أولًا تعطيل حقن التعديلات لهذا التطبيق في Choicy، ولا تضفه إلى القائمة السوداء إلا إذا لم تنجح هذه الطريقة.";
 
-"Process xinaA15 Files" = "معالجة ملفات XinaA15";
-
-"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "تم إخفاء ملفات XinaA15، يرجى إعادة تشغيل جهازك.\n\nيمكنك استعادتها لاحقا إذا كنت ترغب في استخدام XinaA15 مرةً أخرى.";
-
-"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "تمت استعادة ملفات XinaA15، يمكنك إعادة تشغيل جهازك لإكمال الانتقال إلى XinaA15.";
-
-"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "توجد عدة ملفات لجيلبريك XinaA15، يمكنك استعادة هذه الملفات يدويًا:\n\n%s/";
-
-"restore failed: xinaA15 file not found!" = "فشلت الاستعادة: تعذر العثور على ملف XinaA15!";
-"restore failed: %@" = "فشلت الاستعادة: %@";
-"hide failed: %@" = "فشل الإخفاء: %@";
+"Failed to open db, error %d" = "تعذر فتح قاعدة البيانات، الخطأ %d";
+"Failed to exec %@, error %d,%s" = "تعذر تنفيذ %@، الخطأ %d: %s";
+"Failed to remove app group container:\n%@" = "تعذر مسح حاوية مجموعة التطبيقات:\n%@";
+"Failed to remove app data container:\n%@" = "تعذر مسح حاوية بيانات التطبيق:\n%@";
+"Failed to remove app plugin container:\n%@" = "تعذر مسح حاوية امتداد التطبيق:\n%@";

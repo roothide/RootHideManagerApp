@@ -1,12 +1,18 @@
 
 "Blacklist" = "黑名单";
 "name or identifier" = "名字或者标识符";
+"Clear App Data" = "清除应用数据";
+"Cleaned up" = "清理完成";
+"Cancel" = "取消";
 
 "varClean" = "var清理";
 "Clean" = "清理";
 "SelectAll" = "选择全部";
+"Scanning..." = "正在扫描...";
+"Cleaning up..." = "正在清理...";
+"Rescanning files..." = "正在重新扫描文件...";
 
-"Setting" = "设置";
+"Settings" = "设置";
 
 "General" = "通用";
 "Whitelist Mode" = "白名单模式";
@@ -16,30 +22,30 @@
 "Edit varClean Rules" = "编辑清理var垃圾文件时的规则";
 "view the rules file in Filza" = "查看Filza中的规则文件";
 
-"Misc" = "其他";
-"Hide xinaA15 Files" = "隐藏xinaA15文件";
-"hide xinaA15 files without uninstall it" = "隐藏xinaA15文件而不卸载";
-
-
-
 "Got It" = "明白了";
+"Error" = "错误";
+"Warning" = "警告";
+"URL" = "链接";
 
-"SSH Detected" = "检测到SSH";
-"SSH Server  has been installed, you can uninstall it via Sileo/Zebra." = "SSH服务已经安装,您可以通过Sileo/Zebra卸载它.";
+"⚠️Jailbreak Detection Warning⚠️" = "⚠️越狱检测警告⚠️";
+"⚠️Warning⚠️" = "⚠️警告⚠️";
+"Legacy rootless jailbreak(s)" = "旧版无根越狱";
+"*WARNING*: Don't touch any other files in /private/preboot/, otherwise it will cause bootloop" = "*警告*：请勿改动 /private/preboot/ 中的任何其他文件，否则会导致设备循环重启";
+"Unknown preboot system" = "未知的 preboot 系统";
+"Unknown Bindfs Mount(s)" = "未知的 Bindfs 挂载";
 
-"xinaA15 detected" = "检测到xinaA15";
+"SSH Server has been installed, you can uninstall it via Sileo/Zebra." = "已安装 SSH 服务，您可以通过 Sileo/Zebra 卸载它。";
+"Dropbear has been installed, you can uninstall it via Sileo/Zebra." = "已安装 Dropbear，您可以通过 Sileo/Zebra 卸载它。";
+"Frida Server has been installed, you can uninstall it via Sileo/Zebra." = "已安装 Frida Server，您可以通过 Sileo/Zebra 卸载它。";
+"Some apps may refuse to run because a VPN/Proxy is enabled." = "由于启用了 VPN 或代理，部分应用可能拒绝运行。";
 
-"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "xinaA15越狱文件已安装,您可以通过xinaA1五应用程序卸载它，也可以将其隐藏在RootHide应用程序的设置中.";
+"Blacklist is not supported in current environment." = "当前环境不支持黑名单功能。";
+"Apps are blacklisted by default in current environment, just disable tweaks for this app in the AppList of Bootstrap." = "当前环境默认已将应用加入黑名单，只需在 Bootstrap 的 AppList 中关闭此应用的插件注入。";
+"This app is tweaked by Bootstrap, please disable tweak for it in the AppList of Bootstrap first." = "此应用已通过 Bootstrap 启用插件注入，请先在 Bootstrap 的 AppList 中关闭它。";
+"\nFor iOS15 A12+ devices:\n\nthe blacklisted app will have its app extension disabled, and may cause a spinlock panic when the app is running in the foreground/background.\n\nYou can first try disabling tweak injection for this app in Choicy, and only blacklist the app if it doesn't work." = "\n对于搭载 A12 或更新芯片的 iOS 15 设备：\n\n加入黑名单后，应用的扩展将被禁用，应用在前台或后台运行时可能触发自旋锁内核崩溃。\n\n您可以先尝试在 Choicy 中关闭此应用的插件注入，仅在无效时再将其加入黑名单。";
 
-"Process xinaA15 Files" = "处理xinaA15文件";
-
-"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "xinaA15文件已被隐藏，请重新启动您的设备.\n\n如果您想再次使用xina15,可以稍后恢复.";
-
-"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "xinaA15文件已还原,您可以重新启动设备以切换到xinaA15.";
-
-"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "有多个xinaA15越狱文件,您可以手动恢复:\n\n%s/";
-
-"restore failed: xinaA15 file not found!" = "还原失败：找不到xinaA15文件!";
-"restore failed: %@" = "还原失败: %@";
-"hide failed: %@" = "隐藏失败: %@";
-
+"Failed to open db, error %d" = "无法打开数据库，错误码 %d";
+"Failed to exec %@, error %d,%s" = "无法执行 %@，错误码 %d：%s";
+"Failed to remove app group container:\n%@" = "无法清空应用组容器：\n%@";
+"Failed to remove app data container:\n%@" = "无法清空应用数据容器：\n%@";
+"Failed to remove app plugin container:\n%@" = "无法清空应用扩展容器：\n%@";

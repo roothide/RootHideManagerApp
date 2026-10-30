@@ -4,12 +4,8 @@
 #include "AppDelegate.h"
 #import "AppInfo.h"
 
-BOOL isUUIDPathOf(NSString* path, NSString* parent);
-
-BOOL isDefaultInstallationPath(NSString* path)
-{
-    return isUUIDPathOf(path, @"/private/var/containers/Bundle/Application/");
-}
+bool hasTrollstoreMarker(const char* path);
+bool isRemovableBundlePath(const char* path);
 
 @interface LSApplicationWorkspace : NSObject
 + (id)defaultWorkspace;
@@ -204,7 +200,7 @@ BOOL isDefaultInstallationPath(NSString* path)
         //some apps can be installed in trollstore but detect jailbreak
         if(!app.isHiddenApp
            && ![app.bundleIdentifier hasPrefix:@"com.apple."]
-           && isDefaultInstallationPath(app.bundleURL.path))
+           && isRemovableBundlePath(app.bundleURL.path.fileSystemRepresentation))
         {
             [applications addObject:app];
         }
@@ -288,9 +284,11 @@ BOOL isDefaultInstallationPath(NSString* path)
         
         RHMInstalledAppInfo* app = isFiltered? filteredApps[indexPath.row] : appsArray[indexPath.row];
         
+        if(hasTrollstoreMarker(app.bundleURL.path.fileSystemRepresentation)) return;
+        
         UIAlertController* appMenuAlert = [UIAlertController alertControllerWithTitle:app.name?:@"" message:app.bundleIdentifier?:@"" preferredStyle:UIAlertControllerStyleActionSheet];
         
-        UIAlertAction* cleanAction = [UIAlertAction actionWithTitle:@"Clear App Data" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action)
+        UIAlertAction* cleanAction = [UIAlertAction actionWithTitle:Localized(@"Clear App Data") style:UIAlertActionStyleDefault handler:^(UIAlertAction* action)
         {
             void killAllForBundle(const char* bundlePath);
             killAllForBundle(app.bundleURL.path.UTF8String);
@@ -311,7 +309,7 @@ BOOL isDefaultInstallationPath(NSString* path)
         }];
         [appMenuAlert addAction:cleanAction];
         
-        UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction* action)
+        UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:Localized(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction* action)
         {
         }];
         [appMenuAlert addAction:cancelAction];

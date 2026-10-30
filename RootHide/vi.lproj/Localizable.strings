@@ -1,12 +1,18 @@
 
 "Blacklist" = "Blacklist";
 "name or identifier" = "tên hoặc định danh";
+"Clear App Data" = "Xóa dữ liệu ứng dụng";
+"Cleaned up" = "Đã dọn sạch";
+"Cancel" = "Hủy";
 
 "varClean" = "Dọn var";
 "Clean" = "Dọn sạch";
 "SelectAll" = "Chọn tất cả";
+"Scanning..." = "Đang quét...";
+"Cleaning up..." = "Đang dọn dẹp...";
+"Rescanning files..." = "Đang quét lại các tệp...";
 
-"Setting" = "Cài đặt";
+"Settings" = "Cài đặt";
 
 "General" = "Cài đặt chung";
 "Whitelist Mode" = "Chế độ Whitelist";
@@ -16,30 +22,30 @@
 "Edit varClean Rules" = "Sửa quy tắc dọn sạch /var";
 "view the rules file in Filza" = "Xem quy tắc file ở Filza";
 
-"Misc" = "Linh tinh";
-"Hide xinaA15 Files" = "Ẩn file XinaA15";
-"hide xinaA15 files without uninstall it" = "Ẩn file XinaA15 mà không gỡ cài đặt";
+"Got It" = "Đã hiểu";
+"Error" = "Lỗi";
+"Warning" = "Cảnh báo";
+"URL" = "URL";
 
+"⚠️Jailbreak Detection Warning⚠️" = "⚠️Cảnh báo phát hiện jailbreak⚠️";
+"⚠️Warning⚠️" = "⚠️Cảnh báo⚠️";
+"Legacy rootless jailbreak(s)" = "Các bản jailbreak rootless cũ";
+"*WARNING*: Don't touch any other files in /private/preboot/, otherwise it will cause bootloop" = "*CẢNH BÁO*: Không sửa đổi bất kỳ tệp nào khác trong /private/preboot/, nếu không thiết bị sẽ bị lặp khởi động";
+"Unknown preboot system" = "Hệ thống preboot không xác định";
+"Unknown Bindfs Mount(s)" = "Các điểm gắn Bindfs không xác định";
 
+"SSH Server has been installed, you can uninstall it via Sileo/Zebra." = "Máy chủ SSH đã được cài đặt, bạn có thể gỡ cài đặt qua Sileo/Zebra.";
+"Dropbear has been installed, you can uninstall it via Sileo/Zebra." = "Dropbear đã được cài đặt, bạn có thể gỡ cài đặt qua Sileo/Zebra.";
+"Frida Server has been installed, you can uninstall it via Sileo/Zebra." = "Frida Server đã được cài đặt, bạn có thể gỡ cài đặt qua Sileo/Zebra.";
+"Some apps may refuse to run because a VPN/Proxy is enabled." = "Một số ứng dụng có thể từ chối chạy vì VPN hoặc proxy đang được bật.";
 
-"Got It" = "Okay";
+"Blacklist is not supported in current environment." = "Môi trường hiện tại không hỗ trợ danh sách đen.";
+"Apps are blacklisted by default in current environment, just disable tweaks for this app in the AppList of Bootstrap." = "Trong môi trường hiện tại, các ứng dụng mặc định đã nằm trong danh sách đen. Bạn chỉ cần tắt tweak cho ứng dụng này trong AppList của Bootstrap.";
+"This app is tweaked by Bootstrap, please disable tweak for it in the AppList of Bootstrap first." = "Ứng dụng này đang được bật tweak qua Bootstrap. Vui lòng tắt tweak cho ứng dụng trong AppList của Bootstrap trước.";
+"\nFor iOS15 A12+ devices:\n\nthe blacklisted app will have its app extension disabled, and may cause a spinlock panic when the app is running in the foreground/background.\n\nYou can first try disabling tweak injection for this app in Choicy, and only blacklist the app if it doesn't work." = "\nĐối với thiết bị chạy iOS 15 dùng chip A12 trở lên:\n\nViệc đưa ứng dụng vào danh sách đen sẽ vô hiệu hóa các phần mở rộng của ứng dụng và có thể gây lỗi kernel panic do spinlock khi ứng dụng chạy ở nền trước hoặc nền sau.\n\nBạn nên thử tắt tính năng chèn tweak cho ứng dụng này trong Choicy trước, và chỉ đưa ứng dụng vào danh sách đen nếu cách đó không hiệu quả.";
 
-"SSH Detected" = "Phát hiện SSH";
-"SSH Server  has been installed, you can uninstall it via Sileo/Zebra." = "SSH Server  đã được cài đặt, bạn có thể gỡ cài đặt nó qua Sileo/Zebra.";
-
-"xinaA15 detected" = "Phát hiện XinaA15";
-
-"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "Máy đã jailbreak bằng XinaA15, bạn có thể gỡ cài đặt qua XinaA15 hoặc ẩn nó trong cài đặt của RootHide.";
-
-"Process xinaA15 Files" = "Xử lý file XinaA15";
-
-"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "Các file của XinaA15 đã bị ẩn, vui lòng khởi động lại thiết bị của bạn.\n\nBạn có thể khôi phục nó sau nếu muốn sử dụng lại XinaA15.";
-
-"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "Các file XinaA15 đã được khôi phục, bạn có thể khởi động lại thiết bị của mình để chuyển sang XinaA15";
-
-"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "Có nhiều file XinaA15 jailbreak, bạn có thể khôi phục thủ công:\n\n%s/";
-
-"restore failed: xinaA15 file not found!" = "Khôi phục lỗi: không tìm thấy file XinaA15!";
-"restore failed: %@" = "Khôi phục lỗi: %@";
-"hide failed: %@" = "Ẩn lỗi: %@";
-
+"Failed to open db, error %d" = "Không thể mở cơ sở dữ liệu, lỗi %d";
+"Failed to exec %@, error %d,%s" = "Không thể thực thi %@, lỗi %d: %s";
+"Failed to remove app group container:\n%@" = "Không thể xóa dữ liệu trong vùng chứa nhóm ứng dụng:\n%@";
+"Failed to remove app data container:\n%@" = "Không thể xóa dữ liệu trong vùng chứa dữ liệu ứng dụng:\n%@";
+"Failed to remove app plugin container:\n%@" = "Không thể xóa dữ liệu trong vùng chứa tiện ích mở rộng ứng dụng:\n%@";

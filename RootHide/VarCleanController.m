@@ -42,8 +42,27 @@ static BOOL tableDataBusy = NO;
     [refreshControl addTarget:self action:@selector(manualRefresh) forControlEvents:UIControlEventValueChanged];
     self.tableView.refreshControl = refreshControl;
     
-    [self startRefresh:NO];
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:Localized(@"Scanning...") message:@"" preferredStyle:UIAlertControllerStyleAlert];
+
+    alert.modalInPresentation = YES;
     
+    [self presentViewController:alert animated:YES completion:^{
+        if(tableDataBusy) {
+            [alert dismissViewControllerAnimated:YES completion:nil];
+            return;
+        }
+        tableDataBusy = YES;
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            NSMutableArray* newData = [self updateData:NO];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.tableData = newData;
+                [self.tableView reloadData];
+                [alert dismissViewControllerAnimated:YES completion:nil];
+                tableDataBusy = NO;
+            });
+        });
+    }];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoRefresh)
                                           name:UIApplicationWillEnterForegroundNotification object:nil];
 }

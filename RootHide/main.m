@@ -167,38 +167,57 @@ int spawnRoot(NSString* path, NSArray* args, NSString** stdOut, NSString** stdEr
     return retval;
 }
 
-BOOL isUUIDPathOf(NSString* path, NSString* parent)
+char* getAppUUIDPath(const char* path)
 {
-    if(!path || !parent) return NO;
+    if(!path) return NULL;
 
-    const char* _path = path.UTF8String;
-    const char* _parent = parent.UTF8String;
-    
-    char rp[PATH_MAX];
-    if(!realpath(_path, rp)) return NO;
-    
-    char rpp[PATH_MAX+1];
-    if(!realpath(_parent, rpp)) return NO;
-    
-    size_t rpplen = strlen(rpp);
-    
-    if(rpp[rpplen] != '/') {
-        strcat(rpp, "/");
-        rpplen++;
-    }
+    char abspath[PATH_MAX];
+    if(!realpath(path, abspath)) return NULL;
 
-    if(strncmp(rp, rpp, rpplen) != 0)
-        return NO;
+#define APP_PATH_PREFIX "/private/var/containers/Bundle/Application/"
+    if(strncmp(abspath, APP_PATH_PREFIX, sizeof(APP_PATH_PREFIX)-1) != 0)
+        return NULL;
 
-    char* p1 = rp + rpplen;
+    char* p1 = abspath + sizeof(APP_PATH_PREFIX)-1;
     char* p2 = strchr(p1, '/');
-    if(!p2) p2 = rp + strlen(rp);
+    if(!p2) return NULL;
 
     //is normal app or jailbroken app/daemon?
     if((p2 - p1) != (sizeof("xxxxxxxx-xxxx-xxxx-yxxx-xxxxxxxxxxxx")-1))
-        return NO;
+        return NULL;
+    
+    *p2 = '\0';
 
-    return YES;
+    return strdup(abspath);
+}
+
+bool isRemovableBundlePath(const char* path)
+{
+    const char* uuidpath = getAppUUIDPath(path);
+    if(!uuidpath) return false;
+    free((void*)uuidpath);
+    return true;
+}
+
+bool hasTrollstoreMarker(const char* path)
+{
+    char* uuidpath = getAppUUIDPath(path);
+    if(!uuidpath) return false;
+
+    char* markerpath=NULL;
+    asprintf(&markerpath, "%s/_TrollStore", uuidpath);
+
+    int ret = access(markerpath, F_OK);
+    if(ret != 0) {
+        free((void*)markerpath); markerpath = NULL;
+        asprintf(&markerpath, "%s/_TrollStoreLite", uuidpath);
+        ret = access(markerpath, F_OK);
+    }
+
+    free((void*)markerpath);
+    free((void*)uuidpath);
+
+    return ret==0;
 }
 
 #include <sys/sysctl.h>

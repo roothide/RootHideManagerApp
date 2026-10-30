@@ -1,45 +1,51 @@
 
 "Blacklist" = "Lista nera";
 "name or identifier" = "Nome o ID";
+"Clear App Data" = "Cancella i dati dell’app";
+"Cleaned up" = "Pulizia completata";
+"Cancel" = "Annulla";
 
 "varClean" = "Pulisci var";
 "Clean" = "Pulisci";
 "SelectAll" = "Seleziona tutti";
+"Scanning..." = "Scansione in corso...";
+"Cleaning up..." = "Pulizia in corso...";
+"Rescanning files..." = "Nuova scansione dei file in corso...";
 
-"Setting" = "Impostazioni";
+"Settings" = "Impostazioni";
 
 "General" = "Generali";
-"Whitelist Mode" = "Modalitá lista bianca";
+"Whitelist Mode" = "Modalità lista bianca";
 "auto blacklist newly installed apps" = "Lista nera automatica per le nuove app installate";
 
 "Advanced" = "Avanzate";
 "Edit varClean Rules" = "Modifica le regole di Pulisci var";
 "view the rules file in Filza" = "Visualizza le regole dei file in Filza";
 
-"Misc" = "Varie";
-"Hide xinaA15 Files" = "Nascondi i file di xinaA15";
-"hide xinaA15 files without uninstall it" = "Nascondi i file di xinaA15 senza disintallarli";
-
-
-
 "Got It" = "Fatto";
+"Error" = "Errore";
+"Warning" = "Avviso";
+"URL" = "URL";
 
-"SSH Detected" = "SSH Rilevato";
-"SSH Server  has been installed, you can uninstall it via Sileo/Zebra." = "Il servizio SSH è stato installato, puoi disintallarlo tramite Sileo/Zebra.";
+"⚠️Jailbreak Detection Warning⚠️" = "⚠️Avviso di rilevamento del jailbreak⚠️";
+"⚠️Warning⚠️" = "⚠️Avviso⚠️";
+"Legacy rootless jailbreak(s)" = "Vecchi jailbreak rootless";
+"*WARNING*: Don't touch any other files in /private/preboot/, otherwise it will cause bootloop" = "*ATTENZIONE*: non modificare altri file in /private/preboot/, altrimenti il dispositivo entrerà in un ciclo di riavvio";
+"Unknown preboot system" = "Sistema preboot sconosciuto";
+"Unknown Bindfs Mount(s)" = "Montaggi Bindfs sconosciuti";
 
-"xinaA15 detected" = "xinaA15 Rilevato";
+"SSH Server has been installed, you can uninstall it via Sileo/Zebra." = "È installato un server SSH. Puoi disinstallarlo tramite Sileo/Zebra.";
+"Dropbear has been installed, you can uninstall it via Sileo/Zebra." = "Dropbear è installato. Puoi disinstallarlo tramite Sileo/Zebra.";
+"Frida Server has been installed, you can uninstall it via Sileo/Zebra." = "Frida Server è installato. Puoi disinstallarlo tramite Sileo/Zebra.";
+"Some apps may refuse to run because a VPN/Proxy is enabled." = "Alcune app potrebbero rifiutarsi di funzionare perché è attivo un VPN o un proxy.";
 
-"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "I file del jailbreak xinaA15 sono stati installati, puoi disinstallarlo tramite l'app xinaA15 o nasconderli nelle impostazioni dell'app RootHide.";
+"Blacklist is not supported in current environment." = "La lista nera non è supportata nell’ambiente attuale.";
+"Apps are blacklisted by default in current environment, just disable tweaks for this app in the AppList of Bootstrap." = "Nell’ambiente attuale le app sono già nella lista nera per impostazione predefinita. Basta disattivare i tweak per questa app nell’AppList di Bootstrap.";
+"This app is tweaked by Bootstrap, please disable tweak for it in the AppList of Bootstrap first." = "I tweak per questa app sono attivati tramite Bootstrap. Disattivali prima nell’AppList di Bootstrap.";
+"\nFor iOS15 A12+ devices:\n\nthe blacklisted app will have its app extension disabled, and may cause a spinlock panic when the app is running in the foreground/background.\n\nYou can first try disabling tweak injection for this app in Choicy, and only blacklist the app if it doesn't work." = "\nPer i dispositivi con iOS 15 e chip A12 o successivo:\n\nL’inserimento nella lista nera disabilita le estensioni dell’app e può causare un kernel panic dovuto a uno spinlock quando l’app è in esecuzione in primo piano o in background.\n\nProva prima a disattivare l’iniezione dei tweak per questa app in Choicy e inseriscila nella lista nera solo se questo non funziona.";
 
-"Process xinaA15 Files" = "Processo i file di xinaA15";
-
-"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "I file di xinaA15 sono stati nascosti, per favore riavvia il dispositivo.\n\npuoi recuperarli dopo se vuoi usare di nuovo xinaA15.";
-
-"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "I file di xinaA15 sono stati recuperati, puoi riavviare il dispositivo per cambiare in xinaA15.";
-
-"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "Ci sono molteplici file del jailbreak xinaA15, puoi recuperarli manualmente:\n\n%s/";
-
-"restore failed: xinaA15 file not found!" = "Recupero fallito: file di xinaA15 non trovati!";
-"restore failed: %@" = "Recupero fallito: %@";
-"hide failed: %@" = "Nascondere fallito: %@";
-
+"Failed to open db, error %d" = "Impossibile aprire il database, errore %d";
+"Failed to exec %@, error %d,%s" = "Impossibile eseguire %@, errore %d: %s";
+"Failed to remove app group container:\n%@" = "Impossibile svuotare il contenitore del gruppo di app:\n%@";
+"Failed to remove app data container:\n%@" = "Impossibile svuotare il contenitore dei dati dell’app:\n%@";
+"Failed to remove app plugin container:\n%@" = "Impossibile svuotare il contenitore dell’estensione dell’app:\n%@";

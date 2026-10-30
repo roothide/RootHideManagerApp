@@ -1,12 +1,18 @@
 
 "Blacklist" = "ブラックリスト";
 "name or identifier" = "名前　または　識別子";
+"Clear App Data" = "アプリのデータを消去";
+"Cleaned up" = "クリーンアップ完了";
+"Cancel" = "キャンセル";
 
 "varClean" = "varClean";
 "Clean" = "クリーン";
 "SelectAll" = "すべて選択";
+"Scanning..." = "スキャン中...";
+"Cleaning up..." = "クリーンアップ中...";
+"Rescanning files..." = "ファイルを再スキャン中...";
 
-"Setting" = "設定";
+"Settings" = "設定";
 
 "General" = "一般";
 "Whitelist Mode" = "ホワイトリストモード";
@@ -16,30 +22,30 @@
 "Edit varClean Rules" = "varCleanの設定";
 "view the rules file in Filza" = "Filzaを起動しルールを編集します";
 
-"Misc" = "その他";
-"Hide xinaA15 Files" = "xinaA15のファイルを非表示にする";
-"hide xinaA15 files without uninstall it" = "アンインストールせずにxinaA15のファイルを非表示にします";
-
-
-
 "Got It" = "了解";
+"Error" = "エラー";
+"Warning" = "警告";
+"URL" = "URL";
 
-"SSH Detected" = "SSHの検出";
-"SSH Service has been installed, you can uninstall it via Sileo/Zebra." = "SSHがインストールされています SileoまたはZebraを使用してアンインストールできます";
+"⚠️Jailbreak Detection Warning⚠️" = "⚠️脱獄検出の警告⚠️";
+"⚠️Warning⚠️" = "⚠️警告⚠️";
+"Legacy rootless jailbreak(s)" = "古いルートレス脱獄環境";
+"*WARNING*: Don't touch any other files in /private/preboot/, otherwise it will cause bootloop" = "*警告*: /private/preboot/ 内の他のファイルには手を加えないでください。起動ループの原因になります";
+"Unknown preboot system" = "不明な preboot システム";
+"Unknown Bindfs Mount(s)" = "不明な Bindfs マウント";
 
-"xinaA15 detected" = "xinaA15を検出";
+"SSH Server has been installed, you can uninstall it via Sileo/Zebra." = "SSH サーバーがインストールされています。Sileo/Zebra からアンインストールできます。";
+"Dropbear has been installed, you can uninstall it via Sileo/Zebra." = "Dropbear がインストールされています。Sileo/Zebra からアンインストールできます。";
+"Frida Server has been installed, you can uninstall it via Sileo/Zebra." = "Frida Server がインストールされています。Sileo/Zebra からアンインストールできます。";
+"Some apps may refuse to run because a VPN/Proxy is enabled." = "VPN またはプロキシが有効なため、一部のアプリが起動を拒否する場合があります。";
 
-"xinaA15 jailbreak file has been installed, you can uninstall it via xinaA15 app or hide it in the settings of the RootHide app." = "xinaA15をアンインストールするかRootHideを使用して非表示にできます";
+"Blacklist is not supported in current environment." = "現在の環境ではブラックリスト機能を利用できません。";
+"Apps are blacklisted by default in current environment, just disable tweaks for this app in the AppList of Bootstrap." = "現在の環境では、アプリはデフォルトでブラックリストに登録されています。Bootstrap の AppList でこのアプリの Tweak を無効にしてください。";
+"This app is tweaked by Bootstrap, please disable tweak for it in the AppList of Bootstrap first." = "このアプリは Bootstrap で Tweak が有効になっています。まず Bootstrap の AppList で無効にしてください。";
+"\nFor iOS15 A12+ devices:\n\nthe blacklisted app will have its app extension disabled, and may cause a spinlock panic when the app is running in the foreground/background.\n\nYou can first try disabling tweak injection for this app in Choicy, and only blacklist the app if it doesn't work." = "\niOS 15 を搭載した A12 以降のデバイスの場合:\n\nブラックリストに登録するとアプリの拡張機能が無効になり、アプリがフォアグラウンドまたはバックグラウンドで実行中にスピンロックによるカーネルパニックが発生する場合があります。\n\nまず Choicy でこのアプリへの Tweak 注入を無効にし、効果がない場合にのみブラックリストに登録してください。";
 
-"Process xinaA15 Files" = "xinaA15のファイルを処理しています";
-
-"xinaA15 files has been hidden, please reboot your device.\n\nyou can restore it later if you want to use xinaA15 again." = "xinaA15を非表示にしました 端末を再起動してください\n再度使用したい場合あとで復元できます";
-
-"xinaA15 files has been restored, you can reboot your device to switch to xinaA15." = "xinaA15のファイルを復元しました 端末を再起動してxinaA15に切り替えてください";
-
-"there are multiple xinaA15 jailbreak files, you can restore it manually:\n\n%s/" = "複数のxinaA15のファイルを検出しました 手動で復元可能です:\n\n%s/";
-
-"restore failed: xinaA15 file not found!" = "復元に失敗: xinaA15のファイルが見つかりません";
-"restore failed: %@" = "復元に失敗: %@";
-"hide failed: %@" = "非表示に失敗: %@";
-
+"Failed to open db, error %d" = "データベースを開けませんでした。エラー %d";
+"Failed to exec %@, error %d,%s" = "%@ を実行できませんでした。エラー %d: %s";
+"Failed to remove app group container:\n%@" = "アプリグループのコンテナを消去できませんでした:\n%@";
+"Failed to remove app data container:\n%@" = "アプリのデータコンテナを消去できませんでした:\n%@";
+"Failed to remove app plugin container:\n%@" = "アプリ拡張機能のコンテナを消去できませんでした:\n%@";

@@ -59,7 +59,7 @@
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleInsetGrouped];
     self.tableView.tableFooterView = [[UIView alloc] init];
     
-    [self setTitle:Localized(@"Setting")];
+    [self setTitle:Localized(@"Settings")];
     
     [self reloadMenu];
 }

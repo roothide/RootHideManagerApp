@@ -1,47 +1,55 @@
 #import <UIKit/UIKit.h>
 
-@interface LSPlugInKitProxy : NSObject
-- (NSString *)bundleIdentifier;
-@property (nonatomic,readonly) NSURL *dataContainerURL;
+@interface LSBundleProxy : NSObject
+@property (nonatomic,readonly) NSURL* bundleURL;
+@property (nonatomic,readonly) NSURL* containerURL; 
+@property (nonatomic,readonly) NSURL* dataContainerURL; //override by LSPlugInKitProxy and LSApplicationProxy
+@property (nonatomic,readonly) NSURL* bundleContainerURL;
+@property (nonatomic,readonly) NSString* bundleIdentifier;
+@property (nonatomic,readonly) NSString* bundleExecutable;
+@property (nonatomic,readonly) NSDictionary* groupContainerURLs;
 @end
 
+@interface LSPlugInKitProxy : LSBundleProxy
+@property (nonatomic,readonly) NSString* teamID;
+@end
+
+@interface LSApplicationProxy : LSBundleProxy
++ (instancetype)applicationProxyForIdentifier:(NSString*)identifier;
+
+@property (nonatomic,readonly) NSString* teamID;
+@property (nonatomic,readonly) NSArray * appTags;
+@property (nonatomic,readonly) NSString* localizedName;
+@property (nonatomic,readonly) NSString* localizedShortName;
+
+@property (nonatomic,readonly) NSString* applicationType;
+
+@property (nonatomic,readonly) NSArray<LSPlugInKitProxy*>* plugInKitPlugins;
+
+@end
+
+
 @interface RHMInstalledAppInfo : NSObject
-@property (nonatomic, strong) NSString *infoPlistPath;
 
-@property (nonatomic, readonly) NSString* bundleIdentifier;
-@property (nonatomic, readonly) NSString* bundleExecutable;
-@property (nonatomic, readonly) NSString* name;
-@property (nonatomic, readonly) UIImage* icon;
-@property (nonatomic, readonly) NSURL *bundleURL;
-@property (nonatomic, readonly) NSURL *containerURL;
+@property (nonatomic,readonly) UIImage* icon;
+@property (nonatomic,readonly) NSString* name;
+@property (nonatomic,readonly) NSString* teamID;
 
-@property (nonatomic, readonly) NSString *applicationDSID;
-@property (nonatomic, readonly) NSString *applicationIdentifier;
-@property (nonatomic, readonly) NSString *applicationType;
-@property (nonatomic, readonly) NSNumber *dynamicDiskUsage;
+@property (nonatomic,readonly) BOOL isHiddenApp;
 
-@property (nonatomic, readonly) NSArray *groupIdentifiers;
-@property (nonatomic, readonly) NSDictionary *groupContainerURLs;
-@property (nonatomic, readonly) NSNumber *itemID;
-@property (nonatomic, readonly) NSString *itemName;
-@property (nonatomic, readonly) NSString *minimumSystemVersion;
-@property (nonatomic, readonly) NSArray *requiredDeviceCapabilities;
-@property (nonatomic, readonly) NSString *roleIdentifier;
-@property (nonatomic, readonly) NSString *sdkVersion;
-@property (nonatomic, readonly) NSString *shortVersionString;
-@property (nonatomic, readonly) NSString *sourceAppIdentifier;
-@property (nonatomic, readonly) NSNumber *staticDiskUsage;
-@property (nonatomic, readonly) NSString *teamID;
-@property (nonatomic, readonly) NSString *vendorName;
+@property (nonatomic,readonly) NSURL* bundleURL;
+@property (nonatomic,readonly) NSURL* containerURL;
+@property (nonatomic,readonly) NSString* applicationType;
+@property (nonatomic,readonly) NSString* bundleExecutable;
+@property (nonatomic,readonly) NSString* bundleIdentifier;
 
-@property (nonatomic,readonly) NSArray<LSPlugInKitProxy *> *plugInKitPlugins;
+@property (nonatomic,readonly) NSDictionary* groupContainerURLs;
 
-@property (nonatomic, readonly) BOOL isHiddenApp;
+@property (nonatomic,readonly) NSArray<LSPlugInKitProxy*>* plugInKitPlugins;
+
+@property (nonatomic,readonly) LSApplicationProxy* applicationProxy;
 
 + (instancetype)appWithPrivateProxy:(id)privateProxy;
 + (instancetype)appWithBundleIdentifier:(NSString*)bundleIdentifier;
 
 @end
-
-
-

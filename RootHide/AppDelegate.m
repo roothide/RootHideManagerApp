@@ -152,7 +152,7 @@
     
     listController.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Blacklist",@"") image:[UIImage systemImageNamed:@"list.bullet.circle"] tag:0];
     cleanController.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"varClean",@"") image:[UIImage systemImageNamed:@"trash"] tag:1];
-    setController.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Setting",@"") image:[UIImage systemImageNamed:@"gearshape"] tag:2];
+    setController.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Settings",@"") image:[UIImage systemImageNamed:@"gearshape"] tag:2];
     
 
     UINavigationController *listNavigationController = [[UINavigationController alloc] initWithRootViewController:listController];
