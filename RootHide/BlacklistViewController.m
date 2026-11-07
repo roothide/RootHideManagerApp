@@ -4,6 +4,8 @@
 #include "AppDelegate.h"
 #import "AppInfo.h"
 
+#include <sys/sysctl.h>
+
 bool hasTrollstoreMarker(const char* path);
 bool isRemovableBundlePath(const char* path);
 
@@ -360,15 +362,26 @@ bool isRemovableBundlePath(const char* path);
         }
     }
     
-#ifdef __arm64e__
-    if (spinlockFixApplied && NSProcessInfo.processInfo.operatingSystemVersion.majorVersion==15) {
+    static bool iOS15Arm64e = false;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        if(NSProcessInfo.processInfo.operatingSystemVersion.majorVersion==15)
+        {
+            cpu_subtype_t cpusubtype = 0;
+            size_t len = sizeof(cpusubtype);
+            sysctlbyname("hw.cpusubtype", &cpusubtype, &len, NULL, 0);
+            iOS15Arm64e = (cpusubtype & ~CPU_SUBTYPE_MASK) == CPU_SUBTYPE_ARM64E;
+        }
+    });
+
+    if(iOS15Arm64e && spinlockFixApplied)
+    {
         static BOOL Alerted = NO;
         if(!Alerted && switchInCell.on) {
             Alerted = YES;
             [AppDelegate showMessage:Localized(@"\nFor iOS15 A12+ devices:\n\nthe blacklisted app will have its app extension disabled, and may cause a spinlock panic when the app is running in the foreground/background.\n\nYou can first try disabling tweak injection for this app in Choicy, and only blacklist the app if it doesn't work.") title:Localized(@"Warning")];
         }
     }
-#endif
     
     NSMutableDictionary* appconfig = [AppDelegate getDefaultsForKey:@"appconfig"];
     if(!appconfig) appconfig = [[NSMutableDictionary alloc] init];
